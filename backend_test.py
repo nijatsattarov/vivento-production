@@ -563,8 +563,20 @@ class ViventoAPITester:
             
             # Public RSVP tests
             if guest_added and guest_token:
-                self.test_public_invitation(guest_token)
+                invitation_success, invitation_data = self.test_public_invitation(guest_token)
                 self.test_rsvp_response(guest_token)
+        
+        # Custom Design Tests - Create separate event with custom design
+        print("\n🎨 Starting Custom Design Tests...")
+        custom_event_created, custom_event_id = self.test_create_event_with_custom_design()
+        
+        if custom_event_created and custom_event_id:
+            # Add guest to custom design event
+            custom_guest_added, custom_guest_token = self.test_add_guest(custom_event_id)
+            
+            if custom_guest_added and custom_guest_token:
+                # Test invitation with custom design
+                self.test_invitation_custom_design(custom_guest_token)
         
         return self.get_results()
 
