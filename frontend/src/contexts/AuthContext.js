@@ -36,6 +36,7 @@ export const AuthProvider = ({ children }) => {
         }
       });
       setUser(response.data);
+      setToken(token);
       setIsAuthenticated(true);
     } catch (error) {
       console.error('Profil məlumatları alınarkən xəta:', error);
