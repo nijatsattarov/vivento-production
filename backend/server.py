@@ -356,6 +356,30 @@ async def get_event_guests(event_id: str, current_user: User = Depends(get_curre
 # RSVP routes (public)
 @api_router.get("/invite/{token}")
 async def get_invitation(token: str):
+    # Handle demo invitations
+    if token.startswith('demo-'):
+        event_id = token.replace('demo-', '')
+        event = await db.events.find_one({"id": event_id})
+        if not event:
+            raise HTTPException(status_code=404, detail="Tədbir tapılmadı")
+        
+        # Create a demo guest for preview
+        demo_guest = {
+            "id": "demo-guest",
+            "event_id": event_id,
+            "name": "Demo Qonaq",
+            "unique_token": token,
+            "rsvp_status": None,
+            "created_at": datetime.now(timezone.utc),
+            "responded_at": None
+        }
+        
+        return {
+            "guest": Guest(**demo_guest),
+            "event": Event(**event)
+        }
+    
+    # Handle regular invitations
     guest = await db.guests.find_one({"unique_token": token})
     if not guest:
         raise HTTPException(status_code=404, detail="Dəvətnamə tapılmadı")
