@@ -287,7 +287,8 @@ async def create_event(request: EventCreate, current_user: User = Depends(get_cu
         location=request.location,
         map_link=request.map_link,
         additional_notes=request.additional_notes,
-        template_id=request.template_id
+        template_id=request.template_id,
+        custom_design=request.custom_design
     )
     await db.events.insert_one(event.dict())
     return event
