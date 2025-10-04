@@ -250,7 +250,7 @@ test_plan:
           comment: "FIXED deployment configuration: ✅ Created netlify.toml with correct publish path 'build' ✅ Updated backend URL to https://vivento-production.onrender.com ✅ Set Node.js version to 20 ✅ Added fabric.js dependency ✅ Ready for deployment"
 
   - task: "Fix admin background image upload"
-    implemented: false
+    implemented: true
     working: false
     file: "frontend/src/components/AdminTemplateBuilder.jsx"
     stuck_count: 0
@@ -260,6 +260,9 @@ test_plan:
         - working: false
           agent: "user"
           comment: "Admin dəvətnamə şablonu yaradanda background image yüklənmir - Background images not uploading in admin template builder"
+        - working: "implemented"
+          agent: "main"
+          comment: "FIXED: Added AuthContext import and useAuth hook to AdminTemplateBuilder. Added Authorization header with Bearer token to /api/upload/background API call. Upload function now includes proper authentication for admin actions."
 
   - task: "Fix event/template save functionality"
     implemented: false
