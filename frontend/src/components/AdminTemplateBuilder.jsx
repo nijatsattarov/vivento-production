@@ -193,6 +193,50 @@ const AdminTemplateBuilder = ({
     toast.success('Şəkil elementi əlavə edildi');
   };
 
+  // Handle background image upload
+  const handleBackgroundImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Yalnız şəkil faylları qəbul edilir');
+      return;
+    }
+
+    // Validate file size (10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('Fayl ölçüsü 10MB-dan böyük ola bilməz');
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload/background`, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload xətası');
+      }
+
+      const result = await response.json();
+      
+      setTemplateData(prev => ({
+        ...prev,
+        canvasSize: { ...prev.canvasSize, backgroundImage: result.url }
+      }));
+      
+      toast.success('Background şəkil uğurla yükləndi');
+    } catch (error) {
+      console.error('Background upload error:', error);
+      toast.error('Şəkil yüklənərkən xəta baş verdi');
+    }
+  };
+
   // Handle purpose assignment
   const handlePurposeAssignment = (purpose) => {
     if (!pendingElement) return;
