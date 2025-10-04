@@ -101,6 +101,7 @@ export const AuthProvider = ({ children }) => {
       
       const { access_token, user: userData } = response.data;
       localStorage.setItem('accessToken', access_token);
+      setToken(access_token);
       setUser(userData);
       setIsAuthenticated(true);
       
