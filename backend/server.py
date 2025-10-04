@@ -380,6 +380,34 @@ async def respond_to_invitation(token: str, response: RSVPResponse):
     
     return {"message": "Cavabınız qeydə alındı"}
 
+# Admin routes
+@api_router.post("/admin/templates")
+async def create_template(template_data: dict, current_user: User = Depends(get_current_user)):
+    # Check if user is admin
+    if not (current_user.email == 'admin@vivento.az' or 'admin' in current_user.email):
+        raise HTTPException(status_code=403, detail="Admin hüquqları tələb olunur")
+    
+    await db.templates.insert_one(template_data)
+    return {"message": "Template əlavə edildi", "id": template_data["id"]}
+
+@api_router.put("/admin/templates/{template_id}")
+async def update_template(template_id: str, template_data: dict, current_user: User = Depends(get_current_user)):
+    # Check if user is admin
+    if not (current_user.email == 'admin@vivento.az' or 'admin' in current_user.email):
+        raise HTTPException(status_code=403, detail="Admin hüquqları tələb olunur")
+    
+    await db.templates.update_one({"id": template_id}, {"$set": template_data})
+    return {"message": "Template yeniləndi"}
+
+@api_router.delete("/admin/templates/{template_id}")
+async def delete_template(template_id: str, current_user: User = Depends(get_current_user)):
+    # Check if user is admin
+    if not (current_user.email == 'admin@vivento.az' or 'admin' in current_user.email):
+        raise HTTPException(status_code=403, detail="Admin hüquqları tələb olunur")
+    
+    await db.templates.delete_one({"id": template_id})
+    return {"message": "Template silindi"}
+
 # Basic routes
 @api_router.get("/")
 async def root():
