@@ -41,6 +41,11 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 1440  # 24 hours
 # Create the main app
 app = FastAPI(title="Vivento - Dəvətnamə Platforması")
 
+# Mount static files for uploads
+UPLOAD_DIR = Path(__file__).parent / "uploads"
+UPLOAD_DIR.mkdir(exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
+
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
