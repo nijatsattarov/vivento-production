@@ -165,11 +165,11 @@ frontend:
 
   - task: "Replace URL inputs with file uploads"
     implemented: true
-    working: "NA"
+    working: true
     file: "frontend/src/components/AdminTemplateBuilder.jsx, backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: "NA"
           agent: "main"
@@ -177,6 +177,9 @@ frontend:
         - working: "implemented"
           agent: "main"
           comment: "IMPLEMENTED file upload system: ✅ Added /api/upload/image and /api/upload/background endpoints in backend ✅ Replaced background image URL input with file upload in AdminTemplateBuilder ✅ Added handleBackgroundImageUpload function ✅ Upload validation (file type, size limits) ✅ Static file serving via /uploads route ✅ Toast notifications for upload success/error. Ready for testing."
+        - working: true
+          agent: "testing"
+          comment: "VERIFIED: File upload system successfully implemented. AdminTemplateBuilder has file input for background images with proper validation (image types, 10MB limit). Backend endpoints /api/upload/image and /api/upload/background are functional. Static file serving configured via /uploads route. Upload functionality replaces URL inputs as requested."
 
   - task: "Add next step workflow in template editor"
     implemented: true
