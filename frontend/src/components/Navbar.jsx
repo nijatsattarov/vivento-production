@@ -56,6 +56,29 @@ const Navbar = () => {
                 <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors">
                   Ana səhifə
                 </Link>
+                
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="text-gray-700 hover:text-blue-600" data-testid="nav-categories">
+                      Kateqoriyalar
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem>
+                      💍 Toy dəvətnamələri
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      💖 Nişan mərasimləri
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      🎂 Ad günü partiyaları
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      🏢 Korporativ tədbirlər
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                
                 <Link to="/#features" className="text-gray-700 hover:text-blue-600 transition-colors">
                   Xüsusiyyətlər
                 </Link>
