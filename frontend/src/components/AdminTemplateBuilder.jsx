@@ -49,6 +49,8 @@ const AdminTemplateBuilder = ({
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(75); // 75% for better fit
   const [showGrid, setShowGrid] = useState(true);
+  const [showPurposeModal, setShowPurposeModal] = useState(false);
+  const [pendingElement, setPendingElement] = useState(null);
   const canvasRef = useRef(null);
 
   // Font options
