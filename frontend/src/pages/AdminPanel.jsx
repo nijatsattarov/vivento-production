@@ -996,6 +996,119 @@ const AdminPanel = () => {
             </Card>
           </TabsContent>
 
+          <TabsContent value="site" className="space-y-6">
+            {/* Site Management */}
+            <Card className="bg-white shadow-lg border-0">
+              <CardHeader>
+                <CardTitle>Sayt İdarəetməsi</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-8">
+                {/* Logo Management */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Logo İdarəetməsi</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <Label htmlFor="site-logo">Sayt Loqosu URL</Label>
+                      <Input
+                        id="site-logo"
+                        placeholder="https://example.com/logo.png"
+                        className="mt-2"
+                      />
+                      <p className="text-sm text-gray-500 mt-1">Tövsiyə olunan ölçü: 200x60px</p>
+                    </div>
+                    <div>
+                      <Label>Cari Logo</Label>
+                      <div className="mt-2 p-4 border rounded-lg">
+                        <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                          <span className="text-white font-bold text-sm">V</span>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">Vivento (Default)</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Categories Management */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Kateqoriya İdarəetməsi</h3>
+                  <div className="space-y-4">
+                    {/* Add Category */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border rounded-lg">
+                      <Input placeholder="Kateqoriya adı" />
+                      <Input placeholder="Emoji (💍)" />
+                      <Input placeholder="Şablon sayı" type="number" />
+                      <Button className="bg-green-600 hover:bg-green-700">
+                        <Plus className="mr-2 h-4 w-4" />
+                        Əlavə Et
+                      </Button>
+                    </div>
+
+                    {/* Existing Categories */}
+                    <div className="space-y-3">
+                      {[
+                        { name: 'Toy', emoji: '💍', count: 15, color: 'from-pink-400 to-red-400' },
+                        { name: 'Nişan', emoji: '💖', count: 8, color: 'from-purple-400 to-pink-400' },
+                        { name: 'Ad günü', emoji: '🎂', count: 12, color: 'from-yellow-400 to-orange-400' },
+                        { name: 'Korporativ', emoji: '🏢', count: 6, color: 'from-blue-400 to-indigo-400' }
+                      ].map((category, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-10 h-10 rounded-lg bg-gradient-to-r ${category.color} flex items-center justify-center text-lg`}>
+                              {category.emoji}
+                            </div>
+                            <div>
+                              <p className="font-medium">{category.name}</p>
+                              <p className="text-sm text-gray-500">{category.count} şablon</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Button variant="outline" size="sm">
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button variant="outline" size="sm" className="text-red-600">
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Homepage Management */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Ana Səhifə Məzmunu</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="hero-title">Əsas Başlıq</Label>
+                      <Input
+                        id="hero-title"
+                        defaultValue="Rəqəmsal dəvətnamə yaratmaq heç vaxt bu qədər asan olmayıb"
+                        className="mt-2"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="hero-subtitle">Alt Başlıq</Label>
+                      <textarea
+                        id="hero-subtitle"
+                        defaultValue="Vivento ilə toy, nişan, doğum günü və digər tədbirləriniz üçün gözəl dəvətnamələr yaradın."
+                        className="w-full p-3 border border-gray-300 rounded-md mt-2"
+                        rows={3}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Save Button */}
+                <Button className="bg-blue-600 hover:bg-blue-700" data-testid="save-site-settings">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Sayt Ayarlarını Saxla
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           <TabsContent value="settings" className="space-y-6">
             <Card className="bg-white shadow-lg border-0">
               <CardHeader>
