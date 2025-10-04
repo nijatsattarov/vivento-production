@@ -121,69 +121,83 @@ const InvitationPage = () => {
 
   // Render custom template design if available
   const renderCustomInvitation = () => {
+    console.log('Event custom design:', event.custom_design); // Debug log
+    
     if (!event.custom_design || !event.custom_design.elements) {
+      console.log('No custom design found, using default template');
       return null;
     }
 
+    const canvasSize = event.custom_design.canvasSize || { width: 400, height: 600, background: '#ffffff' };
+
     return (
-      <div 
-        className="relative mx-auto rounded-lg shadow-2xl overflow-hidden"
-        style={{
-          width: '400px',
-          height: '600px',
-          backgroundColor: event.custom_design.canvasSize?.background || '#ffffff',
-          backgroundImage: event.custom_design.canvasSize?.backgroundImage 
-            ? `url(${event.custom_design.canvasSize.backgroundImage})` 
-            : 'none',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
-      >
-        {event.custom_design.elements.map((element) => (
-          <div
-            key={element.id}
-            className="absolute"
-            style={{
-              left: element.x,
-              top: element.y,
-              width: element.width,
-              height: element.height,
-            }}
-          >
-            {element.type === 'text' && (
-              <div
-                style={{
-                  fontSize: element.fontSize,
-                  fontFamily: element.fontFamily,
-                  color: element.color,
-                  fontWeight: element.fontWeight,
-                  textAlign: element.textAlign,
-                  width: '100%',
-                  height: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: element.textAlign === 'center' ? 'center' : 
-                    element.textAlign === 'right' ? 'flex-end' : 'flex-start',
-                  whiteSpace: 'pre-line',
-                  lineHeight: element.lineHeight || 1.4
-                }}
-              >
-                {element.content}
-              </div>
-            )}
-            
-            {element.type === 'image' && (
-              <img
-                src={element.src}
-                alt="Design element"
-                className="w-full h-full object-cover"
-                style={{
-                  borderRadius: element.borderRadius || 0
-                }}
-              />
-            )}
-          </div>
-        ))}
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Dəvətnaməniz</h2>
+        <div 
+          className="relative mx-auto rounded-lg shadow-2xl overflow-hidden border-4 border-white"
+          style={{
+            width: canvasSize.width || '400px',
+            height: canvasSize.height || '600px',
+            backgroundColor: canvasSize.background || '#ffffff',
+            backgroundImage: canvasSize.backgroundImage 
+              ? `url(${canvasSize.backgroundImage})` 
+              : 'none',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
+          {event.custom_design.elements.map((element) => (
+            <div
+              key={element.id}
+              className="absolute"
+              style={{
+                left: `${element.x}px`,
+                top: `${element.y}px`,
+                width: `${element.width}px`,
+                height: `${element.height}px`,
+              }}
+            >
+              {element.type === 'text' && (
+                <div
+                  style={{
+                    fontSize: `${element.fontSize}px`,
+                    fontFamily: element.fontFamily || 'Inter',
+                    color: element.color || '#000000',
+                    fontWeight: element.fontWeight || 'normal',
+                    textAlign: element.textAlign || 'center',
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: element.textAlign === 'center' ? 'center' : 
+                      element.textAlign === 'right' ? 'flex-end' : 'flex-start',
+                    whiteSpace: 'pre-line',
+                    lineHeight: element.lineHeight || 1.4,
+                    letterSpacing: element.letterSpacing || 'normal'
+                  }}
+                >
+                  {element.content}
+                </div>
+              )}
+              
+              {element.type === 'image' && (
+                <img
+                  src={element.src}
+                  alt="Design element"
+                  className="w-full h-full object-cover"
+                  style={{
+                    borderRadius: `${element.borderRadius || 0}px`
+                  }}
+                  onError={(e) => {
+                    console.log('Image load error:', element.src);
+                    e.target.style.display = 'none';
+                  }}
+                />
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     );
   };
