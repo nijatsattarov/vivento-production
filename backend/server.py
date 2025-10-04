@@ -199,10 +199,7 @@ async def register(request: RegisterRequest):
 @api_router.post("/auth/login", response_model=TokenResponse)
 async def login(request: LoginRequest):
     user_doc = await db.users.find_one({"email": request.email})
-    # Truncate password to 72 bytes for bcrypt compatibility
-    password_bytes = request.password.encode('utf-8')[:72]
-    truncated_password = password_bytes.decode('utf-8')
-    if not user_doc or not pwd_context.verify(truncated_password, user_doc.get("password", "")):
+    if not user_doc or not verify_password(request.password, user_doc.get("password", "")):
         raise HTTPException(status_code=400, detail="Email və ya parol səhvdir")
     
     user = User(**user_doc)
