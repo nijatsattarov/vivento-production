@@ -225,7 +225,6 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Fix Netlify deployment configuration"
     - "Authentication session persistence issues"
     - "Complete user flow testing"
   stuck_tasks: 
