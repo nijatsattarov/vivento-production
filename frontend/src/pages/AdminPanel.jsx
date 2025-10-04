@@ -36,6 +36,15 @@ const AdminPanel = () => {
     totalTemplates: 0,
     premiumUsers: 0
   });
+  const [isAddingTemplate, setIsAddingTemplate] = useState(false);
+  const [newTemplate, setNewTemplate] = useState({
+    name: '',
+    category: 'toy',
+    thumbnail_url: '',
+    is_premium: false,
+    background_color: '#ffffff',
+    background_image: ''
+  });
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
