@@ -148,16 +148,30 @@ const TemplateEditor = () => {
       
       // Update elements with event data
       const updatedElements = templateElements.map(element => {
+        // Toy mərasimi şablonları üçün
         if (element.content === 'Toy Mərasimi' || element.content === 'Tədbir adı') {
           return { ...element, content: event?.name || 'Tədbir adı' };
-        } else if (element.content === 'Tədbir tarixi') {
+        } 
+        // Elegant şablon üçün gəlin/kişi adları
+        else if (element.content === 'GƏLİN ADI\n&\nKİŞİ ADI') {
+          const eventName = event?.name || 'Gəlin & Kişi adları';
+          return { ...element, content: eventName.replace(' toy', '').replace(' mərasimi', '') };
+        }
+        // Tarix məlumatları
+        else if (element.content === 'Tədbir tarixi' || element.content?.includes('Dekabr') || element.content?.includes('18:00')) {
           return { ...element, content: event ? new Date(event.date).toLocaleDateString('az-AZ', {
+            weekday: 'long',
             day: 'numeric',
             month: 'long',
             year: 'numeric'
-          }) : 'Tarix' };
-        } else if (element.content === 'Tədbir yeri') {
-          return { ...element, content: event?.location || 'Məkan' };
+          }) + '\n' + new Date(event.date).toLocaleTimeString('az-AZ', {
+            hour: '2-digit',
+            minute: '2-digit'
+          }) : 'Tarix və vaxt' };
+        }
+        // Məkan məlumatları
+        else if (element.content === 'Tədbir yeri' || element.content?.includes('məkanı ünvanı')) {
+          return { ...element, content: event?.location || 'Toy məkanı\nÜnvan' };
         }
         return element;
       });
