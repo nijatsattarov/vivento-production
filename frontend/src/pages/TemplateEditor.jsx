@@ -421,7 +421,7 @@ const TemplateEditor = () => {
               <Button
                 variant="outline"
                 onClick={() => {
-                  const inviteUrl = `${window.location.origin}/invite/demo-token-${event?.id}`;
+                  const inviteUrl = `${window.location.origin}/invite/demo-${event?.id}`;
                   window.open(inviteUrl, '_blank');
                 }}
                 data-testid="preview-invitation-button"
