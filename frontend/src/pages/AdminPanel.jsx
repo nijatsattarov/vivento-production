@@ -43,8 +43,12 @@ const AdminPanel = () => {
     thumbnail_url: '',
     is_premium: false,
     background_color: '#ffffff',
-    background_image: ''
+    background_image: '',
+    elements: []
   });
+  const [selectedElement, setSelectedElement] = useState(null);
+  const [showTemplateBuilder, setShowTemplateBuilder] = useState(false);
+  const [editingTemplate, setEditingTemplate] = useState(null);
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
