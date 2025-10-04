@@ -131,9 +131,9 @@ frontend:
           comment: "COMPLETED: Element purpose assignment working perfectly in AdminTemplateBuilder."
 
   - task: "Fix invitation preview not showing"
-    implemented: false
-    working: false
-    file: "frontend/src/pages/InvitationPage.jsx"
+    implemented: true
+    working: "NA"
+    file: "frontend/src/pages/InvitationPage.jsx, backend/server.py"
     stuck_count: 1
     priority: "high"
     needs_retesting: true
@@ -144,6 +144,9 @@ frontend:
         - working: false
           agent: "testing"
           comment: "CRITICAL ISSUE: Demo invitation URLs return 404 errors. /api/invite/demo-{eventId} endpoints not implemented in backend. InvitationPage component exists and has proper custom design rendering logic, but backend doesn't handle demo invitation tokens. Need to implement demo invitation endpoint or fix token generation."
+        - working: "fixed"
+          agent: "main"
+          comment: "FIXED demo invitation endpoint: ✅ Added demo invitation support in /api/invite/{token} endpoint ✅ Handles tokens starting with 'demo-' prefix ✅ Creates demo guest object for preview ✅ Returns proper event and guest data for invitation rendering ✅ InvitationPage now has backend support for demo URLs. Ready for testing."
 
   - task: "Fix background image URLs not working in templates"
     implemented: true
