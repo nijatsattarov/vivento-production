@@ -223,6 +223,27 @@ const TemplateEditor = () => {
     setSelectedElement(newElement);
   };
 
+  const deleteElement = (elementId) => {
+    setElements(prev => prev.filter(el => el.id !== elementId));
+    if (selectedElement?.id === elementId) {
+      setSelectedElement(null);
+    }
+    toast.success('Element silindi');
+  };
+
+  const duplicateElement = (element) => {
+    const newElement = {
+      ...element,
+      id: `${element.type}-${Date.now()}`,
+      x: element.x + 20,
+      y: element.y + 20
+    };
+    
+    setElements(prev => [...prev, newElement]);
+    setSelectedElement(newElement);
+    toast.success('Element kopyalandı');
+  };
+
   const saveDesign = async () => {
     setSaving(true);
     
