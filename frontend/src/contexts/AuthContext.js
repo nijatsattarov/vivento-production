@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }) => {
       // Only remove token on 401/403 errors, not network errors
       if (error.response?.status === 401 || error.response?.status === 403) {
         localStorage.removeItem('accessToken');
+        setToken(null);
         setUser(null);
         setIsAuthenticated(false);
       } else {
