@@ -897,6 +897,44 @@ const AdminTemplateBuilder = ({
           </CardContent>
         </Card>
       </div>
+      
+      {/* Purpose Selection Modal */}
+      {showPurposeModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <h3 className="text-lg font-semibold mb-4">Element Təyinatını Seçin</h3>
+            <p className="text-sm text-gray-600 mb-4">Bu element hansı məlumatı göstərəcək?</p>
+            
+            <div className="grid gap-2 max-h-64 overflow-y-auto">
+              {elementPurposes.map((purpose) => (
+                <Button
+                  key={purpose.value}
+                  onClick={() => handlePurposeAssignment(purpose.value)}
+                  variant="outline"
+                  className="w-full justify-start h-auto p-3"
+                >
+                  <div className="text-left">
+                    <div className="font-medium">{purpose.label}</div>
+                    <div className="text-xs text-gray-500 mt-1">{purpose.placeholder}</div>
+                  </div>
+                </Button>
+              ))}
+            </div>
+            
+            <div className="flex justify-end space-x-2 mt-4 pt-4 border-t">
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setShowPurposeModal(false);
+                  setPendingElement(null);
+                }}
+              >
+                Ləğv et
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
