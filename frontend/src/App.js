@@ -1,53 +1,103 @@
-import { useEffect } from "react";
-import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { Toaster } from "./components/ui/sonner";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import Dashboard from "./pages/Dashboard";
+import CreateEvent from "./pages/CreateEvent";
+import EventDetail from "./pages/EventDetail";
+import TemplateEditor from "./pages/TemplateEditor";
+import InvitationPage from "./pages/InvitationPage";
+import LoadingSpinner from "./components/LoadingSpinner";
+import ProtectedRoute from "./components/ProtectedRoute";
+import "./App.css";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const AppRoutes = () => {
+  const { isAuthenticated, loading } = useAuth();
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
-
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
+    <Routes>
+      {/* Public routes */}
+      <Route path="/" element={<HomePage />} />
+      <Route 
+        path="/login" 
+        element={
+          isAuthenticated ? 
+          <Navigate to="/dashboard" replace /> : 
+          <LoginPage />
+        } 
+      />
+      <Route 
+        path="/register" 
+        element={
+          isAuthenticated ? 
+          <Navigate to="/dashboard" replace /> : 
+          <RegisterPage />
+        } 
+      />
+      <Route path="/invite/:token" element={<InvitationPage />} />
+      
+      {/* Protected routes */}
+      <Route 
+        path="/dashboard" 
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/create-event" 
+        element={
+          <ProtectedRoute>
+            <CreateEvent />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/events/:eventId" 
+        element={
+          <ProtectedRoute>
+            <EventDetail />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/editor/:eventId" 
+        element={
+          <ProtectedRoute>
+            <TemplateEditor />
+          </ProtectedRoute>
+        } 
+      />
+      
+      {/* Fallback */}
+      <Route 
+        path="*" 
+        element={
+          <Navigate to={isAuthenticated ? "/dashboard" : "/"} replace />
+        } 
+      />
+    </Routes>
   );
 };
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <AuthProvider>
+      <Router>
+        <div className="App min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50">
+          <AppRoutes />
+          <Toaster position="top-right" />
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 
