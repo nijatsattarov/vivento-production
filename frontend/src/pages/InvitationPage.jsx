@@ -119,6 +119,75 @@ const InvitationPage = () => {
   const eventDateTime = formatDate(event.date);
   const upcoming = isUpcoming(event.date);
 
+  // Render custom template design if available
+  const renderCustomInvitation = () => {
+    if (!event.custom_design || !event.custom_design.elements) {
+      return null;
+    }
+
+    return (
+      <div 
+        className="relative mx-auto rounded-lg shadow-2xl overflow-hidden"
+        style={{
+          width: '400px',
+          height: '600px',
+          backgroundColor: event.custom_design.canvasSize?.background || '#ffffff',
+          backgroundImage: event.custom_design.canvasSize?.backgroundImage 
+            ? `url(${event.custom_design.canvasSize.backgroundImage})` 
+            : 'none',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
+        {event.custom_design.elements.map((element) => (
+          <div
+            key={element.id}
+            className="absolute"
+            style={{
+              left: element.x,
+              top: element.y,
+              width: element.width,
+              height: element.height,
+            }}
+          >
+            {element.type === 'text' && (
+              <div
+                style={{
+                  fontSize: element.fontSize,
+                  fontFamily: element.fontFamily,
+                  color: element.color,
+                  fontWeight: element.fontWeight,
+                  textAlign: element.textAlign,
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: element.textAlign === 'center' ? 'center' : 
+                    element.textAlign === 'right' ? 'flex-end' : 'flex-start',
+                  whiteSpace: 'pre-line',
+                  lineHeight: element.lineHeight || 1.4
+                }}
+              >
+                {element.content}
+              </div>
+            )}
+            
+            {element.type === 'image' && (
+              <img
+                src={element.src}
+                alt="Design element"
+                className="w-full h-full object-cover"
+                style={{
+                  borderRadius: element.borderRadius || 0
+                }}
+              />
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 p-4">
       {/* Background decoration */}
