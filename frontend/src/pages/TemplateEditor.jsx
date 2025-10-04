@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
+import { useAuth } from '../contexts/AuthContext';
 
 const TemplateEditor = () => {
   const { eventId } = useParams();
