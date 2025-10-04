@@ -702,6 +702,8 @@ const AdminPanel = () => {
                 </div>
               </CardContent>
             </Card>
+              </>
+            )}
           </TabsContent>
 
           <TabsContent value="site" className="space-y-6">
