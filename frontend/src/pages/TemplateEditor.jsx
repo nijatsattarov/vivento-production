@@ -89,6 +89,7 @@ const TemplateEditor = () => {
 
   useEffect(() => {
     fetchEventData();
+    fetchTemplates();
   }, [eventId]);
 
   const fetchEventData = async () => {
