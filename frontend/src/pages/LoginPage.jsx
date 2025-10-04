@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 
 const LoginPage = () => {
   const { login } = useAuth();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
