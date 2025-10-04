@@ -528,6 +528,51 @@ class ViventoAPITester:
             data=rsvp_data
         )[0]
 
+    def check_existing_custom_designs(self):
+        """Check if there are existing events with custom_design data"""
+        if not self.token:
+            self.log_test("Check Existing Custom Designs", False, "No token available")
+            return False
+            
+        print(f"\n🔍 Checking for existing events with custom_design...")
+        
+        success, response = self.run_test(
+            "Get User Events for Custom Design Check",
+            "GET",
+            "events",
+            200
+        )
+        
+        if not success:
+            return False
+            
+        events_with_custom_design = []
+        total_events = len(response) if isinstance(response, list) else 0
+        
+        print(f"   Found {total_events} total events")
+        
+        if isinstance(response, list):
+            for event in response:
+                if event.get('custom_design'):
+                    events_with_custom_design.append({
+                        'id': event.get('id'),
+                        'name': event.get('name'),
+                        'has_elements': bool(event.get('custom_design', {}).get('elements')),
+                        'element_count': len(event.get('custom_design', {}).get('elements', []))
+                    })
+        
+        if events_with_custom_design:
+            print(f"   ✅ Found {len(events_with_custom_design)} events with custom_design:")
+            for event in events_with_custom_design:
+                print(f"     - {event['name']} (ID: {event['id']}) - {event['element_count']} elements")
+            self.log_test("Check Existing Custom Designs", True, 
+                         f"Found {len(events_with_custom_design)} events with custom design")
+        else:
+            print(f"   ⚠️  No existing events with custom_design found")
+            self.log_test("Check Existing Custom Designs", True, "No existing custom designs found")
+        
+        return True
+
     def run_all_tests(self):
         """Run comprehensive API tests"""
         print("🚀 Starting Vivento API Tests...")
