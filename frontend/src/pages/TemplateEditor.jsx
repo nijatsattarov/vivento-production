@@ -34,6 +34,8 @@ import { useAuth } from '../contexts/AuthContext';
 const TemplateEditor = () => {
   const { eventId } = useParams();
   const navigate = useNavigate();
+  const { token } = useAuth();
+  const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isSaving, setSaving] = useState(false);
