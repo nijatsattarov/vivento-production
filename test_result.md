@@ -213,11 +213,11 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Fix invitation preview not showing"
-    - "Fix background image URLs not working in templates"
-    - "Replace URL inputs with file uploads"
-    - "Add next step workflow in template editor"
-  stuck_tasks: []
+    - "Authentication session persistence issues"
+    - "Complete user flow testing"
+    - "Admin panel access and functionality"
+  stuck_tasks: 
+    - "Authentication session persistence issues"
   test_all: false
   test_priority: "high_first"
 
