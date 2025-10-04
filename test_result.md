@@ -295,7 +295,7 @@ test_plan:
           comment: "FIXED: Changed navigation from non-existent /events/{id}/guests route to existing /events/{id} route. EventDetail page contains guest management functionality with tabs, so users will be properly directed to event detail page where they can manage guests."
 
   - task: "Fix user preview functionality"
-    implemented: false
+    implemented: true
     working: false
     file: "frontend/src/pages/TemplateEditor.jsx, frontend/src/pages/InvitationPage.jsx"
     stuck_count: 0
@@ -305,6 +305,9 @@ test_plan:
         - working: false
           agent: "user"
           comment: "İstifadəçi ön izləməyə vurduqda xəta verir önizləmə açılmır - User preview not working, throws errors"
+        - working: "implemented"
+          agent: "main"
+          comment: "FIXED: Added onClick handler to first preview button (Önizləmə) that was missing. Fixed both preview buttons to use correct demo URL format: /invite/demo-{eventId} instead of /invite/demo-token-{eventId}. Preview buttons now properly open invitation preview in new tab."
 
   - task: "Complete backend API testing after deployment"
     implemented: true
