@@ -905,7 +905,7 @@ const AdminTemplateBuilder = ({
             <h3 className="text-lg font-semibold mb-2">Element Təyinatını Seçin</h3>
             <p className="text-sm text-gray-600 mb-4">Bu element hansı məlumatı göstərəcək?</p>
             
-            <div className="grid gap-2 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
+            <div className="grid gap-2 max-h-80 overflow-y-auto pr-2">
               {elementPurposes.map((purpose) => (
                 <Button
                   key={purpose.value}
@@ -936,23 +936,6 @@ const AdminTemplateBuilder = ({
           </div>
         </div>
       )}
-      
-      <style jsx>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: #f1f1f1;
-          border-radius: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #c1c1c1;
-          border-radius: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #a1a1a1;
-        }
-      `}</style>
     </div>
   );
 };
