@@ -143,8 +143,8 @@ frontend:
           comment: "User reports invitation preview not showing. Need to investigate InvitationPage component and custom design rendering."
 
   - task: "Fix background image URLs not working in templates"
-    implemented: false
-    working: false
+    implemented: true
+    working: "NA"
     file: "frontend/src/pages/TemplateEditor.jsx, backend/server.py"
     stuck_count: 0
     priority: "high" 
@@ -153,6 +153,9 @@ frontend:
         - working: false
           agent: "main"
           comment: "Background images set by admin don't show for users in template editor. Need to check template loading and background image rendering."
+        - working: "fixed"
+          agent: "main"
+          comment: "FIXED background image loading issue: ✅ Fixed loadTemplate function to properly load canvasSize (was checking 'canvas' instead of 'canvasSize') ✅ Background images now properly loaded from admin template design_data ✅ Added file upload system as replacement for URL inputs ✅ Proper canvas background rendering in template editor. Ready for testing."
 
   - task: "Replace URL inputs with file uploads"
     implemented: true
