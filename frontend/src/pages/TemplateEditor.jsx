@@ -196,7 +196,9 @@ const TemplateEditor = () => {
       setElements(updatedElements);
       
       // Update canvas size if specified
-      if (template.design_data.canvas) {
+      if (template.design_data.canvasSize) {
+        setCanvasSize(template.design_data.canvasSize);
+      } else if (template.design_data.canvas) {
         setCanvasSize(template.design_data.canvas);
       }
       
