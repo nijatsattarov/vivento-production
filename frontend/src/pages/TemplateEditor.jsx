@@ -411,7 +411,6 @@ const TemplateEditor = () => {
                     {elements.map((element, index) => (
                       <div
                         key={element.id}
-                        onClick={() => handleElementClick(element)}
                         className={`p-2 rounded cursor-pointer transition-colors ${
                           selectedElement?.id === element.id 
                             ? 'bg-blue-50 border border-blue-200' 
@@ -419,18 +418,48 @@ const TemplateEditor = () => {
                         }`}
                         data-testid={`layer-${element.id}`}
                       >
-                        <div className="flex items-center space-x-2">
-                          {element.type === 'text' ? (
-                            <Type className="h-4 w-4 text-gray-500" />
-                          ) : (
-                            <Image className="h-4 w-4 text-gray-500" />
-                          )}
-                          <span className="text-sm text-gray-700 truncate">
-                            {element.type === 'text' 
-                              ? element.content || 'Mətn' 
-                              : 'Şəkil'
-                            }
-                          </span>
+                        <div className="flex items-center justify-between">
+                          <div 
+                            className="flex items-center space-x-2 flex-1"
+                            onClick={() => handleElementClick(element)}
+                          >
+                            {element.type === 'text' ? (
+                              <Type className="h-4 w-4 text-gray-500" />
+                            ) : (
+                              <Image className="h-4 w-4 text-gray-500" />
+                            )}
+                            <span className="text-sm text-gray-700 truncate">
+                              {element.type === 'text' 
+                                ? element.content || 'Mətn' 
+                                : 'Şəkil'
+                              }
+                            </span>
+                          </div>
+                          
+                          <div className="flex items-center space-x-1">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                duplicateElement(element);
+                              }}
+                              className="p-1 hover:bg-blue-100 rounded text-xs"
+                              title="Kopyala"
+                              data-testid={`duplicate-${element.id}`}
+                            >
+                              📄
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                deleteElement(element.id);
+                              }}
+                              className="p-1 hover:bg-red-100 rounded text-xs"
+                              title="Sil"
+                              data-testid={`delete-${element.id}`}
+                            >
+                              🗑️
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}
