@@ -900,38 +900,34 @@ const AdminTemplateBuilder = ({
       
       {/* Purpose Selection Modal */}
       {showPurposeModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-in fade-in-0">
-          <div className="bg-white rounded-lg p-6 w-full max-w-lg mx-4 shadow-xl animate-in zoom-in-95">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999] animate-in fade-in-0">
+          <div className="bg-white rounded-lg p-6 w-full max-w-lg mx-4 shadow-xl animate-in zoom-in-95 relative z-[10000]">
             <h3 className="text-lg font-semibold mb-2">Element Təyinatını Seçin</h3>
             <p className="text-sm text-gray-600 mb-4">Bu element hansı məlumatı göstərəcək?</p>
             
             <div className="grid gap-2 max-h-80 overflow-y-auto pr-2">
               {elementPurposes.map((purpose) => (
-                <Button
+                <button
                   key={purpose.value}
                   onClick={() => handlePurposeAssignment(purpose.value)}
-                  variant="outline"
-                  className="w-full justify-start h-auto p-4 text-left hover:bg-blue-50 border-gray-200"
+                  className="w-full text-left p-4 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors"
                 >
-                  <div className="text-left w-full">
-                    <div className="font-medium text-gray-800">{purpose.label}</div>
-                    <div className="text-sm text-gray-500 mt-1">{purpose.placeholder}</div>
-                  </div>
-                </Button>
+                  <div className="font-medium text-gray-800">{purpose.label}</div>
+                  <div className="text-sm text-gray-500 mt-1">{purpose.placeholder}</div>
+                </button>
               ))}
             </div>
             
             <div className="flex justify-end space-x-2 mt-6 pt-4 border-t">
-              <Button 
-                variant="outline" 
+              <button 
                 onClick={() => {
                   setShowPurposeModal(false);
                   setPendingElement(null);
                 }}
-                className="px-4"
+                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 Ləğv et
-              </Button>
+              </button>
             </div>
           </div>
         </div>
