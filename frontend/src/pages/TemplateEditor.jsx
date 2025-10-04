@@ -40,6 +40,8 @@ const TemplateEditor = () => {
   const [showGrid, setShowGrid] = useState(false);
   const [availableTemplates, setAvailableTemplates] = useState([]);
   const [showTemplateSelector, setShowTemplateSelector] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   
   // Design elements state
   const [elements, setElements] = useState([
