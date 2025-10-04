@@ -38,9 +38,15 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
     } catch (error) {
       console.error('Profil məlumatları alınarkən xəta:', error);
-      localStorage.removeItem('accessToken');
-      setUser(null);
-      setIsAuthenticated(false);
+      // Only remove token on 401/403 errors, not network errors
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        localStorage.removeItem('accessToken');
+        setUser(null);
+        setIsAuthenticated(false);
+      } else {
+        // For network errors, keep trying with existing token
+        console.warn('Network error, keeping existing auth state');
+      }
     } finally {
       setLoading(false);
     }
