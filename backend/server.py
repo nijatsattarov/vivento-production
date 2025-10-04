@@ -23,7 +23,16 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Security
+import hashlib
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def simple_hash_password(password: str) -> str:
+    """Simple password hashing for testing"""
+    return hashlib.sha256(password.encode()).hexdigest()
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """Simple password verification for testing"""
+    return simple_hash_password(plain_password) == hashed_password
 SECRET_KEY = os.environ.get("SECRET_KEY", "your-super-secret-key-here")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
