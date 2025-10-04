@@ -120,6 +120,7 @@ class EventCreate(BaseModel):
     map_link: Optional[str] = None
     additional_notes: Optional[str] = None
     template_id: Optional[str] = None
+    custom_design: Optional[Dict[str, Any]] = None
 
 class GuestCreate(BaseModel):
     name: str
