@@ -443,16 +443,33 @@ const AdminTemplateBuilder = ({
             </div>
 
             <div>
-              <Label>Fon Şəkli URL</Label>
-              <Input
-                value={templateData.canvasSize.backgroundImage}
-                onChange={(e) => setTemplateData(prev => ({
-                  ...prev,
-                  canvasSize: { ...prev.canvasSize, backgroundImage: e.target.value }
-                }))}
-                placeholder="https://example.com/bg.jpg"
-                className="mt-2"
-              />
+              <Label>Fon Şəkli</Label>
+              <div className="space-y-2 mt-2">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleBackgroundImageUpload}
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                />
+                {templateData.canvasSize.backgroundImage && (
+                  <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                    <span className="text-sm text-gray-600 truncate">
+                      {templateData.canvasSize.backgroundImage.split('/').pop()}
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setTemplateData(prev => ({
+                        ...prev,
+                        canvasSize: { ...prev.canvasSize, backgroundImage: '' }
+                      }))}
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="flex items-center justify-between">
