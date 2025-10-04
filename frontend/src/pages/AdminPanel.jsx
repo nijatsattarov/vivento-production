@@ -52,6 +52,7 @@ const AdminPanel = () => {
   const [selectedElement, setSelectedElement] = useState(null);
   const [showTemplateBuilder, setShowTemplateBuilder] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState(null);
+  const [builderTemplate, setBuilderTemplate] = useState(null);
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
