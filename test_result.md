@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Multiple critical issues to fix: 1) Dəvətnamə ön izləmsi görünmür (invitation preview not showing) 2) Background image URLs don't work in user templates 3) Change URLs to file uploads for images and admin logo 4) Add next step workflow: after template ready, add guests or share link directly"
+user_problem_statement: "Current critical issues after deployment: 1) Admin dəvətnamə şablonu yaradanda background image yüklənmir (Admin template builder background upload not working) 2) İstifadəçi dəvətnamə save olmur (User event/template save not working) 3) Next step button redirects to dashboard instead of guest management 4) İstifadəçi ön izləməyə vurduqda xəta verir (User preview not working)"
 
 backend:
   - task: "Test invitation system custom design functionality"
