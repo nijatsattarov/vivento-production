@@ -129,6 +129,51 @@ const TemplateEditor = () => {
     }
   };
 
+  const fetchTemplates = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/templates`);
+      setAvailableTemplates(response.data);
+    } catch (error) {
+      console.error('Şablonlar yüklənərkən xəta:', error);
+    }
+  };
+
+  const loadTemplate = (template) => {
+    if (template.design_data && template.design_data.elements) {
+      // Load template elements
+      const templateElements = template.design_data.elements.map(el => ({
+        ...el,
+        id: el.id + '-' + Date.now() // Make IDs unique
+      }));
+      
+      // Update elements with event data
+      const updatedElements = templateElements.map(element => {
+        if (element.content === 'Toy Mərasimi' || element.content === 'Tədbir adı') {
+          return { ...element, content: event?.name || 'Tədbir adı' };
+        } else if (element.content === 'Tədbir tarixi') {
+          return { ...element, content: event ? new Date(event.date).toLocaleDateString('az-AZ', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+          }) : 'Tarix' };
+        } else if (element.content === 'Tədbir yeri') {
+          return { ...element, content: event?.location || 'Məkan' };
+        }
+        return element;
+      });
+      
+      setElements(updatedElements);
+      
+      // Update canvas size if specified
+      if (template.design_data.canvas) {
+        setCanvasSize(template.design_data.canvas);
+      }
+      
+      setShowTemplateSelector(false);
+      toast.success(`${template.name} şablonu yükləndi`);
+    }
+  };
+
   const handleElementClick = (element) => {
     setSelectedElement(element);
   };
