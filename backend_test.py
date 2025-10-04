@@ -406,14 +406,109 @@ class ViventoAPITester:
         """Test public invitation endpoint"""
         if not guest_token:
             self.log_test("Public Invitation", False, "No guest token available")
-            return False
+            return False, None
             
-        return self.run_test(
+        success, response = self.run_test(
             "Public Invitation",
             "GET",
             f"invite/{guest_token}",
             200
-        )[0]
+        )
+        
+        if success:
+            return True, response
+        return False, None
+
+    def test_invitation_custom_design(self, guest_token):
+        """Test invitation endpoint specifically for custom design data"""
+        if not guest_token:
+            self.log_test("Invitation Custom Design Test", False, "No guest token available")
+            return False
+            
+        print(f"\n🎨 Testing Custom Design in Invitation...")
+        print(f"   Guest Token: {guest_token}")
+        
+        success, response = self.run_test(
+            "Invitation Custom Design Test",
+            "GET",
+            f"invite/{guest_token}",
+            200
+        )
+        
+        if not success:
+            return False
+            
+        # Detailed validation of custom design structure
+        try:
+            event = response.get('event', {})
+            custom_design = event.get('custom_design')
+            
+            print(f"   Event ID: {event.get('id', 'N/A')}")
+            print(f"   Event Name: {event.get('name', 'N/A')}")
+            
+            if not custom_design:
+                self.log_test("Custom Design Validation", False, "No custom_design field in event")
+                return False
+                
+            print(f"   ✅ Custom design found in response")
+            
+            # Validate canvas size
+            canvas_size = custom_design.get('canvasSize', {})
+            if not canvas_size:
+                self.log_test("Custom Design Canvas Validation", False, "No canvasSize in custom_design")
+                return False
+                
+            print(f"   Canvas Size: {canvas_size.get('width')}x{canvas_size.get('height')}")
+            print(f"   Background: {canvas_size.get('background', 'N/A')}")
+            print(f"   Background Image: {canvas_size.get('backgroundImage', 'N/A')[:50]}...")
+            
+            # Validate elements
+            elements = custom_design.get('elements', [])
+            if not elements:
+                self.log_test("Custom Design Elements Validation", False, "No elements in custom_design")
+                return False
+                
+            print(f"   ✅ Found {len(elements)} design elements")
+            
+            # Validate each element structure
+            for i, element in enumerate(elements):
+                element_id = element.get('id', f'element-{i}')
+                element_type = element.get('type', 'unknown')
+                print(f"   Element {i+1}: {element_id} ({element_type})")
+                
+                # Check required fields based on InvitationPage expectations
+                required_fields = ['id', 'type', 'x', 'y', 'width', 'height']
+                missing_fields = [field for field in required_fields if field not in element]
+                
+                if missing_fields:
+                    self.log_test("Custom Design Element Validation", False, 
+                                f"Element {element_id} missing fields: {missing_fields}")
+                    return False
+                    
+                if element_type == 'text':
+                    text_fields = ['content', 'fontSize', 'color']
+                    missing_text_fields = [field for field in text_fields if field not in element]
+                    if missing_text_fields:
+                        self.log_test("Custom Design Text Element Validation", False,
+                                    f"Text element {element_id} missing fields: {missing_text_fields}")
+                        return False
+                    print(f"     Content: '{element.get('content', '')[:30]}...'")
+                    print(f"     Font: {element.get('fontSize')}px {element.get('fontFamily', 'default')}")
+                    
+                elif element_type == 'image':
+                    if 'src' not in element:
+                        self.log_test("Custom Design Image Element Validation", False,
+                                    f"Image element {element_id} missing src field")
+                        return False
+                    print(f"     Image: {element.get('src', '')[:50]}...")
+            
+            self.log_test("Custom Design Full Validation", True, 
+                         f"Custom design validated: {len(elements)} elements, canvas {canvas_size.get('width')}x{canvas_size.get('height')}")
+            return True
+            
+        except Exception as e:
+            self.log_test("Custom Design Validation", False, f"Exception during validation: {str(e)}")
+            return False
 
     def test_rsvp_response(self, guest_token):
         """Test RSVP response"""
