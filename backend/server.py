@@ -419,6 +419,80 @@ async def delete_template(template_id: str, current_user: User = Depends(get_cur
 async def root():
     return {"message": "Vivento API işləyir"}
 
+# File upload endpoints
+@api_router.post("/upload/image")
+async def upload_image(file: UploadFile = File(...), current_user: User = Depends(get_current_user)):
+    """Upload an image file and return the URL"""
+    
+    # Validate file type
+    if not file.content_type or not file.content_type.startswith('image/'):
+        raise HTTPException(status_code=400, detail="Yalnız şəkil faylları qəbul edilir")
+    
+    # Validate file size (max 5MB)
+    if file.size and file.size > 5 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="Fayl ölçüsü 5MB-dan böyük ola bilməz")
+    
+    try:
+        # Generate unique filename
+        file_extension = file.filename.split('.')[-1] if file.filename else 'jpg'
+        unique_filename = f"{uuid.uuid4()}.{file_extension}"
+        file_path = UPLOAD_DIR / unique_filename
+        
+        # Save file
+        with open(file_path, "wb") as buffer:
+            content = await file.read()
+            buffer.write(content)
+        
+        # Return the URL (relative to API base)
+        file_url = f"/uploads/{unique_filename}"
+        
+        return {
+            "filename": unique_filename,
+            "url": file_url,
+            "message": "Şəkil uğurla yükləndi"
+        }
+        
+    except Exception as e:
+        logger.error(f"File upload error: {e}")
+        raise HTTPException(status_code=500, detail="Fayl yüklənərkən xəta baş verdi")
+
+@api_router.post("/upload/background")
+async def upload_background_image(file: UploadFile = File(...)):
+    """Upload background image for admin templates (no auth required for admin users)"""
+    
+    # Validate file type
+    if not file.content_type or not file.content_type.startswith('image/'):
+        raise HTTPException(status_code=400, detail="Yalnız şəkil faylları qəbul edilir")
+    
+    # Validate file size (max 10MB for backgrounds)
+    if file.size and file.size > 10 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="Fayl ölçüsü 10MB-dan böyük ola bilməz")
+    
+    try:
+        # Generate unique filename
+        file_extension = file.filename.split('.')[-1] if file.filename else 'jpg'
+        unique_filename = f"bg_{uuid.uuid4()}.{file_extension}"
+        file_path = UPLOAD_DIR / unique_filename
+        
+        # Save file
+        with open(file_path, "wb") as buffer:
+            content = await file.read()
+            buffer.write(content)
+        
+        # Return the full URL for backgrounds
+        base_url = os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:8001')
+        file_url = f"{base_url}/uploads/{unique_filename}"
+        
+        return {
+            "filename": unique_filename,
+            "url": file_url,
+            "message": "Background şəkil uğurla yükləndi"
+        }
+        
+    except Exception as e:
+        logger.error(f"Background upload error: {e}")
+        raise HTTPException(status_code=500, detail="Background şəkil yüklənərkən xəta baş verdi")
+
 # Include the router in the main app
 app.include_router(api_router)
 
