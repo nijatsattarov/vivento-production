@@ -196,7 +196,14 @@ const InvitationPage = () => {
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-blue-200 to-purple-200 rounded-full opacity-20 blur-3xl"></div>
       </div>
 
-      <div className="relative z-10 max-w-2xl mx-auto">
+      <div className="relative z-10 max-w-4xl mx-auto">
+        {/* Custom Template Design */}
+        {event.custom_design && (
+          <div className="mb-8 text-center">
+            {renderCustomInvitation()}
+          </div>
+        )}
+
         {/* Main Invitation Card */}
         <Card className="glass border-0 shadow-2xl overflow-hidden" data-testid="invitation-card">
           {/* Header with decorative elements */}
