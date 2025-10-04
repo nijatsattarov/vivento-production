@@ -183,10 +183,115 @@ const AdminPanel = () => {
     }
   };
 
-  const deleteTemplate = (templateId) => {
-    setTemplates(prev => prev.filter(t => t.id !== templateId));
-    setStats(prev => ({ ...prev, totalTemplates: prev.totalTemplates - 1 }));
-    toast.success('Şablon silindi');
+  const deleteTemplate = async (templateId) => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      await axios.delete(`${API_BASE_URL}/api/admin/templates/${templateId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      await fetchAdminData(); // Refresh
+      toast.success('Şablon silindi');
+    } catch (error) {
+      toast.error('Şablon silinə bilmədi');
+    }
+  };
+
+  const addElement = (type) => {
+    const newElement = {
+      id: `${type}-${Date.now()}`,
+      type: type,
+      content: type === 'text' ? 'Yeni mətn' : 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=300&h=200&fit=crop',
+      x: 50 + (newTemplate.elements.length * 20),
+      y: 100 + (newTemplate.elements.length * 40),
+      width: type === 'text' ? 300 : 200,
+      height: type === 'text' ? 40 : 150,
+      fontSize: type === 'text' ? 16 : undefined,
+      fontFamily: type === 'text' ? 'Inter' : undefined,
+      color: type === 'text' ? '#374151' : undefined,
+      textAlign: type === 'text' ? 'center' : undefined,
+      src: type === 'image' ? 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=300&h=200&fit=crop' : undefined
+    };
+    
+    setNewTemplate(prev => ({
+      ...prev,
+      elements: [...prev.elements, newElement]
+    }));
+    setSelectedElement(newElement);
+  };
+
+  const updateElement = (elementId, updates) => {
+    setNewTemplate(prev => ({
+      ...prev,
+      elements: prev.elements.map(el => 
+        el.id === elementId ? { ...el, ...updates } : el
+      )
+    }));
+    
+    if (selectedElement?.id === elementId) {
+      setSelectedElement(prev => ({ ...prev, ...updates }));
+    }
+  };
+
+  const deleteElement = (elementId) => {
+    setNewTemplate(prev => ({
+      ...prev,
+      elements: prev.elements.filter(el => el.id !== elementId)
+    }));
+    
+    if (selectedElement?.id === elementId) {
+      setSelectedElement(null);
+    }
+  };
+
+  const editTemplate = (template) => {
+    setEditingTemplate(template);
+    setNewTemplate({
+      name: template.name,
+      category: template.category,
+      thumbnail_url: template.thumbnail_url,
+      is_premium: template.is_premium,
+      background_color: template.design_data?.canvasSize?.background || '#ffffff',
+      background_image: template.design_data?.canvasSize?.backgroundImage || '',
+      elements: template.design_data?.elements || []
+    });
+    setShowTemplateBuilder(true);
+  };
+
+  const saveEditedTemplate = async () => {
+    if (!editingTemplate) return;
+    
+    try {
+      const token = localStorage.getItem('accessToken');
+      const templateData = {
+        ...editingTemplate,
+        name: newTemplate.name,
+        category: newTemplate.category,
+        thumbnail_url: newTemplate.thumbnail_url,
+        is_premium: newTemplate.is_premium,
+        design_data: {
+          canvasSize: {
+            width: 400,
+            height: 600,
+            background: newTemplate.background_color,
+            backgroundImage: newTemplate.background_image
+          },
+          elements: newTemplate.elements
+        },
+        updated_at: new Date().toISOString()
+      };
+
+      await axios.put(`${API_BASE_URL}/api/admin/templates/${editingTemplate.id}`, templateData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      await fetchAdminData();
+      setShowTemplateBuilder(false);
+      setEditingTemplate(null);
+      toast.success('Şablon yeniləndi!');
+    } catch (error) {
+      toast.error('Şablon yenilənə bilmədi');
+    }
   };
 
   if (!isAuthenticated) {
