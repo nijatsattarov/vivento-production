@@ -668,6 +668,18 @@ const AdminTemplateBuilder = ({
             <CardContent className="space-y-4">
               {selectedElement.type === 'text' && (
                 <>
+                  {/* Element Purpose */}
+                  {selectedElement.purpose && (
+                    <div>
+                      <Label>Element Təyinatı</Label>
+                      <div className="p-2 bg-blue-50 border border-blue-200 rounded-md mt-1">
+                        <span className="text-sm text-blue-800">
+                          {selectedElement.purposeLabel || selectedElement.purpose}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  
                   <div>
                     <Label>Mətn</Label>
                     <textarea
