@@ -482,10 +482,49 @@ const AdminTemplateBuilder = ({
           </CardContent>
         </Card>
 
+        {/* Predefined Elements */}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">Hazır Elementlər</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <div className="grid grid-cols-1 gap-2">
+              {elementPurposes.slice(0, 6).map((purpose) => (
+                <Button 
+                  key={purpose.value}
+                  onClick={() => addPlaceholderElement(purpose)}
+                  variant="outline" 
+                  className="w-full justify-start text-sm h-auto p-3"
+                >
+                  <span className="mr-2">{purpose.label.split(' ')[0]}</span>
+                  <span className="truncate">{purpose.label.split(' ').slice(1).join(' ')}</span>
+                </Button>
+              ))}
+            </div>
+            
+            <div className="pt-2 border-t">
+              <p className="text-xs text-gray-600 mb-2">Digər elementlər:</p>
+              <div className="grid grid-cols-1 gap-2">
+                {elementPurposes.slice(6).map((purpose) => (
+                  <Button 
+                    key={purpose.value}
+                    onClick={() => addPlaceholderElement(purpose)}
+                    variant="ghost" 
+                    className="w-full justify-start text-xs h-auto p-2"
+                  >
+                    <span className="mr-2">{purpose.label.split(' ')[0]}</span>
+                    <span className="truncate">{purpose.label.split(' ').slice(1).join(' ')}</span>
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Element Tools */}
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg">Element Əlavə Et</CardTitle>
+            <CardTitle className="text-lg">Əl ilə Element</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <Button onClick={addTextElement} variant="outline" className="w-full justify-start">
