@@ -329,6 +329,40 @@ const TemplateEditor = () => {
               </TabsList>
 
               <TabsContent value="elements" className="space-y-4">
+                {/* Template Selector */}
+                <Card className="bg-white shadow-lg border-0">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm font-semibold">Şablon seç</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Button 
+                      onClick={() => setShowTemplateSelector(!showTemplateSelector)}
+                      variant="outline" 
+                      className="w-full"
+                      data-testid="template-selector-button"
+                    >
+                      <Palette className="mr-2 h-4 w-4" />
+                      {showTemplateSelector ? 'Şablonları gizlət' : 'Şablon seç'}
+                    </Button>
+                    
+                    {showTemplateSelector && (
+                      <div className="mt-3 space-y-2 max-h-40 overflow-y-auto">
+                        {availableTemplates.map((template) => (
+                          <button
+                            key={template.id}
+                            onClick={() => loadTemplate(template)}
+                            className="w-full p-2 text-left border rounded hover:bg-gray-50 text-sm"
+                            data-testid={`template-${template.id}`}
+                          >
+                            <div className="font-medium">{template.name}</div>
+                            <div className="text-xs text-gray-500">{template.category}</div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
                 <Card className="bg-white shadow-lg border-0">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-sm font-semibold">Elementlər əlavə et</CardTitle>
