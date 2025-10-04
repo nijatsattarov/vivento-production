@@ -202,6 +202,11 @@ const TemplateEditor = () => {
       
       setShowTemplateSelector(false);
       toast.success(`${template.name} şablonu yükləndi`);
+      
+      // Auto-save the loaded template
+      setTimeout(() => {
+        saveDesign();
+      }, 1000);
     }
   };
 
