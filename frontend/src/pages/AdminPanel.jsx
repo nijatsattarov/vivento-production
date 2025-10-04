@@ -392,14 +392,126 @@ const AdminPanel = () => {
           </TabsContent>
 
           <TabsContent value="templates" className="space-y-6">
+            {/* Add Template Form */}
+            <Card className="bg-white shadow-lg border-0">
+              <CardHeader>
+                <CardTitle>Yeni Şablon Əlavə Et</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="template-name">Şablon Adı</Label>
+                      <Input
+                        id="template-name"
+                        value={newTemplate.name}
+                        onChange={(e) => setNewTemplate(prev => ({ ...prev, name: e.target.value }))}
+                        placeholder="məs: Elegant Toy Şablonu"
+                        data-testid="template-name-input"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="template-category">Kateqoriya</Label>
+                      <select
+                        id="template-category"
+                        value={newTemplate.category}
+                        onChange={(e) => setNewTemplate(prev => ({ ...prev, category: e.target.value }))}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                        data-testid="template-category-select"
+                      >
+                        <option value="toy">💍 Toy</option>
+                        <option value="nişan">💖 Nişan</option>
+                        <option value="doğum_günü">🎂 Ad günü</option>
+                        <option value="korporativ">🏢 Korporativ</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="template-thumbnail">Thumbnail URL</Label>
+                      <Input
+                        id="template-thumbnail"
+                        value={newTemplate.thumbnail_url}
+                        onChange={(e) => setNewTemplate(prev => ({ ...prev, thumbnail_url: e.target.value }))}
+                        placeholder="https://example.com/image.jpg"
+                        data-testid="template-thumbnail-input"
+                      />
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id="template-premium"
+                        checked={newTemplate.is_premium}
+                        onChange={(e) => setNewTemplate(prev => ({ ...prev, is_premium: e.target.checked }))}
+                        data-testid="template-premium-checkbox"
+                      />
+                      <Label htmlFor="template-premium">Premium Şablon</Label>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="background-color">Fon Rəngi</Label>
+                      <Input
+                        id="background-color"
+                        type="color"
+                        value={newTemplate.background_color}
+                        onChange={(e) => setNewTemplate(prev => ({ ...prev, background_color: e.target.value }))}
+                        className="h-12"
+                        data-testid="background-color-input"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="background-image">Fon Şəkli URL</Label>
+                      <Input
+                        id="background-image"
+                        value={newTemplate.background_image}
+                        onChange={(e) => setNewTemplate(prev => ({ ...prev, background_image: e.target.value }))}
+                        placeholder="https://example.com/background.jpg"
+                        data-testid="background-image-input"
+                      />
+                    </div>
+                    
+                    {/* Preview */}
+                    <div>
+                      <Label>Önizləmə</Label>
+                      <div 
+                        className="w-full h-40 border rounded-lg p-4 relative overflow-hidden"
+                        style={{ 
+                          backgroundColor: newTemplate.background_color,
+                          backgroundImage: newTemplate.background_image ? `url(${newTemplate.background_image})` : 'none',
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center'
+                        }}
+                      >
+                        <div className="text-center space-y-2">
+                          <h3 className="font-bold text-lg">Tədbir Adı</h3>
+                          <p className="text-sm">Tədbir Tarixi</p>
+                          <p className="text-xs">Tədbir Yeri</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <Button 
+                      onClick={handleAddTemplate}
+                      disabled={isAddingTemplate}
+                      className="w-full bg-blue-600 hover:bg-blue-700"
+                      data-testid="submit-add-template"
+                    >
+                      {isAddingTemplate ? 'Əlavə edilir...' : 'Şablon Əlavə Et'}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card className="bg-white shadow-lg border-0">
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
-                  Şablon İdarəetməsi
-                  <Button size="sm" data-testid="add-template-button">
-                    <Plus className="mr-2 h-4 w-4" />
-                    Yeni Şablon
-                  </Button>
+                  Mövcud Şablonlar
+                  <Badge variant="secondary">{templates.length} şablon</Badge>
                 </CardTitle>
               </CardHeader>
               <CardContent>
