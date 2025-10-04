@@ -900,34 +900,35 @@ const AdminTemplateBuilder = ({
       
       {/* Purpose Selection Modal */}
       {showPurposeModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
-            <h3 className="text-lg font-semibold mb-4">Element Təyinatını Seçin</h3>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-in fade-in-0">
+          <div className="bg-white rounded-lg p-6 w-full max-w-lg mx-4 shadow-xl animate-in zoom-in-95">
+            <h3 className="text-lg font-semibold mb-2">Element Təyinatını Seçin</h3>
             <p className="text-sm text-gray-600 mb-4">Bu element hansı məlumatı göstərəcək?</p>
             
-            <div className="grid gap-2 max-h-64 overflow-y-auto">
+            <div className="grid gap-2 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
               {elementPurposes.map((purpose) => (
                 <Button
                   key={purpose.value}
                   onClick={() => handlePurposeAssignment(purpose.value)}
                   variant="outline"
-                  className="w-full justify-start h-auto p-3"
+                  className="w-full justify-start h-auto p-4 text-left hover:bg-blue-50 border-gray-200"
                 >
-                  <div className="text-left">
-                    <div className="font-medium">{purpose.label}</div>
-                    <div className="text-xs text-gray-500 mt-1">{purpose.placeholder}</div>
+                  <div className="text-left w-full">
+                    <div className="font-medium text-gray-800">{purpose.label}</div>
+                    <div className="text-sm text-gray-500 mt-1">{purpose.placeholder}</div>
                   </div>
                 </Button>
               ))}
             </div>
             
-            <div className="flex justify-end space-x-2 mt-4 pt-4 border-t">
+            <div className="flex justify-end space-x-2 mt-6 pt-4 border-t">
               <Button 
                 variant="outline" 
                 onClick={() => {
                   setShowPurposeModal(false);
                   setPendingElement(null);
                 }}
+                className="px-4"
               >
                 Ləğv et
               </Button>
@@ -935,6 +936,23 @@ const AdminTemplateBuilder = ({
           </div>
         </div>
       )}
+      
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #c1c1c1;
+          border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #a1a1a1;
+        }
+      `}</style>
     </div>
   );
 };
