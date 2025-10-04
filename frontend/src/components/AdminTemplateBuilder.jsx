@@ -14,7 +14,13 @@ import {
   ZoomIn,
   ZoomOut,
   Grid,
-  Save
+  Save,
+  Plus,
+  Calendar,
+  MapPin,
+  Clock,
+  Users,
+  Tag
 } from 'lucide-react';
 import { toast } from 'sonner';
 
