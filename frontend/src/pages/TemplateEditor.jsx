@@ -657,15 +657,19 @@ const TemplateEditor = () => {
                 {/* Canvas Container */}
                 <div className="flex justify-center p-8 bg-gray-50 rounded-lg">
                   <div 
-                    className="canvas-container relative bg-white border-2 border-gray-200 rounded-lg shadow-lg overflow-hidden"
+                    className="canvas-container relative border-2 border-gray-200 rounded-lg shadow-lg overflow-hidden"
                     style={{ 
                       width: canvasSize.width * (zoom / 100), 
                       height: canvasSize.height * (zoom / 100),
-                      backgroundImage: showGrid ? `
-                        linear-gradient(rgba(0,0,0,.1) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(0,0,0,.1) 1px, transparent 1px)
-                      ` : 'none',
-                      backgroundSize: showGrid ? '20px 20px' : 'auto'
+                      backgroundColor: canvasSize.background || '#ffffff',
+                      backgroundImage: canvasSize.backgroundImage ? 
+                        `url(${canvasSize.backgroundImage})${showGrid ? ', linear-gradient(rgba(0,0,0,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.1) 1px, transparent 1px)' : ''}` : 
+                        showGrid ? `linear-gradient(rgba(0,0,0,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.1) 1px, transparent 1px)` : 'none',
+                      backgroundSize: canvasSize.backgroundImage ? 
+                        `cover${showGrid ? ', 20px 20px, 20px 20px' : ''}` : 
+                        showGrid ? '20px 20px' : 'auto',
+                      backgroundPosition: 'center',
+                      backgroundRepeat: 'no-repeat'
                     }}
                     data-testid="design-canvas"
                   >
