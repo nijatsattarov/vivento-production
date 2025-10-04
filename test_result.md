@@ -134,13 +134,16 @@ frontend:
     implemented: false
     working: false
     file: "frontend/src/pages/InvitationPage.jsx"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: true
     status_history:
         - working: false
           agent: "main"
           comment: "User reports invitation preview not showing. Need to investigate InvitationPage component and custom design rendering."
+        - working: false
+          agent: "testing"
+          comment: "CRITICAL ISSUE: Demo invitation URLs return 404 errors. /api/invite/demo-{eventId} endpoints not implemented in backend. InvitationPage component exists and has proper custom design rendering logic, but backend doesn't handle demo invitation tokens. Need to implement demo invitation endpoint or fix token generation."
 
   - task: "Fix background image URLs not working in templates"
     implemented: true
