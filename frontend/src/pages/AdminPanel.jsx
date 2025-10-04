@@ -400,10 +400,11 @@ const AdminPanel = () => {
 
         {/* Main Content */}
         <Tabs defaultValue="users" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:w-[500px]">
+          <TabsList className="grid w-full grid-cols-5 lg:w-[600px]">
             <TabsTrigger value="users" data-testid="admin-users-tab">İstifadəçilər</TabsTrigger>
             <TabsTrigger value="events" data-testid="admin-events-tab">Tədbirlər</TabsTrigger>
             <TabsTrigger value="templates" data-testid="admin-templates-tab">Şablonlar</TabsTrigger>
+            <TabsTrigger value="site" data-testid="admin-site-tab">Sayt</TabsTrigger>
             <TabsTrigger value="settings" data-testid="admin-settings-tab">Ayarlar</TabsTrigger>
           </TabsList>
 
