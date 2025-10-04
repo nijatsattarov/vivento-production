@@ -92,12 +92,14 @@ const AdminTemplateBuilder = ({
     '#f43f5e', '#8B7355', '#DDA15E', '#BC6C25'
   ];
 
-  // Add element functions
-  const addTextElement = () => {
-    const newElement = {
-      id: `text-${Date.now()}`,
+  // Add predefined placeholder element
+  const addPlaceholderElement = (purposeData) => {
+    const baseElement = {
+      id: `${purposeData.value}-${Date.now()}`,
       type: 'text',
-      content: 'Yeni mətn əlavə edin',
+      content: purposeData.placeholder,
+      purpose: purposeData.value,
+      purposeLabel: purposeData.label,
       x: 50 + (templateData.elements.length * 10),
       y: 100 + (templateData.elements.length * 30),
       width: 300,
@@ -111,12 +113,60 @@ const AdminTemplateBuilder = ({
       zIndex: templateData.elements.length + 1
     };
     
+    // Adjust element properties based on purpose
+    let element = { ...baseElement };
+    
+    switch (purposeData.value) {
+      case 'event_name':
+        element = { ...element, fontSize: 24, fontWeight: 'bold', height: 50 };
+        break;
+      case 'couple_names':
+        element = { ...element, fontSize: 20, fontWeight: 'bold', height: 45 };
+        break;
+      case 'event_date':
+        element = { ...element, fontSize: 18, fontWeight: '600' };
+        break;
+      case 'event_time':
+        element = { ...element, fontSize: 16, width: 200 };
+        break;
+      case 'event_location':
+        element = { ...element, fontSize: 16, width: 350 };
+        break;
+      default:
+        break;
+    }
+    
     setTemplateData(prev => ({
       ...prev,
-      elements: [...prev.elements, newElement]
+      elements: [...prev.elements, element]
     }));
-    setSelectedElement(newElement);
-    toast.success('Mətn elementi əlavə edildi');
+    setSelectedElement(element);
+    toast.success(`${purposeData.label} əlavə edildi`);
+  };
+
+  // Add element functions
+  const addTextElement = () => {
+    const newElement = {
+      id: `text-${Date.now()}`,
+      type: 'text',
+      content: 'Yeni mətn əlavə edin',
+      purpose: 'custom_text',
+      purposeLabel: '📝 Sərbəst Mətn',
+      x: 50 + (templateData.elements.length * 10),
+      y: 100 + (templateData.elements.length * 30),
+      width: 300,
+      height: 40,
+      fontSize: 16,
+      fontFamily: 'Inter',
+      color: '#374151',
+      fontWeight: 'normal',
+      textAlign: 'center',
+      rotation: 0,
+      zIndex: templateData.elements.length + 1
+    };
+    
+    setPendingElement(newElement);
+    setShowPurposeModal(true);
   };
 
   const addImageElement = () => {
@@ -124,6 +174,8 @@ const AdminTemplateBuilder = ({
       id: `image-${Date.now()}`,
       type: 'image',
       src: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=300&h=200&fit=crop',
+      purpose: 'decorative',
+      purposeLabel: '🎨 Dekorativ Element',
       x: 50 + (templateData.elements.length * 10),
       y: 300 + (templateData.elements.length * 20),
       width: 200,
@@ -139,6 +191,57 @@ const AdminTemplateBuilder = ({
     }));
     setSelectedElement(newElement);
     toast.success('Şəkil elementi əlavə edildi');
+  };
+
+  // Handle purpose assignment
+  const handlePurposeAssignment = (purpose) => {
+    if (!pendingElement) return;
+    
+    const purposeData = elementPurposes.find(p => p.value === purpose);
+    const elementWithPurpose = {
+      ...pendingElement,
+      purpose: purpose,
+      purposeLabel: purposeData?.label || '📝 Sərbəst Mətn',
+      content: purposeData?.placeholder || pendingElement.content
+    };
+
+    // Adjust element properties based on purpose
+    switch (purpose) {
+      case 'event_name':
+        elementWithPurpose.fontSize = 24;
+        elementWithPurpose.fontWeight = 'bold';
+        elementWithPurpose.height = 50;
+        break;
+      case 'couple_names':
+        elementWithPurpose.fontSize = 20;
+        elementWithPurpose.fontWeight = 'bold';
+        elementWithPurpose.height = 45;
+        break;
+      case 'event_date':
+        elementWithPurpose.fontSize = 18;
+        elementWithPurpose.fontWeight = '600';
+        break;
+      case 'event_time':
+        elementWithPurpose.fontSize = 16;
+        elementWithPurpose.width = 200;
+        break;
+      case 'event_location':
+        elementWithPurpose.fontSize = 16;
+        elementWithPurpose.width = 350;
+        break;
+      default:
+        break;
+    }
+    
+    setTemplateData(prev => ({
+      ...prev,
+      elements: [...prev.elements, elementWithPurpose]
+    }));
+    setSelectedElement(elementWithPurpose);
+    
+    setShowPurposeModal(false);
+    setPendingElement(null);
+    toast.success(`${purposeData?.label || 'Mətn'} elementi əlavə edildi`);
   };
 
   // Update element
