@@ -218,6 +218,9 @@ const AdminTemplateBuilder = ({
 
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload/background`, {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
         body: formData
       });
 
