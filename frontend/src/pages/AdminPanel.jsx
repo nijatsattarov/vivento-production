@@ -12,7 +12,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { 
   Users, 
   Calendar, 
-  Template, 
+  FileText, 
   BarChart3, 
   Settings, 
   Plus,
