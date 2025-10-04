@@ -310,7 +310,7 @@ async def update_event(event_id: str, request: EventCreate, current_user: User =
     if not event:
         raise HTTPException(status_code=404, detail="Tədbir tapılmadı")
     
-    update_data = request.dict()
+    update_data = request.dict(exclude_none=True)  # Don't update None values
     update_data["updated_at"] = datetime.now(timezone.utc)
     
     await db.events.update_one({"id": event_id}, {"$set": update_data})
