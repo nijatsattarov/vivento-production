@@ -510,35 +510,34 @@ const AdminPanel = () => {
           </TabsContent>
 
           <TabsContent value="templates" className="space-y-6">
-            {/* Template Builder Toggle */}
-            <Card className="bg-white shadow-lg border-0">
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  Şablon İdarəetməsi
-                  <div className="flex items-center space-x-2">
-                    <Button 
-                      onClick={() => {
-                        setShowTemplateBuilder(!showTemplateBuilder);
-                        setEditingTemplate(null);
-                        setNewTemplate({
-                          name: '',
-                          category: 'toy',
-                          thumbnail_url: '',
-                          is_premium: false,
-                          background_color: '#ffffff',
-                          background_image: '',
-                          elements: []
-                        });
-                      }}
-                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-                      data-testid="toggle-template-builder"
-                    >
-                      <Plus className="mr-2 h-4 w-4" />
-                      {showTemplateBuilder ? 'Builder-i Bağla' : 'Yeni Şablon Yarat'}
-                    </Button>
-                  </div>
-                </CardTitle>
-              </CardHeader>
+            {showTemplateBuilder ? (
+              /* Template Builder Interface */
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                <AdminTemplateBuilder
+                  template={builderTemplate}
+                  onSave={handleBuilderSave}
+                  onCancel={handleBuilderCancel}
+                  isEditing={!!editingTemplate}
+                />
+              </div>
+            ) : (
+              <>
+                {/* Template Management Header */}
+                <Card className="bg-white shadow-lg border-0">
+                  <CardHeader>
+                    <CardTitle className="flex items-center justify-between">
+                      Şablon İdarəetməsi
+                      <Button 
+                        onClick={openTemplateBuilder}
+                        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                        data-testid="open-template-builder"
+                      >
+                        <Plus className="mr-2 h-4 w-4" />
+                        Yeni Şablon Yarat
+                      </Button>
+                    </CardTitle>
+                  </CardHeader>
+                </Card>
               
               {showTemplateBuilder && (
                 <CardContent>
