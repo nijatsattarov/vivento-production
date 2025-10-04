@@ -500,6 +500,26 @@ const TemplateEditor = () => {
                           </div>
                           
                           <div className="space-y-2">
+                            <Label htmlFor="font-family" className="text-xs">Şrift ailəsi</Label>
+                            <select
+                              id="font-family"
+                              value={selectedElement.fontFamily}
+                              onChange={(e) => updateElement(selectedElement.id, { fontFamily: e.target.value })}
+                              className="w-full p-2 border border-gray-200 rounded text-sm"
+                              data-testid="font-family-select"
+                            >
+                              <option value="Inter">Inter</option>
+                              <option value="Space Grotesk">Space Grotesk</option>
+                              <option value="Playfair Display">Playfair Display</option>
+                              <option value="Roboto">Roboto</option>
+                              <option value="Montserrat">Montserrat</option>
+                              <option value="Open Sans">Open Sans</option>
+                              <option value="Lato">Lato</option>
+                              <option value="Poppins">Poppins</option>
+                            </select>
+                          </div>
+                          
+                          <div className="space-y-2">
                             <Label htmlFor="text-color" className="text-xs">Rəng</Label>
                             <Input
                               id="text-color"
