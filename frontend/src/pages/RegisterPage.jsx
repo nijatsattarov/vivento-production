@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 
 const RegisterPage = () => {
   const { register } = useAuth();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
