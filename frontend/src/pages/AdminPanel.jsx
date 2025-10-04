@@ -117,13 +117,13 @@ const AdminPanel = () => {
         thumbnail_url: newTemplate.thumbnail_url || 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=400&h=600&fit=crop',
         is_premium: newTemplate.is_premium,
         design_data: {
-          canvas: {
+          canvasSize: {
             width: 400,
             height: 600,
             background: newTemplate.background_color,
             backgroundImage: newTemplate.background_image
           },
-          elements: [
+          elements: newTemplate.elements || [
             {
               id: 'title',
               type: 'text',
@@ -153,9 +153,11 @@ const AdminPanel = () => {
         created_at: new Date().toISOString()
       };
 
-      // Add to local state (in real app, this would be API call)
-      setTemplates(prev => [...prev, templateData]);
-      setStats(prev => ({ ...prev, totalTemplates: prev.totalTemplates + 1 }));
+      // Save to backend instead of local state
+      const response = await axios.post(`${API_BASE_URL}/api/admin/templates`, templateData);
+      
+      // Refresh templates list
+      await fetchAdminData();
       
       // Reset form
       setNewTemplate({
@@ -164,13 +166,14 @@ const AdminPanel = () => {
         thumbnail_url: '',
         is_premium: false,
         background_color: '#ffffff',
-        background_image: ''
+        background_image: '',
+        elements: []
       });
 
       toast.success('Şablon uğurla əlavə edildi!');
     } catch (error) {
       console.error('Template add error:', error);
-      toast.error('Şablon əlavə edilə bilmədi');
+      toast.error('Şablon əlavə edilə bilmədi: ' + (error.response?.data?.detail || error.message));
     } finally {
       setIsAddingTemplate(false);
     }
