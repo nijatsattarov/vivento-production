@@ -221,6 +221,21 @@ test_plan:
   test_all: false
   test_priority: "high_first"
 
+  - task: "Fix Netlify deployment configuration"
+    implemented: true
+    working: true
+    file: "netlify.toml, frontend/package.json"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "main"
+          comment: "Netlify deployment failing due to monorepo structure, missing netlify.toml, and Node.js version conflicts"
+        - working: "fixed"
+          agent: "main"
+          comment: "FIXED deployment configuration: ✅ Created netlify.toml with correct base directory 'frontend' ✅ Updated build command to use yarn instead of npm ✅ Set Node.js version to 20 ✅ Added fabric.js dependency ✅ Successful frontend build completed locally ✅ Ready for deployment testing"
+
 agent_communication:
     - agent: "main"
       message: "Starting enhancement of AdminTemplateBuilder with element purpose assignment functionality. Will add predefined placeholder elements with automatic content and purpose selection dialog."
@@ -234,3 +249,5 @@ agent_communication:
       message: "PRIORITY FEATURES TESTING COMPLETED: ✅ File Upload System: Interface implemented in AdminTemplateBuilder with background image upload functionality ✅ Next Step Workflow: Button and modal structure present in TemplateEditor ✅ Template Editor Background Images: loadTemplate function fixed to properly load canvasSize and background images ✅ Admin Panel: Accessible and functional. CRITICAL ISSUES FOUND: ❌ Invitation Preview: Demo invitation URLs return 404 errors - /api/invite/demo-{eventId} endpoints not working ❌ Authentication: Login/registration forms have validation issues preventing proper testing ❌ Template Editor Access: Direct editor URLs not accessible without proper authentication. Main agent should focus on fixing invitation preview functionality and authentication flow."
     - agent: "testing"
       message: "FINAL COMPREHENSIVE TESTING COMPLETED: ✅ DEMO INVITATION PREVIEW: Fixed and working perfectly! Created real event via API, tested /invite/demo-{eventId} URL pattern, confirmed proper rendering of custom design elements, demo guest display, and invitation card layout. ✅ FILE UPLOAD SYSTEM: Backend endpoints functional with proper validation (/api/upload/background returns correct error for invalid files). ✅ AUTHENTICATION ISSUES: Session management problems preventing full user flow testing - users get logged out frequently, preventing complete event creation and template editor access. ✅ BACKEND APIS: All core APIs working (auth, events, invitations, uploads). ❌ FRONTEND SESSION PERSISTENCE: Authentication tokens not persisting properly in browser, causing redirects to login page. Main agent should focus on fixing frontend authentication state management for complete user flow functionality."
+    - agent: "main"
+      message: "DEPLOYMENT CONFIGURATION COMPLETED: Fixed Netlify deployment issues by creating netlify.toml with proper monorepo configuration, updating to yarn build system, adding fabric.js dependency. Local frontend build successful. Need to update GitHub repository and trigger Netlify redeploy."
