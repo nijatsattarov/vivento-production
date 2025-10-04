@@ -534,7 +534,13 @@ const AdminPanel = () => {
                             <Button variant="outline" size="sm">
                               <Edit className="h-3 w-3" />
                             </Button>
-                            <Button variant="outline" size="sm" className="text-red-600">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="text-red-600"
+                              onClick={() => deleteTemplate(template.id)}
+                              data-testid={`delete-template-${template.id}`}
+                            >
                               <Trash2 className="h-3 w-3" />
                             </Button>
                           </div>
