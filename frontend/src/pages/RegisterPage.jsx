@@ -76,6 +76,10 @@ const RegisterPage = () => {
     
     if (result.success) {
       toast.success('Qeydiyyat tamamlandı! Xoş gəlmisiniz!');
+      // Redirect to dashboard after successful registration
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 1000);
     } else {
       toast.error(result.error);
     }
