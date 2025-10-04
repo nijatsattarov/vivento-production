@@ -38,6 +38,8 @@ const TemplateEditor = () => {
   const [canvasSize, setCanvasSize] = useState({ width: 400, height: 600 });
   const [zoom, setZoom] = useState(100);
   const [showGrid, setShowGrid] = useState(false);
+  const [availableTemplates, setAvailableTemplates] = useState([]);
+  const [showTemplateSelector, setShowTemplateSelector] = useState(false);
   
   // Design elements state
   const [elements, setElements] = useState([
