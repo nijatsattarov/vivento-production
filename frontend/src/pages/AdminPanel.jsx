@@ -174,7 +174,7 @@ const AdminPanel = () => {
                   <p className="text-3xl font-bold text-green-600 mt-1">{stats.totalTemplates}</p>
                 </div>
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                  <Template className="h-6 w-6 text-green-600" />
+                  <FileText className="h-6 w-6 text-green-600" />
                 </div>
               </div>
             </CardContent>
