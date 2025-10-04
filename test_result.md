@@ -132,11 +132,11 @@ frontend:
 
   - task: "Fix invitation preview not showing"
     implemented: true
-    working: "NA"
+    working: true
     file: "frontend/src/pages/InvitationPage.jsx, backend/server.py"
     stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
         - working: false
           agent: "main"
@@ -147,6 +147,9 @@ frontend:
         - working: "fixed"
           agent: "main"
           comment: "FIXED demo invitation endpoint: ✅ Added demo invitation support in /api/invite/{token} endpoint ✅ Handles tokens starting with 'demo-' prefix ✅ Creates demo guest object for preview ✅ Returns proper event and guest data for invitation rendering ✅ InvitationPage now has backend support for demo URLs. Ready for testing."
+        - working: true
+          agent: "testing"
+          comment: "✅ DEMO INVITATION PREVIEW WORKING PERFECTLY! Comprehensive testing completed: ✅ Created test event via API with custom design (event ID: 42c36275-bead-4c83-816d-f6354bd531e7) ✅ Demo URL /invite/demo-{eventId} loads invitation page successfully ✅ Event title 'Test Wedding Event' displays correctly ✅ Demo guest name 'Demo Qonaq' shows properly ✅ Custom design elements render correctly (5 elements found) ✅ Custom design text content 'Test Wedding' displays ✅ Invitation card with proper styling and layout ✅ Backend endpoint returns 200 OK for valid events, 404 for invalid ones ✅ InvitationPage component handles demo guests correctly. Demo invitation functionality is fully operational!"
 
   - task: "Fix background image URLs not working in templates"
     implemented: true
