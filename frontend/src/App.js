@@ -10,6 +10,7 @@ import CreateEvent from "./pages/CreateEvent";
 import EventDetail from "./pages/EventDetail";
 import TemplateEditor from "./pages/TemplateEditor";
 import InvitationPage from "./pages/InvitationPage";
+import AdminPanel from "./pages/AdminPanel";
 import LoadingSpinner from "./components/LoadingSpinner";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./App.css";
