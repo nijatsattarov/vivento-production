@@ -194,6 +194,44 @@ const TemplateEditor = () => {
     setSelectedElement(element);
   };
 
+  const handleMouseDown = (e, element) => {
+    e.preventDefault();
+    setSelectedElement(element);
+    setIsDragging(true);
+    
+    const rect = e.currentTarget.getBoundingClientRect();
+    const canvasRect = e.currentTarget.parentElement.getBoundingClientRect();
+    
+    setDragOffset({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    });
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging || !selectedElement) return;
+    
+    e.preventDefault();
+    const canvasRect = document.querySelector('[data-testid="design-canvas"]').getBoundingClientRect();
+    
+    const newX = Math.max(0, Math.min(
+      canvasSize.width - selectedElement.width,
+      ((e.clientX - canvasRect.left - dragOffset.x) / (zoom / 100))
+    ));
+    
+    const newY = Math.max(0, Math.min(
+      canvasSize.height - selectedElement.height,
+      ((e.clientY - canvasRect.top - dragOffset.y) / (zoom / 100))
+    ));
+
+    updateElement(selectedElement.id, { x: newX, y: newY });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    setDragOffset({ x: 0, y: 0 });
+  };
+
   const updateElement = (id, updates) => {
     setElements(prev => prev.map(el => 
       el.id === id ? { ...el, ...updates } : el
