@@ -360,16 +360,35 @@ const TemplateEditor = () => {
                     </Button>
                     
                     {showTemplateSelector && (
-                      <div className="mt-3 space-y-2 max-h-40 overflow-y-auto">
+                      <div className="mt-3 space-y-3 max-h-80 overflow-y-auto">
                         {availableTemplates.map((template) => (
                           <button
                             key={template.id}
                             onClick={() => loadTemplate(template)}
-                            className="w-full p-2 text-left border rounded hover:bg-gray-50 text-sm"
+                            className="w-full p-3 text-left border rounded-lg hover:bg-blue-50 hover:border-blue-200 transition-all card-hover"
                             data-testid={`template-${template.id}`}
                           >
-                            <div className="font-medium">{template.name}</div>
-                            <div className="text-xs text-gray-500">{template.category}</div>
+                            <div className="flex items-start space-x-3">
+                              <img 
+                                src={template.thumbnail_url} 
+                                alt={template.name}
+                                className="w-16 h-20 object-cover rounded border"
+                                onError={(e) => {
+                                  e.target.src = 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=64&h=80&fit=crop';
+                                }}
+                              />
+                              <div className="flex-1 min-w-0">
+                                <div className="font-medium text-sm text-gray-900 truncate">{template.name}</div>
+                                <div className="text-xs text-gray-500 capitalize mt-1">{template.category}</div>
+                                <div className="flex items-center space-x-2 mt-2">
+                                  {template.is_premium ? (
+                                    <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">Premium</span>
+                                  ) : (
+                                    <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Pulsuz</span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
                           </button>
                         ))}
                       </div>
