@@ -94,6 +94,21 @@ const TemplateEditor = () => {
     fetchTemplates();
   }, [eventId]);
 
+  useEffect(() => {
+    const handleGlobalMouseMove = (e) => handleMouseMove(e);
+    const handleGlobalMouseUp = () => handleMouseUp();
+
+    if (isDragging) {
+      document.addEventListener('mousemove', handleGlobalMouseMove);
+      document.addEventListener('mouseup', handleGlobalMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleGlobalMouseMove);
+      document.removeEventListener('mouseup', handleGlobalMouseUp);
+    };
+  }, [isDragging, selectedElement, dragOffset, zoom, canvasSize]);
+
   const fetchEventData = async () => {
     try {
       const token = localStorage.getItem('accessToken');
