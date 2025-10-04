@@ -255,6 +255,12 @@ const TemplateEditor = () => {
     if (selectedElement?.id === id) {
       setSelectedElement(prev => ({ ...prev, ...updates }));
     }
+    
+    // Auto-save after changes (debounced)
+    clearTimeout(window.autoSaveTimeout);
+    window.autoSaveTimeout = setTimeout(() => {
+      saveDesign();
+    }, 2000);
   };
 
   const addTextElement = () => {
