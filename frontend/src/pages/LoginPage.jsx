@@ -42,6 +42,10 @@ const LoginPage = () => {
     
     if (result.success) {
       toast.success('Uğurla giriş etdiniz!');
+      // Redirect to dashboard after successful login
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 1000);
     } else {
       toast.error(result.error);
     }
