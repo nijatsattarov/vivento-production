@@ -35,7 +35,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return simple_hash_password(plain_password) == hashed_password
 SECRET_KEY = os.environ.get("SECRET_KEY", "your-super-secret-key-here")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 1440  # 24 hours
 
 # Create the main app
 app = FastAPI(title="Vivento - Dəvətnamə Platforması")
