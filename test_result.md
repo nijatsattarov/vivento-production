@@ -117,6 +117,18 @@ backend:
           agent: "testing"
           comment: "COMPREHENSIVE BACKEND TESTING COMPLETED SUCCESSFULLY! All invitation system APIs working perfectly: ✅ Custom design data properly saved in events ✅ /api/invite/{token} endpoint returns complete custom_design data ✅ Custom design structure matches InvitationPage expectations ✅ Created test event with 4 design elements (text + image) ✅ Canvas size, background, and element positioning data preserved ✅ All CRUD operations for events, guests, and invitations working ✅ 22/22 tests passed (100% success rate). Custom design invitation system is fully functional."
 
+  - task: "Backend deployment on Render.com"
+    implemented: true
+    working: true
+    file: "backend/server.py, backend/requirements.txt"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "Backend successfully deployed on Render.com at https://event-cards-5.preview.emergentagent.com - tested and responding correctly. MongoDB Atlas connection working."
+
 frontend:
   - task: "Add element purpose assignment to AdminTemplateBuilder"
     implemented: true
