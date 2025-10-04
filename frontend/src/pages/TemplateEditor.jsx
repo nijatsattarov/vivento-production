@@ -731,10 +731,16 @@ const TemplateEditor = () => {
                     {elements.map((element) => (
                       <div
                         key={element.id}
-                        onClick={() => handleElementClick(element)}
-                        className={`absolute cursor-pointer transition-all ${
-                          selectedElement?.id === element.id ? 'ring-2 ring-blue-500' : ''
-                        }`}
+                        onMouseDown={(e) => handleMouseDown(e, element)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleElementClick(element);
+                        }}
+                        className={`absolute cursor-move transition-all select-none ${
+                          selectedElement?.id === element.id 
+                            ? 'ring-2 ring-blue-500 shadow-lg' 
+                            : 'hover:ring-1 hover:ring-gray-300'
+                        } ${isDragging && selectedElement?.id === element.id ? 'z-50' : 'z-10'}`}
                         style={{
                           left: element.x * (zoom / 100),
                           top: element.y * (zoom / 100),
