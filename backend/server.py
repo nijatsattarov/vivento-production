@@ -177,9 +177,7 @@ async def register(request: RegisterRequest):
         raise HTTPException(status_code=400, detail="Bu email artıq istifadədədir")
     
     # Create user
-    # Truncate password to 72 bytes for bcrypt compatibility
-    password_bytes = request.password.encode('utf-8')[:72]
-    hashed_password = pwd_context.hash(password_bytes.decode('utf-8'))
+    hashed_password = simple_hash_password(request.password)
     user = User(
         name=request.name,
         email=request.email
