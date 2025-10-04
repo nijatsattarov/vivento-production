@@ -23,6 +23,7 @@ import {
   Tag
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useAuth } from '../contexts/AuthContext';
 
 const AdminTemplateBuilder = ({ 
   template, 
