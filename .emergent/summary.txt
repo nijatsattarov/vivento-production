@@ -1,0 +1,75 @@
+<analysis>
+The AI engineer has successfully built the core functionalities of a Paperless Post-like application, Vivento. The development followed an iterative approach, starting with user authentication and progressively building the event and template management features, including a Canva-like editor and an admin panel. A significant portion of the work involved translating user requirements from Azerbaijani, implementing a robust authentication system with JWT, and integrating essential UI components using Shadcn UI. The engineer meticulously addressed bugs identified through internal testing and user feedback, particularly concerning the template editor's functionality (drag & drop, element management, font/color, custom design saving) and the admin panel's template creation and editing capabilities. The current focus is on enhancing the Admin Template Builder with predefined placeholder elements and assigning purposes to them, indicating a shift towards a highly dynamic and customizable template creation experience.
+</analysis>
+
+<product_requirements>
+The goal is to create Vivento, a PaperlessPost-like website with a minimalist design, with the entire interface in Azerbaijani. Key modules include:
+1.  **User Authentication & Management:** Standard registration (email/password), social logins (Google/Facebook), user dashboard (personal info, invitations, payments), password recovery.
+2.  **Template & Design Module:** Catalog of ready-made invitation templates (wedding, engagement, birthday, corporate), template selection, dynamic Canva-style editor (text editing, image/logo upload, color/font selection), responsive design.
+3.  **Event Management Module:** Create/edit events, event details (date, location, map link, notes), multiple events per user.
+4.  **Guest List & RSVP Module:** Add guests (manual/CSV optional), unique invite links, RSVP options (Coming/Not Coming), auto-saved RSVP results in dashboard, guest count/status reports.
+5.  **Sharing & Sending Module:** WhatsApp/Email sharing, QR code generation (optional).
+6.  **Payment & Premium Features:** Epoint.az integration, Free (1 event, max 50 invites), Premium (unlimited invites, custom designs, extra gallery), VIP (post-event photo/video gallery), subscription/one-time payment models.
+7.  **User Dashboard:** View all created events, track RSVP statuses, premium features/payment history.
+8.  **Admin Panel Module:** Manage templates (add/change design), monitor users/events, premium user subscriptions, statistics/reports, dynamic CMS (edit site content, blog posts, about page, menus, prices, view registered users).
+9.  **Technical Module:** Security (reCAPTCHA, SSL), SEO/social meta tags, mobile optimization, backup, speed optimization.
+
+The implementation has focused on authentication, core event/template management, and a dynamic template editor, along with an admin panel.
+</product_requirements>
+
+<key_technical_concepts>
+-   **FastAPI:** Python backend framework.
+-   **React:** JavaScript frontend library.
+-   **MongoDB:** NoSQL database.
+-   **JWT (JSON Web Tokens):** For user authentication and session management.
+-   **Shadcn UI:** A collection of accessible and customizable UI components for React.
+-   **Fabric.js:** JavaScript canvas library for the Canva-like template editor.
+-   **OAuth (Facebook):** For social login integration.
+-   **Environment Variables:** For secure configuration (, , ).
+-   **Supervisor:** Process control system for managing backend/frontend services.
+</key_technical_concepts>
+
+<code_architecture>
+The application follows a standard full-stack architecture with a React frontend, FastAPI backend, and MongoDB database.
+
+
+
+-   : Main FastAPI application. Contains API routes for authentication, user management, event CRUD, and template management. Defines Pydantic models for data validation and MongoDB interaction. The  model now includes .
+-   : Stores backend environment variables like .
+-   : The root React component defining the application's routing using . Includes  provider and .
+-   : Manages global authentication state, including login, logout, and token handling.
+-   : A React component to protect routes, redirecting unauthenticated users to the login page.
+-   : The Canva-like editor page. Utilizes  for canvas manipulation, enabling text, image, color, font, drag & drop, and element deletion. It now saves  to the backend.
+-   : The administrative interface. Includes tabs for User Management, Event Management, Template Management, and Site Settings. It now integrates .
+-   : A newly created component for building templates dynamically within the Admin Panel. It aims to provide a live editor experience for template creation and modification.
+-   : Renders the unique invitation link, now capable of displaying custom designs saved from the .
+-   : Stores frontend environment variables like  and .
+-   : Configuration for Create React App Co Override, used to correctly handle environment variables.
+-   : Script to initialize default templates in the MongoDB database.
+-   : Script to add a specific elegant wedding template based on user request.
+</code_architecture>
+
+<pending_tasks>
+-   Full Google/Facebook OAuth integration.
+-   Password recovery function.
+-   Guest list CSV/Excel import.
+-   Full RSVP module with detailed response tracking.
+-   WhatsApp/Email sharing and QR code generation for invitations.
+-   Epoint.az payment system integration.
+-   Implementation of Free, Premium, VIP package logic.
+-   Further Admin Panel CMS features (blog posts, about page, menus, logo change).
+-   SEO, mobile optimization, backup, speed optimization.
+-   Complete dynamic input and element purpose assignment in Admin Template Builder.
+</pending_tasks>
+
+<current_work>
+Currently, the AI engineer is working on enhancing the Admin Template Builder component (). The goal is to make the template creation process more dynamic and intuitive for administrators. This involves:
+1.  **Adding ready-made placeholder elements:** Instead of just generic text inputs, the admin should be able to drag pre-defined elements like date, location, time, and names onto the canvas.
+2.  **Assigning purpose to elements:** When an element is added, the admin needs the ability to specify its purpose (e.g., this text field is for the 'Event Date', this image is for the 'Logo').
+
+The system currently has a working authentication flow (email/password, basic Facebook SDK integration), and users can create events and design custom invitations using a Canvas-based editor with drag-and-drop, text, color, and font editing capabilities. These custom designs are correctly saved and rendered when guests access their unique invitation links. The admin panel is functional for user/event/template management, and a preliminary template builder has been integrated, which is now being further refined to meet the latest user requirements for dynamic placeholder elements.
+</current_work>
+
+<optional_next_step>
+I will continue implementing the placeholder elements with specific purpose selection in the  component.
+</optional_next_step>
