@@ -590,6 +590,9 @@ class ViventoAPITester:
         self.test_facebook_login()
         self.test_get_current_user()
         
+        # Check existing custom designs first
+        self.check_existing_custom_designs()
+        
         # Template tests
         self.test_get_templates()
         self.test_get_templates_by_category()
