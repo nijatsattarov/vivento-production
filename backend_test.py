@@ -214,6 +214,110 @@ class ViventoAPITester:
             return True, response['id']
         return False, None
 
+    def test_create_event_with_custom_design(self):
+        """Test creating an event with custom design data"""
+        if not self.token:
+            self.log_test("Create Event with Custom Design", False, "No token available")
+            return False, None
+            
+        # Create comprehensive custom design data that matches InvitationPage expectations
+        custom_design = {
+            "canvasSize": {
+                "width": 400,
+                "height": 600,
+                "background": "#f8f9fa",
+                "backgroundImage": "https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            "elements": [
+                {
+                    "id": "title-element",
+                    "type": "text",
+                    "content": "Toy Mərasimi",
+                    "x": 50,
+                    "y": 100,
+                    "width": 300,
+                    "height": 60,
+                    "fontSize": 28,
+                    "fontFamily": "Inter",
+                    "color": "#2d3748",
+                    "fontWeight": "bold",
+                    "textAlign": "center",
+                    "lineHeight": 1.4,
+                    "letterSpacing": "normal"
+                },
+                {
+                    "id": "date-element", 
+                    "type": "text",
+                    "content": "25 Dekabr 2024",
+                    "x": 50,
+                    "y": 200,
+                    "width": 300,
+                    "height": 40,
+                    "fontSize": 18,
+                    "fontFamily": "Inter",
+                    "color": "#4a5568",
+                    "fontWeight": "normal",
+                    "textAlign": "center",
+                    "lineHeight": 1.4,
+                    "letterSpacing": "normal"
+                },
+                {
+                    "id": "location-element",
+                    "type": "text", 
+                    "content": "Bakı, Azərbaycan",
+                    "x": 50,
+                    "y": 260,
+                    "width": 300,
+                    "height": 40,
+                    "fontSize": 16,
+                    "fontFamily": "Inter",
+                    "color": "#718096",
+                    "fontWeight": "normal",
+                    "textAlign": "center",
+                    "lineHeight": 1.4,
+                    "letterSpacing": "normal"
+                },
+                {
+                    "id": "decorative-image",
+                    "type": "image",
+                    "src": "https://images.unsplash.com/photo-1464207687429-7505649dae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+                    "x": 150,
+                    "y": 350,
+                    "width": 100,
+                    "height": 100,
+                    "borderRadius": 50
+                }
+            ]
+        }
+        
+        event_data = {
+            "name": "Test Custom Design Toy Mərasimi",
+            "date": "2024-12-25T18:00:00Z",
+            "location": "Bakı, Azərbaycan",
+            "map_link": "https://maps.google.com/test",
+            "additional_notes": "Custom design test tədbiri",
+            "template_id": "custom-template",
+            "custom_design": custom_design
+        }
+        
+        success, response = self.run_test(
+            "Create Event with Custom Design",
+            "POST",
+            "events",
+            200,
+            data=event_data
+        )
+        
+        if success and 'id' in response:
+            # Verify custom_design was saved properly
+            if 'custom_design' in response and response['custom_design']:
+                print(f"   ✅ Custom design saved with {len(response['custom_design'].get('elements', []))} elements")
+                return True, response['id']
+            else:
+                self.log_test("Create Event with Custom Design", False, "Custom design not saved in response")
+                return False, None
+        return False, None
+
     def test_get_user_events(self):
         """Test getting user events"""
         if not self.token:
