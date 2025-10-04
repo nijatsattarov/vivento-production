@@ -425,6 +425,15 @@ const TemplateEditor = () => {
                 <Save className="mr-2 h-4 w-4" />
                 {isSaving ? 'Saxlanılır...' : 'Saxla'}
               </Button>
+
+              <Button 
+                onClick={() => setShowNextStepModal(true)}
+                className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+                data-testid="next-step-button"
+              >
+                <Users className="mr-2 h-4 w-4" />
+                Növbəti Addım
+              </Button>
             </div>
           </div>
         </div>
