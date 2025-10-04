@@ -1,6 +1,6 @@
 {
-  "total_tests": 16,
-  "passed_tests": 16,
+  "total_tests": 22,
+  "passed_tests": 22,
   "failed_tests": 0,
   "success_rate": "100.0%",
   "test_details": [
@@ -33,6 +33,16 @@
       "test": "Get Current User",
       "success": true,
       "details": ""
+    },
+    {
+      "test": "Get User Events for Custom Design Check",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Check Existing Custom Designs",
+      "success": true,
+      "details": "No existing custom designs found"
     },
     {
       "test": "Get Templates",
@@ -83,6 +93,26 @@
       "test": "RSVP Response",
       "success": true,
       "details": ""
+    },
+    {
+      "test": "Create Event with Custom Design",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Add Guest",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Invitation Custom Design Test",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Custom Design Full Validation",
+      "success": true,
+      "details": "Custom design validated: 4 elements, canvas 400x600"
     }
   ]
 }
