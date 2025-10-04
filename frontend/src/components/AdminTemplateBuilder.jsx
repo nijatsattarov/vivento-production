@@ -59,6 +59,111 @@ const AdminTemplateBuilder = ({
     'Crimson Text'
   ];
 
+  // Predefined placeholder elements
+  const placeholderElements = [
+    {
+      id: 'event-name',
+      type: 'text',
+      label: '🎉 Tədbir Adı',
+      content: 'Tədbir Adı',
+      defaultStyle: {
+        fontSize: 28,
+        fontFamily: 'Space Grotesk',
+        color: '#1f2937',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        width: 300,
+        height: 60
+      }
+    },
+    {
+      id: 'couple-names',
+      type: 'text',
+      label: '💕 Ad və Soyad',
+      content: 'Gəlin və Bəy Adları',
+      defaultStyle: {
+        fontSize: 24,
+        fontFamily: 'Playfair Display',
+        color: '#374151',
+        fontWeight: '600',
+        textAlign: 'center',
+        width: 280,
+        height: 80
+      }
+    },
+    {
+      id: 'event-date',
+      type: 'text',
+      label: '📅 Tarix',
+      content: 'Tədbir Tarixi',
+      defaultStyle: {
+        fontSize: 18,
+        fontFamily: 'Inter',
+        color: '#6b7280',
+        fontWeight: 'normal',
+        textAlign: 'center',
+        width: 250,
+        height: 40
+      }
+    },
+    {
+      id: 'event-time',
+      type: 'text',
+      label: '⏰ Saat',
+      content: 'Başlama Saatı',
+      defaultStyle: {
+        fontSize: 16,
+        fontFamily: 'Inter',
+        color: '#6b7280',
+        fontWeight: 'normal',
+        textAlign: 'center',
+        width: 200,
+        height: 35
+      }
+    },
+    {
+      id: 'event-location',
+      type: 'text',
+      label: '📍 Məkan',
+      content: 'Tədbir Məkanı',
+      defaultStyle: {
+        fontSize: 16,
+        fontFamily: 'Inter',
+        color: '#6b7280',
+        fontWeight: 'normal',
+        textAlign: 'center',
+        width: 280,
+        height: 40
+      }
+    },
+    {
+      id: 'invitation-text',
+      type: 'text',
+      label: '✉️ Dəvət Mətni',
+      content: 'İştirakınızı gözləyirik',
+      defaultStyle: {
+        fontSize: 14,
+        fontFamily: 'Playfair Display',
+        color: '#374151',
+        fontWeight: 'normal',
+        textAlign: 'center',
+        width: 300,
+        height: 50
+      }
+    },
+    {
+      id: 'decorative-image',
+      type: 'image',
+      label: '🖼️ Dekorativ Şəkil',
+      src: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=200&h=150&fit=crop',
+      defaultStyle: {
+        width: 150,
+        height: 100,
+        borderRadius: 8
+      }
+    }
+  ];
+
   // Color palette
   const colorPalette = [
     '#000000', '#374151', '#6b7280', '#9ca3af',
