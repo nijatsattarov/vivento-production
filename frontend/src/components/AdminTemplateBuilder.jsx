@@ -865,12 +865,19 @@ const AdminTemplateBuilder = ({
                       ) : (
                         <Image className="h-4 w-4 text-gray-500" />
                       )}
-                      <span className="text-sm truncate">
-                        {element.type === 'text' 
-                          ? element.content?.substring(0, 20) + (element.content?.length > 20 ? '...' : '')
-                          : 'Şəkil'
-                        }
-                      </span>
+                      <div className="flex-1 min-w-0">
+                        <span className="text-sm truncate block">
+                          {element.type === 'text' 
+                            ? element.content?.substring(0, 20) + (element.content?.length > 20 ? '...' : '')
+                            : 'Şəkil'
+                          }
+                        </span>
+                        {element.purposeLabel && (
+                          <span className="text-xs text-blue-600 truncate block">
+                            {element.purposeLabel}
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <Button
                       variant="ghost"
