@@ -245,10 +245,55 @@ test_plan:
           comment: "Netlify deployment failing due to monorepo structure, missing netlify.toml, and Node.js version conflicts"
         - working: "fixed"
           agent: "main"
-          comment: "FIXED deployment configuration: ✅ Created netlify.toml with correct base directory 'frontend' ✅ Updated build command to use yarn instead of npm ✅ Set Node.js version to 20 ✅ Added fabric.js dependency ✅ Successful frontend build completed locally ✅ Ready for deployment testing"
-        - working: true
-          agent: "testing"
-          comment: "BACKEND DEPLOYMENT TESTING COMPLETED SUCCESSFULLY! ✅ All 22 core API tests passed (100% success rate) ✅ Authentication system working (register/login/Facebook/JWT tokens) ✅ Event management fully functional (CRUD operations, custom designs) ✅ Guest management and RSVP system operational ✅ Template system working (get templates, categories) ✅ File upload system functional (/api/upload/image, /api/upload/background with proper validation) ✅ Admin functionality working (template CRUD with proper authorization) ✅ Demo invitation system working perfectly ✅ Public invitation endpoints operational ✅ MongoDB connectivity confirmed ✅ Backend deployed at https://event-cards-5.preview.emergentagent.com is fully operational. All backend APIs are working correctly after deployment configuration updates."
+          comment: "FIXED deployment configuration: ✅ Created netlify.toml with correct publish path 'build' ✅ Updated backend URL to https://vivento-production.onrender.com ✅ Set Node.js version to 20 ✅ Added fabric.js dependency ✅ Ready for deployment"
+
+  - task: "Fix admin background image upload"
+    implemented: false
+    working: false
+    file: "frontend/src/components/AdminTemplateBuilder.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "Admin dəvətnamə şablonu yaradanda background image yüklənmir - Background images not uploading in admin template builder"
+
+  - task: "Fix event/template save functionality"
+    implemented: false
+    working: false
+    file: "frontend/src/pages/TemplateEditor.jsx"
+    stuck_count: 0
+    priority: "high" 
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "İstifadəçi dəvətnamə yaradıb şablon seçir tamamlayıb yadda saxladığında save olmur - User template customization not saving"
+
+  - task: "Fix next step navigation to guest management"
+    implemented: false
+    working: false
+    file: "frontend/src/pages/TemplateEditor.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "Növbəti addıma keçdikdə qonaq əlavə etə vuruqda dashboard açır, əslində qonaq əlavə et bölməsi açılmalıdır - Next step redirects to dashboard instead of guest management"
+
+  - task: "Fix user preview functionality"
+    implemented: false
+    working: false
+    file: "frontend/src/pages/TemplateEditor.jsx, frontend/src/pages/InvitationPage.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "user"
+          comment: "İstifadəçi ön izləməyə vurduqda xəta verir önizləmə açılmır - User preview not working, throws errors"
 
   - task: "Complete backend API testing after deployment"
     implemented: true
