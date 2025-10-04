@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Biz qaldığım yerdən davam edək şablon yaratma redaktorunu təkmilləşdirmək. Deməli redaktorda daxil etdiyim elementə təyinat seçməliyəmki məsələn bu tarixdir tarix burada olacaq bu məkandır belə nzərdə tutrdum zəhmət olmasa bunu da hazırla"
+user_problem_statement: "Multiple critical issues to fix: 1) Dəvətnamə ön izləmsi görünmür (invitation preview not showing) 2) Background image URLs don't work in user templates 3) Change URLs to file uploads for images and admin logo 4) Add next step workflow: after template ready, add guests or share link directly"
 
 frontend:
   - task: "Add element purpose assignment to AdminTemplateBuilder"
