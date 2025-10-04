@@ -59,109 +59,19 @@ const AdminTemplateBuilder = ({
     'Crimson Text'
   ];
 
-  // Predefined placeholder elements
-  const placeholderElements = [
-    {
-      id: 'event-name',
-      type: 'text',
-      label: '🎉 Tədbir Adı',
-      content: 'Tədbir Adı',
-      defaultStyle: {
-        fontSize: 28,
-        fontFamily: 'Space Grotesk',
-        color: '#1f2937',
-        fontWeight: 'bold',
-        textAlign: 'center',
-        width: 300,
-        height: 60
-      }
-    },
-    {
-      id: 'couple-names',
-      type: 'text',
-      label: '💕 Ad və Soyad',
-      content: 'Gəlin və Bəy Adları',
-      defaultStyle: {
-        fontSize: 24,
-        fontFamily: 'Playfair Display',
-        color: '#374151',
-        fontWeight: '600',
-        textAlign: 'center',
-        width: 280,
-        height: 80
-      }
-    },
-    {
-      id: 'event-date',
-      type: 'text',
-      label: '📅 Tarix',
-      content: 'Tədbir Tarixi',
-      defaultStyle: {
-        fontSize: 18,
-        fontFamily: 'Inter',
-        color: '#6b7280',
-        fontWeight: 'normal',
-        textAlign: 'center',
-        width: 250,
-        height: 40
-      }
-    },
-    {
-      id: 'event-time',
-      type: 'text',
-      label: '⏰ Saat',
-      content: 'Başlama Saatı',
-      defaultStyle: {
-        fontSize: 16,
-        fontFamily: 'Inter',
-        color: '#6b7280',
-        fontWeight: 'normal',
-        textAlign: 'center',
-        width: 200,
-        height: 35
-      }
-    },
-    {
-      id: 'event-location',
-      type: 'text',
-      label: '📍 Məkan',
-      content: 'Tədbir Məkanı',
-      defaultStyle: {
-        fontSize: 16,
-        fontFamily: 'Inter',
-        color: '#6b7280',
-        fontWeight: 'normal',
-        textAlign: 'center',
-        width: 280,
-        height: 40
-      }
-    },
-    {
-      id: 'invitation-text',
-      type: 'text',
-      label: '✉️ Dəvət Mətni',
-      content: 'İştirakınızı gözləyirik',
-      defaultStyle: {
-        fontSize: 14,
-        fontFamily: 'Playfair Display',
-        color: '#374151',
-        fontWeight: 'normal',
-        textAlign: 'center',
-        width: 300,
-        height: 50
-      }
-    },
-    {
-      id: 'decorative-image',
-      type: 'image',
-      label: '🖼️ Dekorativ Şəkil',
-      src: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=200&h=150&fit=crop',
-      defaultStyle: {
-        width: 150,
-        height: 100,
-        borderRadius: 8
-      }
-    }
+  // Element purposes/assignments for automatic data filling
+  const elementPurposes = [
+    { value: 'event_name', label: '🎉 Tədbir Adı', placeholder: 'Ayşən və Elnurun Toy Mərasimi' },
+    { value: 'couple_names', label: '💕 Gəlin və Kişi Adları', placeholder: 'Ayşən & Elnur' },
+    { value: 'event_date', label: '📅 Tədbir Tarixi', placeholder: '25 Dekabr 2024, Cümə axşamı' },
+    { value: 'event_time', label: '⏰ Başlama Saatı', placeholder: '18:00' },
+    { value: 'event_location', label: '📍 Tədbir Məkanı', placeholder: 'Şəhər Sarayı, Bakı' },
+    { value: 'invitation_message', label: '✉️ Dəvət Mətni', placeholder: 'İştirakınızı səbirsizliklə gözləyirik' },
+    { value: 'save_date', label: '💌 Tarix Qeyd Et', placeholder: 'Tarixi qeyd edin' },
+    { value: 'dress_code', label: '👔 Geyim Kodu', placeholder: 'Geyim kodu: Formal' },
+    { value: 'rsvp_text', label: '📞 RSVP Məlumatı', placeholder: 'Cavabınızı gözləyirik' },
+    { value: 'custom_text', label: '📝 Sərbəst Mətn', placeholder: 'İstədiyiniz mətn' },
+    { value: 'decorative', label: '🎨 Dekorativ Element', placeholder: 'Dekorativ mətn/şəkil' }
   ];
 
   // Color palette
