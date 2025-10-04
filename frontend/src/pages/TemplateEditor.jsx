@@ -319,17 +319,34 @@ const TemplateEditor = () => {
     try {
       const token = localStorage.getItem('accessToken');
       const designData = {
-        elements,
-        canvasSize
+        canvasSize,
+        elements
       };
       
-      // Here we would save the design to the backend
-      // For now, just show success message
-      toast.success('Dizayn saxlanıldı!');
+      // Save design to backend by updating event
+      const response = await axios.put(
+        `${API_BASE_URL}/api/events/${eventId}`,
+        {
+          name: event.name,
+          date: event.date,
+          location: event.location,
+          map_link: event.map_link,
+          additional_notes: event.additional_notes,
+          custom_design: designData  // Add custom design data
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      
+      toast.success('Dizayn uğurla saxlanıldı!');
       
     } catch (error) {
       console.error('Dizayn saxlanılarkən xəta:', error);
-      toast.error('Dizayn saxlanıla bilmədi');
+      toast.error('Dizayn saxlanıla bilmədi: ' + (error.response?.data?.detail || error.message));
     } finally {
       setSaving(false);
     }
