@@ -100,6 +100,88 @@ const AdminPanel = () => {
     toast.success('İstifadəçi abunəliyi yeniləndi');
   };
 
+  const handleAddTemplate = async () => {
+    if (!newTemplate.name || !newTemplate.category) {
+      toast.error('Ad və kateqoriya daxil edilməlidir');
+      return;
+    }
+
+    setIsAddingTemplate(true);
+
+    try {
+      // Create new template object
+      const templateData = {
+        id: `template-${Date.now()}`,
+        name: newTemplate.name,
+        category: newTemplate.category,
+        thumbnail_url: newTemplate.thumbnail_url || 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=400&h=600&fit=crop',
+        is_premium: newTemplate.is_premium,
+        design_data: {
+          canvas: {
+            width: 400,
+            height: 600,
+            background: newTemplate.background_color,
+            backgroundImage: newTemplate.background_image
+          },
+          elements: [
+            {
+              id: 'title',
+              type: 'text',
+              content: 'Tədbir Adı',
+              x: 50, y: 100, width: 300, height: 60,
+              fontSize: 28, fontFamily: 'Space Grotesk',
+              color: '#1f2937', fontWeight: 'bold', textAlign: 'center'
+            },
+            {
+              id: 'date',
+              type: 'text',
+              content: 'Tədbir Tarixi',
+              x: 50, y: 180, width: 300, height: 40,
+              fontSize: 16, fontFamily: 'Inter',
+              color: '#6b7280', textAlign: 'center'
+            },
+            {
+              id: 'location',
+              type: 'text',
+              content: 'Tədbir Yeri',
+              x: 50, y: 220, width: 300, height: 40,
+              fontSize: 14, fontFamily: 'Inter',
+              color: '#9ca3af', textAlign: 'center'
+            }
+          ]
+        },
+        created_at: new Date().toISOString()
+      };
+
+      // Add to local state (in real app, this would be API call)
+      setTemplates(prev => [...prev, templateData]);
+      setStats(prev => ({ ...prev, totalTemplates: prev.totalTemplates + 1 }));
+      
+      // Reset form
+      setNewTemplate({
+        name: '',
+        category: 'toy',
+        thumbnail_url: '',
+        is_premium: false,
+        background_color: '#ffffff',
+        background_image: ''
+      });
+
+      toast.success('Şablon uğurla əlavə edildi!');
+    } catch (error) {
+      console.error('Template add error:', error);
+      toast.error('Şablon əlavə edilə bilmədi');
+    } finally {
+      setIsAddingTemplate(false);
+    }
+  };
+
+  const deleteTemplate = (templateId) => {
+    setTemplates(prev => prev.filter(t => t.id !== templateId));
+    setStats(prev => ({ ...prev, totalTemplates: prev.totalTemplates - 1 }));
+    toast.success('Şablon silindi');
+  };
+
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
