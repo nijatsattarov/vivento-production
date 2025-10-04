@@ -1,8 +1,8 @@
 {
-  "total_tests": 2,
-  "passed_tests": 1,
-  "failed_tests": 1,
-  "success_rate": "50.0%",
+  "total_tests": 16,
+  "passed_tests": 16,
+  "failed_tests": 0,
+  "success_rate": "100.0%",
   "test_details": [
     {
       "test": "Root API",
@@ -11,8 +11,78 @@
     },
     {
       "test": "User Registration",
-      "success": false,
-      "details": "Expected 200, got 500 - Internal Server Error"
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Pre-Login Registration",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "User Login",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Facebook Login (Expected Failure)",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Get Current User",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Get Templates",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Get Templates by Category",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Create Event",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Get User Events",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Get Event Detail",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Update Event",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Add Guest",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Get Event Guests",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Public Invitation",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "RSVP Response",
+      "success": true,
+      "details": ""
     }
   ]
 }
