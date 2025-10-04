@@ -280,7 +280,7 @@ test_plan:
           comment: "FIXED: Added AuthContext import and useAuth hook. Fixed missing API_BASE_URL definition with process.env.REACT_APP_BACKEND_URL. Updated saveDesign function to use token from AuthContext instead of localStorage. Fixed duplicate variable declaration compilation error."
 
   - task: "Fix next step navigation to guest management"
-    implemented: false
+    implemented: true
     working: false
     file: "frontend/src/pages/TemplateEditor.jsx"
     stuck_count: 0
@@ -290,6 +290,9 @@ test_plan:
         - working: false
           agent: "user"
           comment: "Növbəti addıma keçdikdə qonaq əlavə etə vuruqda dashboard açır, əslində qonaq əlavə et bölməsi açılmalıdır - Next step redirects to dashboard instead of guest management"
+        - working: "implemented"
+          agent: "main"
+          comment: "FIXED: Changed navigation from non-existent /events/{id}/guests route to existing /events/{id} route. EventDetail page contains guest management functionality with tabs, so users will be properly directed to event detail page where they can manage guests."
 
   - task: "Fix user preview functionality"
     implemented: false
