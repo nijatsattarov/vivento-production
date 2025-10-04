@@ -249,53 +249,54 @@ const AdminPanel = () => {
   };
 
   const editTemplate = (template) => {
+    setBuilderTemplate(template);
     setEditingTemplate(template);
-    setNewTemplate({
-      name: template.name,
-      category: template.category,
-      thumbnail_url: template.thumbnail_url,
-      is_premium: template.is_premium,
-      background_color: template.design_data?.canvasSize?.background || '#ffffff',
-      background_image: template.design_data?.canvasSize?.backgroundImage || '',
-      elements: template.design_data?.elements || []
-    });
     setShowTemplateBuilder(true);
   };
 
-  const saveEditedTemplate = async () => {
-    if (!editingTemplate) return;
-    
+  const handleBuilderSave = async (templateData) => {
     try {
       const token = localStorage.getItem('accessToken');
-      const templateData = {
-        ...editingTemplate,
-        name: newTemplate.name,
-        category: newTemplate.category,
-        thumbnail_url: newTemplate.thumbnail_url,
-        is_premium: newTemplate.is_premium,
-        design_data: {
-          canvasSize: {
-            width: 400,
-            height: 600,
-            background: newTemplate.background_color,
-            backgroundImage: newTemplate.background_image
-          },
-          elements: newTemplate.elements
-        },
-        updated_at: new Date().toISOString()
-      };
-
-      await axios.put(`${API_BASE_URL}/api/admin/templates/${editingTemplate.id}`, templateData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      
+      if (editingTemplate) {
+        // Update existing template
+        await axios.put(`${API_BASE_URL}/api/admin/templates/${editingTemplate.id}`, templateData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        toast.success('Şablon yeniləndi!');
+      } else {
+        // Create new template
+        const newTemplateData = {
+          ...templateData,
+          id: `template-${Date.now()}`,
+          created_at: new Date().toISOString()
+        };
+        
+        await axios.post(`${API_BASE_URL}/api/admin/templates`, newTemplateData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        toast.success('Şablon əlavə edildi!');
+      }
       
       await fetchAdminData();
       setShowTemplateBuilder(false);
       setEditingTemplate(null);
-      toast.success('Şablon yeniləndi!');
+      setBuilderTemplate(null);
     } catch (error) {
-      toast.error('Şablon yenilənə bilmədi');
+      toast.error('Şablon saxlanıla bilmədi: ' + (error.response?.data?.detail || error.message));
     }
+  };
+
+  const handleBuilderCancel = () => {
+    setShowTemplateBuilder(false);
+    setEditingTemplate(null);
+    setBuilderTemplate(null);
+  };
+
+  const openTemplateBuilder = () => {
+    setBuilderTemplate(null);
+    setEditingTemplate(null);
+    setShowTemplateBuilder(true);
   };
 
   if (!isAuthenticated) {
