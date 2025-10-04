@@ -968,7 +968,12 @@ const AdminPanel = () => {
                             {template.is_premium ? 'Premium' : 'Pulsuz'}
                           </Badge>
                           <div className="flex items-center space-x-1">
-                            <Button variant="outline" size="sm">
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => editTemplate(template)}
+                              data-testid={`edit-template-${template.id}`}
+                            >
                               <Edit className="h-3 w-3" />
                             </Button>
                             <Button 
