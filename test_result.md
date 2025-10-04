@@ -225,8 +225,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Authentication session persistence issues"
-    - "Complete user flow testing"
+    - "Fix admin background image upload"
+    - "Fix event/template save functionality"
+    - "Fix next step navigation to guest management"
+    - "Fix user preview functionality"
   stuck_tasks: 
     - "Authentication session persistence issues"
   test_all: false
