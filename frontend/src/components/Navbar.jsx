@@ -100,6 +100,12 @@ const Navbar = () => {
                     <Settings className="mr-2 h-4 w-4" />
                     Parametrlər
                   </DropdownMenuItem>
+                  {(user?.email === 'admin@vivento.az' || user?.email?.includes('admin')) && (
+                    <DropdownMenuItem onClick={() => navigate('/admin')} data-testid="menu-admin">
+                      <User className="mr-2 h-4 w-4" />
+                      Admin Panel
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout} data-testid="menu-logout">
                     <LogOut className="mr-2 h-4 w-4" />
