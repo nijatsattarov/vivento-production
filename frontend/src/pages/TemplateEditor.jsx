@@ -338,7 +338,6 @@ const TemplateEditor = () => {
     setSaving(true);
     
     try {
-      const token = localStorage.getItem('accessToken');
       const designData = {
         canvasSize,
         elements
