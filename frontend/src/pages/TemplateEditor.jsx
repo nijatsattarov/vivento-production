@@ -406,7 +406,14 @@ const TemplateEditor = () => {
             </div>
             
             <div className="flex items-center space-x-3">
-              <Button variant="outline" data-testid="preview-button">
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  const inviteUrl = `${window.location.origin}/invite/demo-${event?.id}`;
+                  window.open(inviteUrl, '_blank');
+                }}
+                data-testid="preview-button"
+              >
                 <Eye className="mr-2 h-4 w-4" />
                 Önizləmə
               </Button>
