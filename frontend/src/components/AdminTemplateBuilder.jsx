@@ -31,6 +31,7 @@ const AdminTemplateBuilder = ({
   onCancel, 
   isEditing = false 
 }) => {
+  const { token } = useAuth();
   const [templateData, setTemplateData] = useState({
     name: template?.name || '',
     category: template?.category || 'toy',
