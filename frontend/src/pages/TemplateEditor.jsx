@@ -42,6 +42,7 @@ const TemplateEditor = () => {
   const [showTemplateSelector, setShowTemplateSelector] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [showNextStepModal, setShowNextStepModal] = useState(false);
   
   // Design elements state
   const [elements, setElements] = useState([
