@@ -21,7 +21,11 @@ import {
   ZoomIn,
   ZoomOut,
   Grid,
-  Layers
+  Layers,
+  Users,
+  UserPlus,
+  Share2,
+  Copy
 } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
