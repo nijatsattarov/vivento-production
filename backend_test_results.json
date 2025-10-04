@@ -1,0 +1,18 @@
+{
+  "total_tests": 2,
+  "passed_tests": 1,
+  "failed_tests": 1,
+  "success_rate": "50.0%",
+  "test_details": [
+    {
+      "test": "Root API",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "User Registration",
+      "success": false,
+      "details": "Expected 200, got 500 - Internal Server Error"
+    }
+  ]
+}
