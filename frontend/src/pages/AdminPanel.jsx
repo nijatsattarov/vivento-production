@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs'
 import { Badge } from '../components/ui/badge';
 import Navbar from '../components/Navbar';
 import LoadingSpinner from '../components/LoadingSpinner';
+import AdminTemplateBuilder from '../components/AdminTemplateBuilder';
 import { 
   Users, 
   Calendar, 
@@ -19,7 +20,9 @@ import {
   Edit,
   Trash2,
   Crown,
-  Eye
+  Eye,
+  Type,
+  Image
 } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
