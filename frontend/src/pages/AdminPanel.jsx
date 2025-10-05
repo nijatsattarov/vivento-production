@@ -28,7 +28,7 @@ import axios from 'axios';
 import { toast } from 'sonner';
 
 const AdminPanel = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, token } = useAuth();
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const [events, setEvents] = useState([]);
