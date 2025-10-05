@@ -250,6 +250,50 @@ const AdminPanel = () => {
     }
   };
 
+  const handleLogoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Yalnız şəkil faylları qəbul edilir');
+      return;
+    }
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Fayl ölçüsü 5MB-dan böyük ola bilməz');
+      return;
+    }
+
+    try {
+      setIsUploadingLogo(true);
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch(`${API_BASE_URL}/api/upload/image`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload xətası');
+      }
+
+      const result = await response.json();
+      setSiteLogoUrl(result.url);
+      toast.success('Logo uğurla yükləndi');
+    } catch (error) {
+      console.error('Logo upload error:', error);
+      toast.error('Logo yüklənərkən xəta baş verdi');
+    } finally {
+      setIsUploadingLogo(false);
+    }
+  };
+
   const editTemplate = (template) => {
     setBuilderTemplate(template);
     setEditingTemplate(template);
