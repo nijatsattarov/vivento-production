@@ -764,13 +764,33 @@ const AdminPanel = () => {
                   <h3 className="text-lg font-semibold">Logo İdarəetməsi</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <Label htmlFor="site-logo">Sayt Loqosu URL</Label>
-                      <Input
-                        id="site-logo"
-                        placeholder="https://example.com/logo.png"
-                        className="mt-2"
-                      />
-                      <p className="text-sm text-gray-500 mt-1">Tövsiyə olunan ölçü: 200x60px</p>
+                      <Label htmlFor="site-logo">Sayt Loqosu</Label>
+                      <div className="mt-2 space-y-3">
+                        <div>
+                          <Label className="text-sm">URL ilə əlavə et</Label>
+                          <Input
+                            id="site-logo"
+                            placeholder="https://example.com/logo.png"
+                            value={siteLogoUrl}
+                            onChange={(e) => setSiteLogoUrl(e.target.value)}
+                            className="mt-1"
+                          />
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-gray-500">və ya</span>
+                        </div>
+                        <div>
+                          <Label className="text-sm">Fayl yüklə</Label>
+                          <Input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleLogoUpload}
+                            disabled={isUploadingLogo}
+                            className="mt-1"
+                          />
+                        </div>
+                      </div>
+                      <p className="text-sm text-gray-500 mt-2">Tövsiyə olunan ölçü: 200x60px</p>
                     </div>
                     <div>
                       <Label>Cari Logo</Label>
