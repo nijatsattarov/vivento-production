@@ -493,17 +493,37 @@ const AdminTemplateBuilder = ({
 
             <div>
               <Label>Fon Şəkli</Label>
-              <div className="space-y-2 mt-2">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleBackgroundImageUpload}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                />
+              <div className="space-y-3 mt-2">
+                <div>
+                  <Label className="text-sm">URL ilə əlavə et</Label>
+                  <Input
+                    placeholder="https://example.com/background.jpg"
+                    value={templateData.canvasSize.backgroundImage || ''}
+                    onChange={(e) => setTemplateData(prev => ({
+                      ...prev,
+                      canvasSize: { ...prev.canvasSize, backgroundImage: e.target.value }
+                    }))}
+                    className="mt-1"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-500">və ya</span>
+                </div>
+                <div>
+                  <Label className="text-sm">Fayl yüklə</Label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleBackgroundImageUpload}
+                    className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  />
+                </div>
                 {templateData.canvasSize.backgroundImage && (
                   <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
                     <span className="text-sm text-gray-600 truncate">
-                      {templateData.canvasSize.backgroundImage.split('/').pop()}
+                      {templateData.canvasSize.backgroundImage.includes('http') ? 
+                        'URL şəkil' : 
+                        templateData.canvasSize.backgroundImage.split('/').pop()}
                     </span>
                     <Button
                       variant="ghost"
