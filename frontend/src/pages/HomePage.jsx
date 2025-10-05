@@ -235,12 +235,17 @@ const HomePage = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
             {[
-              { name: 'Toy', icon: '💍', color: 'from-pink-400 to-red-400', count: '15+' },
-              { name: 'Nişan', icon: '💖', color: 'from-purple-400 to-pink-400', count: '8+' },
-              { name: 'Ad günü', icon: '🎂', color: 'from-yellow-400 to-orange-400', count: '12+' },
-              { name: 'Korporativ', icon: '🏢', color: 'from-blue-400 to-indigo-400', count: '6+' }
+              { name: 'Toy', slug: 'toy', icon: '💍', color: 'from-pink-400 to-red-400', count: '15+' },
+              { name: 'Nişan', slug: 'nişan', icon: '💖', color: 'from-purple-400 to-pink-400', count: '8+' },
+              { name: 'Ad günü', slug: 'doğum_günü', icon: '🎂', color: 'from-yellow-400 to-orange-400', count: '12+' },
+              { name: 'Korporativ', slug: 'korporativ', icon: '🏢', color: 'from-blue-400 to-indigo-400', count: '6+' }
             ].map((category, index) => (
-              <Card key={index} className="card-hover cursor-pointer group" data-testid={`category-${category.name.toLowerCase()}`}>
+              <Card 
+                key={index} 
+                className="card-hover cursor-pointer group" 
+                data-testid={`category-${category.name.toLowerCase()}`}
+                onClick={() => navigate(`/templates/${category.slug}`)}
+              >
                 <CardContent className="p-8 text-center">
                   <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-r ${category.color} flex items-center justify-center text-2xl group-hover:scale-110 transition-transform`}>
                     {category.icon}
