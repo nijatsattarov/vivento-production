@@ -137,7 +137,7 @@ const Navbar = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <div className="flex items-center space-x-3">
+              <div className="hidden md:flex items-center space-x-3">
                 <Link to="/login">
                   <Button variant="ghost" data-testid="nav-login">
                     Giriş
