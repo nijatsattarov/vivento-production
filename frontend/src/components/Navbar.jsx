@@ -212,6 +212,13 @@ const Navbar = () => {
             ) : (
               <>
                 <Link
+                  to="/"
+                  className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Ana səhifə
+                </Link>
+                <Link
                   to="/login"
                   className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md"
                   onClick={() => setIsMenuOpen(false)}
@@ -221,7 +228,7 @@ const Navbar = () => {
                 </Link>
                 <Link
                   to="/register"
-                  className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md"
+                  className="block px-3 py-2 text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-md mx-3"
                   onClick={() => setIsMenuOpen(false)}
                   data-testid="mobile-nav-register"
                 >
