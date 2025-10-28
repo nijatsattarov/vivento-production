@@ -63,6 +63,7 @@ const AdminPanel = () => {
   useEffect(() => {
     if (isAdmin) {
       fetchAdminData();
+      fetchSiteSettings();
     } else {
       setLoading(false);
     }
