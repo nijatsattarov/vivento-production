@@ -13,6 +13,13 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Safe settings with defaults
+  const safeSettings = settings || {
+    site_logo: null,
+    hero_title: 'Vivento',
+    hero_subtitle: ''
+  };
+
   const handleLogout = () => {
     logout();
     navigate('/');
