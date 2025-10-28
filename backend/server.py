@@ -744,15 +744,20 @@ async def get_site_settings():
 
 @api_router.put("/site/settings")
 async def update_site_settings(
-    site_logo: Optional[str] = None,
-    hero_title: Optional[str] = None,
-    hero_subtitle: Optional[str] = None,
+    request: UpdateSiteSettingsRequest,
     current_user: User = Depends(get_current_user)
 ):
     """Update site settings (admin only)"""
-    # Check if user is admin
-    if not (current_user.email == 'admin@vivento.az' or 'admin' in current_user.email):
-        raise HTTPException(status_code=403, detail="Yalnız admin istifadə edə bilər")
+    try:
+        # Check if user is admin
+        if not (current_user.email == 'admin@vivento.az' or 'admin' in current_user.email):
+            raise HTTPException(status_code=403, detail="Yalnız admin istifadə edə bilər")
+        
+        logger.info(f"Admin {current_user.email} updating site settings: {request}")
+        
+        site_logo = request.site_logo
+        hero_title = request.hero_title
+        hero_subtitle = request.hero_subtitle
     
     # Get existing settings
     settings_doc = await db.site_settings.find_one({})
