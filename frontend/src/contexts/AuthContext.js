@@ -57,7 +57,12 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
+      console.log('AuthContext login called with:', credentials);
+      console.log('API Base URL:', API_BASE_URL);
+      
       const response = await axios.post(`${API_BASE_URL}/api/auth/login`, credentials);
+      console.log('Login API response:', response.data);
+      
       const { access_token, user: userData } = response.data;
       
       localStorage.setItem('accessToken', access_token);
@@ -65,9 +70,14 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       setIsAuthenticated(true);
       
+      console.log('Login successful, user set:', userData);
       return { success: true };
     } catch (error) {
       console.error('Giriş xətası:', error);
+      console.error('Error response:', error.response);
+      console.error('Error status:', error.response?.status);
+      console.error('Error data:', error.response?.data);
+      
       return { 
         success: false, 
         error: error.response?.data?.detail || 'Giriş zamanı xəta baş verdi' 
