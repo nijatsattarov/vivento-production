@@ -849,10 +849,33 @@ const AdminPanel = () => {
                     <div>
                       <Label>Cari Logo</Label>
                       <div className="mt-2 p-4 border rounded-lg">
-                        <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                          <span className="text-white font-bold text-sm">V</span>
-                        </div>
-                        <p className="text-xs text-gray-500 mt-1">Vivento (Default)</p>
+                        {siteLogoUrl ? (
+                          <div className="space-y-2">
+                            <img 
+                              src={siteLogoUrl} 
+                              alt="Site Logo" 
+                              className="max-w-[200px] max-h-[60px] object-contain"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.nextSibling.style.display = 'block';
+                              }}
+                            />
+                            <div style={{display: 'none'}}>
+                              <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
+                                <span className="text-red-600 font-bold text-sm">!</span>
+                              </div>
+                              <p className="text-xs text-red-500 mt-1">Logo yüklənə bilmədi</p>
+                            </div>
+                            <p className="text-xs text-gray-500">Cari logo</p>
+                          </div>
+                        ) : (
+                          <div>
+                            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                              <span className="text-white font-bold text-sm">V</span>
+                            </div>
+                            <p className="text-xs text-gray-500 mt-1">Vivento (Default)</p>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
