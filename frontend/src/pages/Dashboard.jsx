@@ -46,7 +46,19 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchEvents();
+    fetchBalance();
   }, []);
+
+  const fetchBalance = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/user/balance`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setBalance(response.data);
+    } catch (error) {
+      console.error('Balance fetch error:', error);
+    }
+  };
 
   const fetchEvents = async () => {
     try {
