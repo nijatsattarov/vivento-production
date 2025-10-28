@@ -122,6 +122,14 @@ class Payment(BaseModel):
     payment_url: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     completed_at: Optional[datetime] = None
+
+class SiteSettings(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    site_logo: Optional[str] = None
+    hero_title: str = "Rəqəmsal dəvətnamə yaratmaq heç vaxt bu qədər asan olmayıb"
+    hero_subtitle: str = "Vivento ilə toy, nişan, doğum günü və digər tədbirləriniz üçün gözəl dəvətnamələr yaradın."
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     rsvp_status: Optional[str] = None  # gəlirəm, gəlmirəm
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     responded_at: Optional[datetime] = None
