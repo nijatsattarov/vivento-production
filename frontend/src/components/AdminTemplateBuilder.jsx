@@ -459,6 +459,23 @@ const AdminTemplateBuilder = ({
               />
               <Label htmlFor="is-premium">Premium Şablon</Label>
             </div>
+
+            <div>
+              <Label htmlFor="price-per-invitation">Dəvətnamə başına qiymət (AZN)</Label>
+              <Input
+                id="price-per-invitation"
+                type="number"
+                min="0"
+                step="0.01"
+                value={templateData.price_per_invitation}
+                onChange={(e) => setTemplateData(prev => ({ ...prev, price_per_invitation: parseFloat(e.target.value) || 0.10 }))}
+                placeholder="0.10"
+                className="mt-2"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                {templateData.is_premium ? 'Premium şablon qiyməti' : 'Standard şablon (30 pulsuzdan sonra)'}
+              </p>
+            </div>
           </CardContent>
         </Card>
 
