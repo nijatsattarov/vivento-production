@@ -21,6 +21,7 @@ import {
 const HomePage = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const { settings } = useSiteSettings();
 
   const features = [
     {
