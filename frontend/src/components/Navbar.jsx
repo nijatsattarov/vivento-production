@@ -25,7 +25,22 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              {settings.site_logo ? (
+                <img 
+                  src={settings.site_logo} 
+                  alt="Vivento Logo" 
+                  className="h-8 w-auto max-w-[120px] object-contain"
+                  onError={(e) => {
+                    // Fallback to default logo if image fails to load
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
+                />
+              ) : null}
+              <div 
+                className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center"
+                style={{ display: settings.site_logo ? 'none' : 'flex' }}
+              >
                 <span className="text-white font-bold text-sm">V</span>
               </div>
               <span className="text-xl font-bold text-gray-900">Vivento</span>
