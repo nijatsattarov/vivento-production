@@ -60,6 +60,8 @@ class User(BaseModel):
     profile_picture: Optional[str] = None
     is_active: bool = True
     subscription_type: str = "free"  # free, premium, vip
+    balance: float = 0.0  # AZN balance
+    free_invitations_used: int = 0  # Track free invitations used (max 30)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
