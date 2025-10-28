@@ -341,6 +341,19 @@ const AdminPanel = () => {
 
       const result = await response.json();
       console.log('Success result:', result);
+      
+      // Update local state with saved data
+      if (result.settings) {
+        setSiteLogoUrl(result.settings.site_logo || '');
+        
+        // Update form fields with saved values
+        const heroTitleInput = document.getElementById('hero-title');
+        const heroSubtitleInput = document.getElementById('hero-subtitle');
+        
+        if (heroTitleInput) heroTitleInput.value = result.settings.hero_title || '';
+        if (heroSubtitleInput) heroSubtitleInput.value = result.settings.hero_subtitle || '';
+      }
+      
       toast.success('Sayt ayarları uğurla saxlanıldı!');
     } catch (error) {
       console.error('Settings save error:', error);
