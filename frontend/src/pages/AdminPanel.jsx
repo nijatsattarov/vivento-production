@@ -337,6 +337,10 @@ const AdminPanel = () => {
       console.log('Upload success result:', result);
       
       setSiteLogoUrl(result.url);
+      
+      // Update global site settings context immediately
+      updateSettings({ site_logo: result.url });
+      
       toast.success('Logo uğurla yükləndi');
       
       // Clear file input after successful upload
