@@ -29,6 +29,7 @@ import { toast } from 'sonner';
 
 const AdminPanel = () => {
   const { user, isAuthenticated, token } = useAuth();
+  const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const [events, setEvents] = useState([]);
