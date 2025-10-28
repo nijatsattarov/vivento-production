@@ -785,11 +785,18 @@ async def update_site_settings(
         settings_doc = await db.site_settings.find_one({})
         settings = SiteSettings(**settings_doc)
     
-    return {
-        "success": True,
-        "message": "Sayt ayarları uğurla yeniləndi",
-        "settings": settings
-    }
+        return {
+            "success": True,
+            "message": "Sayt ayarları uğurla yeniləndi",
+            "settings": settings
+        }
+        
+    except HTTPException:
+        # Re-raise HTTP exceptions (like 403 Forbidden)
+        raise
+    except Exception as e:
+        logger.error(f"Site settings update error: {e}")
+        raise HTTPException(status_code=500, detail="Sayt ayarları yenilənərkən xəta baş verdi")
 
 # Include the router in the main app
 app.include_router(api_router)
