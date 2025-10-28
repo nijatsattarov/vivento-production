@@ -130,6 +130,11 @@ class SiteSettings(BaseModel):
     hero_subtitle: str = "Vivento ilə toy, nişan, doğum günü və digər tədbirləriniz üçün gözəl dəvətnamələr yaradın."
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class UpdateSiteSettingsRequest(BaseModel):
+    site_logo: Optional[str] = None
+    hero_title: Optional[str] = None
+    hero_subtitle: Optional[str] = None
     rsvp_status: Optional[str] = None  # gəlirəm, gəlmirəm
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     responded_at: Optional[datetime] = None
