@@ -948,11 +948,19 @@ const AdminPanel = () => {
                               alt="Site Logo" 
                               className="max-w-[200px] max-h-[60px] object-contain"
                               onError={(e) => {
-                                console.error('Logo load error:', e);
-                                e.target.style.display = 'none';
-                                const errorDiv = e.target.parentElement.querySelector('.logo-error-fallback');
-                                if (errorDiv) {
-                                  errorDiv.style.display = 'block';
+                                try {
+                                  console.error('Logo load error:', e);
+                                  if (e && e.target && e.target.style) {
+                                    e.target.style.display = 'none';
+                                  }
+                                  if (e && e.target && e.target.parentElement) {
+                                    const errorDiv = e.target.parentElement.querySelector('.logo-error-fallback');
+                                    if (errorDiv && errorDiv.style) {
+                                      errorDiv.style.display = 'block';
+                                    }
+                                  }
+                                } catch (error) {
+                                  console.error('Error in logo onError handler:', error);
                                 }
                               }}
                             />
