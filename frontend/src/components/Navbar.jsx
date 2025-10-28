@@ -38,11 +38,19 @@ const Navbar = () => {
                   alt="Site Logo" 
                   className="h-10 w-auto max-w-[200px] object-contain"
                   onError={(e) => {
-                    console.error('Navbar logo load error:', e);
-                    e.target.style.display = 'none';
-                    const fallbackDiv = e.target.parentElement.querySelector('.default-logo-fallback');
-                    if (fallbackDiv) {
-                      fallbackDiv.style.display = 'flex';
+                    try {
+                      console.error('Navbar logo load error:', e);
+                      if (e && e.target && e.target.style) {
+                        e.target.style.display = 'none';
+                      }
+                      if (e && e.target && e.target.parentElement) {
+                        const fallbackDiv = e.target.parentElement.querySelector('.default-logo-fallback');
+                        if (fallbackDiv && fallbackDiv.style) {
+                          fallbackDiv.style.display = 'flex';
+                        }
+                      }
+                    } catch (error) {
+                      console.error('Error in onError handler:', error);
                     }
                   }}
                 />
