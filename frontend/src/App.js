@@ -117,12 +117,14 @@ const AppRoutes = () => {
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <div className="App min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50">
-          <AppRoutes />
-          <Toaster position="top-right" />
-        </div>
-      </Router>
+      <SiteSettingsProvider>
+        <Router>
+          <div className="App min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50">
+            <AppRoutes />
+            <Toaster position="top-right" />
+          </div>
+        </Router>
+      </SiteSettingsProvider>
     </AuthProvider>
   );
 }
