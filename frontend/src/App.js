@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { SiteSettingsProvider } from "./contexts/SiteSettingsContext";
 import { Toaster } from "./components/ui/sonner";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
