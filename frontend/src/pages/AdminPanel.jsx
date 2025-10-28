@@ -906,7 +906,11 @@ const AdminPanel = () => {
                             id="site-logo"
                             placeholder="https://example.com/logo.png"
                             value={siteLogoUrl}
-                            onChange={(e) => setSiteLogoUrl(e.target.value)}
+                            onChange={(e) => {
+                              console.log('URL input changed:', e.target.value);
+                              setSiteLogoUrl(e.target.value);
+                              console.log('siteLogoUrl updated to:', e.target.value);
+                            }}
                             className="mt-1"
                           />
                         </div>
