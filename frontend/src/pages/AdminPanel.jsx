@@ -294,6 +294,27 @@ const AdminPanel = () => {
     }
   };
 
+  const handleSaveSiteSettings = async () => {
+    try {
+      // Collect all site settings
+      const settings = {
+        site_logo: siteLogoUrl,
+        hero_title: document.getElementById('hero-title')?.value || '',
+        hero_subtitle: document.getElementById('hero-subtitle')?.value || '',
+        updated_at: new Date().toISOString()
+      };
+
+      // For now, just save to localStorage (you can add backend API later)
+      localStorage.setItem('site_settings', JSON.stringify(settings));
+      
+      toast.success('Sayt ayarları uğurla saxlanıldı!');
+      console.log('Saved settings:', settings);
+    } catch (error) {
+      console.error('Settings save error:', error);
+      toast.error('Ayarlar saxlanılarkən xəta baş verdi');
+    }
+  };
+
   const editTemplate = (template) => {
     setBuilderTemplate(template);
     setEditingTemplate(template);
