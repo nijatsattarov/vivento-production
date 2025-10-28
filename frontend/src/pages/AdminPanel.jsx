@@ -917,11 +917,16 @@ const AdminPanel = () => {
                           <Label className="text-sm">Fayl yüklə</Label>
                           <Input
                             type="file"
-                            accept="image/*"
+                            accept="image/*,image/jpeg,image/png,image/gif,image/webp"
                             onChange={handleLogoUpload}
                             disabled={isUploadingLogo}
-                            className="mt-1"
+                            className="mt-1 disabled:opacity-50"
                           />
+                          {isUploadingLogo && (
+                            <p className="text-sm text-blue-600 mt-1">
+                              <span className="animate-spin inline-block">⏳</span> Logo yüklənir...
+                            </p>
+                          )}
                         </div>
                       </div>
                       <p className="text-sm text-gray-500 mt-2">Tövsiyə olunan ölçü: 200x60px</p>
