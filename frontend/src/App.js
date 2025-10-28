@@ -13,6 +13,7 @@ import InvitationPage from "./pages/InvitationPage";
 import AdminPanel from "./pages/AdminPanel";
 import Templates from "./pages/Templates";
 import TemplateDetail from "./pages/TemplateDetail";
+import AddBalance from "./pages/AddBalance";
 import LoadingSpinner from "./components/LoadingSpinner";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./App.css";
