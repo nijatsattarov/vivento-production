@@ -761,30 +761,30 @@ async def update_site_settings(
         
         # Get existing settings
         settings_doc = await db.site_settings.find_one({})
-    if not settings_doc:
-        # Create new settings
-        settings = SiteSettings(
-            site_logo=site_logo,
-            hero_title=hero_title or "Rəqəmsal dəvətnamə yaratmaq heç vaxt bu qədər asan olmayıb",
-            hero_subtitle=hero_subtitle or "Vivento ilə toy, nişan, doğum günü və digər tədbirləriniz üçün gözəl dəvətnamələr yaradın."
-        )
-        await db.site_settings.insert_one(settings.dict())
-    else:
-        # Update existing settings
-        update_data = {"updated_at": datetime.now(timezone.utc).isoformat()}
-        if site_logo is not None:
-            update_data["site_logo"] = site_logo
-        if hero_title is not None:
-            update_data["hero_title"] = hero_title
-        if hero_subtitle is not None:
-            update_data["hero_subtitle"] = hero_subtitle
+        if not settings_doc:
+            # Create new settings
+            settings = SiteSettings(
+                site_logo=site_logo,
+                hero_title=hero_title or "Rəqəmsal dəvətnamə yaratmaq heç vaxt bu qədər asan olmayıb",
+                hero_subtitle=hero_subtitle or "Vivento ilə toy, nişan, doğum günü və digər tədbirləriniz üçün gözəl dəvətnamələr yaradın."
+            )
+            await db.site_settings.insert_one(settings.dict())
+        else:
+            # Update existing settings
+            update_data = {"updated_at": datetime.now(timezone.utc).isoformat()}
+            if site_logo is not None:
+                update_data["site_logo"] = site_logo
+            if hero_title is not None:
+                update_data["hero_title"] = hero_title
+            if hero_subtitle is not None:
+                update_data["hero_subtitle"] = hero_subtitle
+            
+            await db.site_settings.update_one({}, {"$set": update_data})
+            
+            # Get updated settings
+            settings_doc = await db.site_settings.find_one({})
+            settings = SiteSettings(**settings_doc)
         
-        await db.site_settings.update_one({}, {"$set": update_data})
-        
-        # Get updated settings
-        settings_doc = await db.site_settings.find_one({})
-        settings = SiteSettings(**settings_doc)
-    
         return {
             "success": True,
             "message": "Sayt ayarları uğurla yeniləndi",
