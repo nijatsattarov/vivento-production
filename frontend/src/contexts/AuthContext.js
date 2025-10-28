@@ -57,30 +57,70 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      console.log('AuthContext login called with:', credentials);
-      console.log('API Base URL:', API_BASE_URL);
+      console.log('🔐 AuthContext login called with:', credentials);
+      console.log('🔗 API Base URL:', API_BASE_URL);
       
-      const response = await axios.post(`${API_BASE_URL}/api/auth/login`, credentials);
-      console.log('Login API response:', response.data);
+      if (!credentials.email || !credentials.password) {
+        throw new Error('Email və parol tələb olunur');
+      }
+
+      console.log('📤 Making API call to:', `${API_BASE_URL}/api/auth/login`);
+      
+      const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
+        email: credentials.email.trim(),
+        password: credentials.password
+      }, {
+        timeout: 10000, // 10 second timeout
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log('✅ Login API response:', response.data);
       
       const { access_token, user: userData } = response.data;
+      
+      if (!access_token || !userData) {
+        throw new Error('Server cavab formatı düzgün deyil');
+      }
       
       localStorage.setItem('accessToken', access_token);
       setToken(access_token);
       setUser(userData);
       setIsAuthenticated(true);
       
-      console.log('Login successful, user set:', userData);
-      return { success: true };
+      console.log('✅ Login successful, user set:', userData);
+      return { success: true, user: userData };
+      
     } catch (error) {
-      console.error('Giriş xətası:', error);
-      console.error('Error response:', error.response);
-      console.error('Error status:', error.response?.status);
-      console.error('Error data:', error.response?.data);
+      console.error('❌ Giriş xətası:', error);
+      
+      let errorMessage = 'Giriş zamanı xəta baş verdi';
+      
+      if (error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK') {
+        errorMessage = 'Server əlaqə xətası. Lütfən yenidən cəhd edin.';
+      } else if (error.response) {
+        console.error('❌ Error response status:', error.response.status);
+        console.error('❌ Error response data:', error.response.data);
+        
+        if (error.response.status === 401) {
+          errorMessage = 'Email və ya parol səhvdir';
+        } else if (error.response.status === 422) {
+          errorMessage = 'Daxil edilən məlumatlar düzgün deyil';
+        } else if (error.response.data?.detail) {
+          errorMessage = error.response.data.detail;
+        }
+      } else if (error.request) {
+        console.error('❌ Network error - no response:', error.request);
+        errorMessage = 'Internet əlaqəsi problemi. Yenidən cəhd edin.';
+      } else {
+        console.error('❌ Error message:', error.message);
+        errorMessage = error.message;
+      }
       
       return { 
         success: false, 
-        error: error.response?.data?.detail || 'Giriş zamanı xəta baş verdi' 
+        error: errorMessage
       };
     }
   };
