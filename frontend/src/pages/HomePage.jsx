@@ -403,7 +403,7 @@ const HomePage = () => {
               <div className="flex items-center">
                 {safeSettings.site_logo ? (
                   <img 
-                    src={settings.site_logo} 
+                    src={safeSettings.site_logo} 
                     alt="Site Logo" 
                     className="h-10 w-auto max-w-[200px] object-contain filter brightness-0 invert"
                     onError={(e) => {
