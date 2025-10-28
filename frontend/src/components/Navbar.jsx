@@ -9,6 +9,7 @@ import { LogOut, User, Settings, Plus, Calendar, Home } from 'lucide-react';
 
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
+  const { settings } = useSiteSettings();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
