@@ -402,6 +402,13 @@ const AdminPanel = () => {
       if (result.settings) {
         setSiteLogoUrl(result.settings.site_logo || '');
         
+        // Update global site settings context
+        updateSettings({
+          site_logo: result.settings.site_logo,
+          hero_title: result.settings.hero_title,
+          hero_subtitle: result.settings.hero_subtitle
+        });
+        
         // Update form fields with saved values
         const heroTitleInput = document.getElementById('hero-title');
         const heroSubtitleInput = document.getElementById('hero-subtitle');
