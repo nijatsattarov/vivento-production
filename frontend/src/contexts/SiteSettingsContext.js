@@ -42,7 +42,21 @@ export const SiteSettingsProvider = ({ children }) => {
   const updateSettings = (newSettings) => {
     console.log('SiteSettings context: updateSettings called with:', newSettings);
     console.log('Previous settings:', settings);
+    
+    if (!newSettings || typeof newSettings !== 'object') {
+      console.warn('Invalid newSettings provided:', newSettings);
+      return;
+    }
+    
     setSettings(prev => {
+      if (!prev) {
+        console.warn('Previous settings is null, using defaults');
+        prev = {
+          site_logo: null,
+          hero_title: 'Rəqəmsal dəvətnamə yaratmaq heç vaxt bu qədər asan olmayıb',
+          hero_subtitle: 'Vivento ilə toy, nişan, doğum günü və digər tədbirləriniz üçün gözəl dəvətnamələr yaradın.'
+        };
+      }
       const updated = { ...prev, ...newSettings };
       console.log('New settings state:', updated);
       return updated;
