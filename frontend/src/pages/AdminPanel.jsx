@@ -936,11 +936,15 @@ const AdminPanel = () => {
                               alt="Site Logo" 
                               className="max-w-[200px] max-h-[60px] object-contain"
                               onError={(e) => {
+                                console.error('Logo load error:', e);
                                 e.target.style.display = 'none';
-                                e.target.nextSibling.style.display = 'block';
+                                const errorDiv = e.target.parentElement.querySelector('.logo-error-fallback');
+                                if (errorDiv) {
+                                  errorDiv.style.display = 'block';
+                                }
                               }}
                             />
-                            <div style={{display: 'none'}}>
+                            <div className="logo-error-fallback" style={{display: 'none'}}>
                               <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
                                 <span className="text-red-600 font-bold text-sm">!</span>
                               </div>
