@@ -101,6 +101,27 @@ class Guest(BaseModel):
     phone: Optional[str] = None
     email: Optional[str] = None
     unique_token: str = Field(default_factory=lambda: str(uuid.uuid4()))
+
+class BalanceTransaction(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    amount: float  # AZN
+    transaction_type: str  # "payment", "invitation_charge", "refund"
+    description: str
+    payment_method: Optional[str] = None  # "card", "bank_transfer", etc.
+    payment_id: Optional[str] = None  # External payment system ID
+    status: str = "completed"  # "pending", "completed", "failed"
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class Payment(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    amount: float  # AZN
+    payment_method: str
+    status: str = "pending"  # "pending", "completed", "failed"
+    payment_url: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    completed_at: Optional[datetime] = None
     rsvp_status: Optional[str] = None  # gəlirəm, gəlmirəm
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     responded_at: Optional[datetime] = None
