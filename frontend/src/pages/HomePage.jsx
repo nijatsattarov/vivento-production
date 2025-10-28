@@ -23,6 +23,13 @@ const HomePage = () => {
   const navigate = useNavigate();
   const { settings } = useSiteSettings();
 
+  // Safe settings with defaults
+  const safeSettings = settings || {
+    site_logo: null,
+    hero_title: 'Rəqəmsal dəvətnamə yaratmaq heç vaxt bu qədər asan olmayıb',
+    hero_subtitle: 'Vivento ilə toy, nişan, doğum günü və digər tədbirləriniz üçün gözəl dəvətnamələr yaradın.'
+  };
+
   const features = [
     {
       icon: <Palette className="h-8 w-8 text-blue-600" />,
