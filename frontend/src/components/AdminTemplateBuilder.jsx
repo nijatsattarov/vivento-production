@@ -37,6 +37,7 @@ const AdminTemplateBuilder = ({
     category: template?.category || 'toy',
     thumbnail_url: template?.thumbnail_url || '',
     is_premium: template?.is_premium || false,
+    price_per_invitation: template?.price_per_invitation || 0.10,
     canvasSize: {
       width: 400,
       height: 600,
