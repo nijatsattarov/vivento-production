@@ -57,8 +57,6 @@ const AdminPanel = () => {
   const [siteLogoUrl, setSiteLogoUrl] = useState('');
   const [isUploadingLogo, setIsUploadingLogo] = useState(false);
 
-  const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
-
   // Check if user is admin (for demo purposes, checking email)
   const isAdmin = user?.email === 'admin@vivento.az' || user?.email?.includes('admin');
 
