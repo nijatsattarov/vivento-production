@@ -161,6 +161,33 @@ const Dashboard = () => {
           </div>
         </div>
 
+        {/* Balance Section */}
+        <Card className="mb-8 bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-xl">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-100 text-sm font-medium">Balans</p>
+                <p className="text-3xl font-bold text-white mt-1">
+                  {balance.balance.toFixed(2)} {balance.currency}
+                </p>
+                <p className="text-green-100 text-sm mt-2">
+                  Pulsuz dəvətnamə: {balance.free_invitations_remaining}/30
+                </p>
+              </div>
+              <div className="text-right">
+                <Button 
+                  onClick={() => navigate('/add-balance')}
+                  variant="secondary"
+                  className="bg-white/20 text-white hover:bg-white/30 border-white/30"
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Balans əlavə et
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card className="card-hover bg-white shadow-lg border-0" data-testid="stats-total-events">
