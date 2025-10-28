@@ -62,7 +62,6 @@ const Dashboard = () => {
 
   const fetchEvents = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
       const response = await axios.get(`${API_BASE_URL}/api/events`, {
         headers: { Authorization: `Bearer ${token}` }
       });
