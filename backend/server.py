@@ -724,6 +724,63 @@ async def charge_for_invitation(
         "remaining_balance": current_user.balance - total_cost
     }
 
+# Site Settings endpoints
+@api_router.get("/site/settings")
+async def get_site_settings():
+    """Get current site settings"""
+    settings_doc = await db.site_settings.find_one({})
+    if not settings_doc:
+        # Create default settings if none exist
+        default_settings = SiteSettings()
+        await db.site_settings.insert_one(default_settings.dict())
+        return default_settings
+    
+    return SiteSettings(**settings_doc)
+
+@api_router.put("/site/settings")
+async def update_site_settings(
+    site_logo: Optional[str] = None,
+    hero_title: Optional[str] = None,
+    hero_subtitle: Optional[str] = None,
+    current_user: User = Depends(get_current_user)
+):
+    """Update site settings (admin only)"""
+    # Check if user is admin
+    if not (current_user.email == 'admin@vivento.az' or 'admin' in current_user.email):
+        raise HTTPException(status_code=403, detail="Yalnız admin istifadə edə bilər")
+    
+    # Get existing settings
+    settings_doc = await db.site_settings.find_one({})
+    if not settings_doc:
+        # Create new settings
+        settings = SiteSettings(
+            site_logo=site_logo,
+            hero_title=hero_title or "Rəqəmsal dəvətnamə yaratmaq heç vaxt bu qədər asan olmayıb",
+            hero_subtitle=hero_subtitle or "Vivento ilə toy, nişan, doğum günü və digər tədbirləriniz üçün gözəl dəvətnamələr yaradın."
+        )
+        await db.site_settings.insert_one(settings.dict())
+    else:
+        # Update existing settings
+        update_data = {"updated_at": datetime.now(timezone.utc).isoformat()}
+        if site_logo is not None:
+            update_data["site_logo"] = site_logo
+        if hero_title is not None:
+            update_data["hero_title"] = hero_title
+        if hero_subtitle is not None:
+            update_data["hero_subtitle"] = hero_subtitle
+        
+        await db.site_settings.update_one({}, {"$set": update_data})
+        
+        # Get updated settings
+        settings_doc = await db.site_settings.find_one({})
+        settings = SiteSettings(**settings_doc)
+    
+    return {
+        "success": True,
+        "message": "Sayt ayarları uğurla yeniləndi",
+        "settings": settings
+    }
+
 # Include the router in the main app
 app.include_router(api_router)
 
