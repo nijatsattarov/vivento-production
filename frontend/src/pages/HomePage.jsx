@@ -407,9 +407,17 @@ const HomePage = () => {
                     alt="Site Logo" 
                     className="h-10 w-auto max-w-[200px] object-contain filter brightness-0 invert"
                     onError={(e) => {
-                      // Fallback to default logo if image fails to load
-                      e.target.style.display = 'none';
-                      e.target.nextSibling.style.display = 'flex';
+                      try {
+                        console.error('Footer logo load error:', e);
+                        if (e && e.target && e.target.style) {
+                          e.target.style.display = 'none';
+                        }
+                        if (e && e.target && e.target.nextSibling && e.target.nextSibling.style) {
+                          e.target.nextSibling.style.display = 'flex';
+                        }
+                      } catch (error) {
+                        console.error('Error in footer logo onError handler:', error);
+                      }
                     }}
                   />
                 ) : (
