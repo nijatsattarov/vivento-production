@@ -31,6 +31,8 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    console.log('Login form submitted with:', formData);
+    
     if (!formData.email || !formData.password) {
       toast.error('Bütün sahələri doldurmuaq lazımdır');
       return;
@@ -38,15 +40,19 @@ const LoginPage = () => {
 
     setIsLoading(true);
     
+    console.log('Calling login function...');
     const result = await login(formData);
+    console.log('Login result:', result);
     
     if (result.success) {
       toast.success('Uğurla giriş etdiniz!');
+      console.log('Login successful, redirecting to dashboard');
       // Redirect to dashboard after successful login
       setTimeout(() => {
         navigate('/dashboard');
       }, 1000);
     } else {
+      console.error('Login failed:', result.error);
       toast.error(result.error);
     }
     
