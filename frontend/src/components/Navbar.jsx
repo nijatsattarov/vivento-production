@@ -34,7 +34,7 @@ const Navbar = () => {
             <Link to="/" className="flex items-center">
               {safeSettings.site_logo ? (
                 <img 
-                  src={settings.site_logo} 
+                  src={safeSettings.site_logo} 
                   alt="Site Logo" 
                   className="h-10 w-auto max-w-[200px] object-contain"
                   onError={(e) => {
