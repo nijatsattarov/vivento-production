@@ -31,9 +31,12 @@ const Navbar = () => {
                   alt="Site Logo" 
                   className="h-10 w-auto max-w-[200px] object-contain"
                   onError={(e) => {
-                    // Fallback to default logo if image fails to load
+                    console.error('Navbar logo load error:', e);
                     e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
+                    const fallbackDiv = e.target.parentElement.querySelector('.default-logo-fallback');
+                    if (fallbackDiv) {
+                      fallbackDiv.style.display = 'flex';
+                    }
                   }}
                 />
               ) : (
