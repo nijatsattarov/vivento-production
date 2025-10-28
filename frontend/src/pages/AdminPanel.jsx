@@ -340,7 +340,9 @@ const AdminPanel = () => {
       setSiteLogoUrl(result.url);
       
       // Update global site settings context immediately
+      console.log('Updating global settings with logo:', result.url);
       updateSettings({ site_logo: result.url });
+      console.log('Settings update called');
       
       toast.success('Logo uğurla yükləndi');
       
