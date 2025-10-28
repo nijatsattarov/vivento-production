@@ -25,10 +25,16 @@ import axios from 'axios';
 import { toast } from 'sonner';
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [balance, setBalance] = useState({
+    balance: 0,
+    free_invitations_used: 0,
+    free_invitations_remaining: 30,
+    currency: 'AZN'
+  });
   const [stats, setStats] = useState({
     totalEvents: 0,
     totalGuests: 0,
