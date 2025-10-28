@@ -127,20 +127,75 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/auth/register`, userData);
-      const { access_token, user: newUser } = response.data;
+      console.log('📝 AuthContext register called with:', userData);
+      console.log('🔗 API Base URL:', API_BASE_URL);
+      
+      if (!userData.email || !userData.password || !userData.name) {
+        throw new Error('Ad, email və parol tələb olunur');
+      }
+
+      console.log('📤 Making register API call to:', `${API_BASE_URL}/api/auth/register`);
+      
+      const response = await axios.post(`${API_BASE_URL}/api/auth/register`, {
+        name: userData.name.trim(),
+        email: userData.email.trim(),
+        password: userData.password
+      }, {
+        timeout: 10000, // 10 second timeout
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log('✅ Register API response:', response.data);
+      
+      const { access_token, user } = response.data;
+      
+      if (!access_token || !user) {
+        throw new Error('Server cavab formatı düzgün deyil');
+      }
       
       localStorage.setItem('accessToken', access_token);
       setToken(access_token);
-      setUser(newUser);
+      setUser(user);
       setIsAuthenticated(true);
       
-      return { success: true };
+      console.log('✅ Registration successful, user set:', user);
+      return { success: true, user: user };
+      
     } catch (error) {
-      console.error('Qeydiyyat xətası:', error);
+      console.error('❌ Qeydiyyat xətası:', error);
+      
+      let errorMessage = 'Qeydiyyat zamanı xəta baş verdi';
+      
+      if (error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK') {
+        errorMessage = 'Server əlaqə xətası. Lütfən yenidən cəhd edin.';
+      } else if (error.response) {
+        console.error('❌ Error response status:', error.response.status);
+        console.error('❌ Error response data:', error.response.data);
+        
+        if (error.response.status === 400) {
+          if (error.response.data?.detail?.includes('email')) {
+            errorMessage = 'Bu email artıq istifadədədir';
+          } else {
+            errorMessage = error.response.data?.detail || 'Daxil edilən məlumatlar düzgün deyil';
+          }
+        } else if (error.response.status === 422) {
+          errorMessage = 'Daxil edilən məlumatlar düzgün deyil';
+        } else if (error.response.data?.detail) {
+          errorMessage = error.response.data.detail;
+        }
+      } else if (error.request) {
+        console.error('❌ Network error - no response:', error.request);
+        errorMessage = 'Internet əlaqəsi problemi. Yenidən cəhd edin.';
+      } else {
+        console.error('❌ Error message:', error.message);
+        errorMessage = error.message;
+      }
+      
       return { 
         success: false, 
-        error: error.response?.data?.detail || 'Qeydiyyat zamanı xəta baş verdi' 
+        error: errorMessage
       };
     }
   };
