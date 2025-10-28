@@ -280,7 +280,19 @@ const AdminPanel = () => {
 
   const handleLogoUpload = async (e) => {
     const file = e.target.files[0];
-    if (!file) return;
+    console.log('File selected:', file);
+    
+    if (!file) {
+      console.log('No file selected');
+      return;
+    }
+
+    console.log('File details:', {
+      name: file.name,
+      type: file.type,
+      size: file.size,
+      lastModified: file.lastModified
+    });
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
@@ -296,6 +308,10 @@ const AdminPanel = () => {
 
     try {
       setIsUploadingLogo(true);
+      console.log('Starting upload...');
+      console.log('API Base URL:', API_BASE_URL);
+      console.log('Token present:', !!token);
+
       const formData = new FormData();
       formData.append('file', file);
 
@@ -307,16 +323,25 @@ const AdminPanel = () => {
         body: formData
       });
 
+      console.log('Upload response status:', response.status);
+
       if (!response.ok) {
-        throw new Error('Upload xətası');
+        const errorText = await response.text();
+        console.error('Upload error response:', errorText);
+        throw new Error(`Upload xətası: ${response.status}`);
       }
 
       const result = await response.json();
+      console.log('Upload success result:', result);
+      
       setSiteLogoUrl(result.url);
       toast.success('Logo uğurla yükləndi');
+      
+      // Clear file input after successful upload
+      e.target.value = '';
     } catch (error) {
       console.error('Logo upload error:', error);
-      toast.error('Logo yüklənərkən xəta baş verdi');
+      toast.error(`Logo yüklənərkən xəta: ${error.message}`);
     } finally {
       setIsUploadingLogo(false);
     }
