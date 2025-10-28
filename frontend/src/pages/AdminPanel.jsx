@@ -295,9 +295,22 @@ const AdminPanel = () => {
 
   const handleSaveSiteSettings = async () => {
     try {
+      console.log('Starting save process...');
+      console.log('Token:', token ? 'Present' : 'Missing');
+      console.log('API Base URL:', API_BASE_URL);
+      console.log('Site Logo URL:', siteLogoUrl);
+
       // Collect all site settings
       const heroTitle = document.getElementById('hero-title')?.value || '';
       const heroSubtitle = document.getElementById('hero-subtitle')?.value || '';
+
+      const requestData = {
+        site_logo: siteLogoUrl || null,
+        hero_title: heroTitle,
+        hero_subtitle: heroSubtitle
+      };
+
+      console.log('Request data:', requestData);
 
       const response = await fetch(`${API_BASE_URL}/api/site/settings`, {
         method: 'PUT',
@@ -305,23 +318,33 @@ const AdminPanel = () => {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          site_logo: siteLogoUrl || null,
-          hero_title: heroTitle,
-          hero_subtitle: heroSubtitle
-        })
+        body: JSON.stringify(requestData)
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response OK:', response.ok);
+
       if (!response.ok) {
-        throw new Error('Settings save failed');
+        const errorText = await response.text();
+        console.error('Response error text:', errorText);
+        
+        let errorMessage = 'Ayarlar saxlanılarkən xəta baş verdi';
+        try {
+          const errorJson = JSON.parse(errorText);
+          errorMessage = errorJson.detail || errorMessage;
+        } catch (e) {
+          // Keep default message if parsing fails
+        }
+        
+        throw new Error(errorMessage);
       }
 
       const result = await response.json();
+      console.log('Success result:', result);
       toast.success('Sayt ayarları uğurla saxlanıldı!');
-      console.log('Saved settings:', result);
     } catch (error) {
       console.error('Settings save error:', error);
-      toast.error('Ayarlar saxlanılarkən xəta baş verdi');
+      toast.error(error.message || 'Ayarlar saxlanılarkən xəta baş verdi');
     }
   };
 
