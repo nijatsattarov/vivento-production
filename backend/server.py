@@ -758,9 +758,9 @@ async def update_site_settings(
         site_logo = request.site_logo
         hero_title = request.hero_title
         hero_subtitle = request.hero_subtitle
-    
-    # Get existing settings
-    settings_doc = await db.site_settings.find_one({})
+        
+        # Get existing settings
+        settings_doc = await db.site_settings.find_one({})
     if not settings_doc:
         # Create new settings
         settings = SiteSettings(
