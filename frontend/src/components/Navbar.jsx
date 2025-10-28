@@ -32,7 +32,7 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center">
-              {settings.site_logo ? (
+              {safeSettings.site_logo ? (
                 <img 
                   src={settings.site_logo} 
                   alt="Site Logo" 
