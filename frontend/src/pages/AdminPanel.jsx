@@ -898,7 +898,11 @@ const AdminPanel = () => {
                 </div>
 
                 {/* Save Button */}
-                <Button className="bg-blue-600 hover:bg-blue-700" data-testid="save-site-settings">
+                <Button 
+                  onClick={handleSaveSiteSettings}
+                  className="bg-blue-600 hover:bg-blue-700" 
+                  data-testid="save-site-settings"
+                >
                   <Settings className="mr-2 h-4 w-4" />
                   Sayt Ayarlarını Saxla
                 </Button>
