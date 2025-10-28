@@ -297,18 +297,29 @@ const AdminPanel = () => {
   const handleSaveSiteSettings = async () => {
     try {
       // Collect all site settings
-      const settings = {
-        site_logo: siteLogoUrl,
-        hero_title: document.getElementById('hero-title')?.value || '',
-        hero_subtitle: document.getElementById('hero-subtitle')?.value || '',
-        updated_at: new Date().toISOString()
-      };
+      const heroTitle = document.getElementById('hero-title')?.value || '';
+      const heroSubtitle = document.getElementById('hero-subtitle')?.value || '';
 
-      // For now, just save to localStorage (you can add backend API later)
-      localStorage.setItem('site_settings', JSON.stringify(settings));
-      
+      const response = await fetch(`${API_BASE_URL}/api/site/settings`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          site_logo: siteLogoUrl || null,
+          hero_title: heroTitle,
+          hero_subtitle: heroSubtitle
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Settings save failed');
+      }
+
+      const result = await response.json();
       toast.success('Sayt ayarları uğurla saxlanıldı!');
-      console.log('Saved settings:', settings);
+      console.log('Saved settings:', result);
     } catch (error) {
       console.error('Settings save error:', error);
       toast.error('Ayarlar saxlanılarkən xəta baş verdi');
