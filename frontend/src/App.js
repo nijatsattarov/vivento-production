@@ -93,6 +93,15 @@ const AppRoutes = () => {
         } 
       />
       
+      <Route 
+        path="/add-balance" 
+        element={
+          <ProtectedRoute>
+            <AddBalance />
+          </ProtectedRoute>
+        } 
+      />
+      
       {/* Fallback */}
       <Route 
         path="*" 
