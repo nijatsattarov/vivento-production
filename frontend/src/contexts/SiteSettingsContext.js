@@ -40,7 +40,13 @@ export const SiteSettingsProvider = ({ children }) => {
   };
 
   const updateSettings = (newSettings) => {
-    setSettings(prev => ({ ...prev, ...newSettings }));
+    console.log('SiteSettings context: updateSettings called with:', newSettings);
+    console.log('Previous settings:', settings);
+    setSettings(prev => {
+      const updated = { ...prev, ...newSettings };
+      console.log('New settings state:', updated);
+      return updated;
+    });
   };
 
   const value = {
