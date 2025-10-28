@@ -39,14 +39,13 @@ const Navbar = () => {
                     }
                   }}
                 />
-              ) : (
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">V</span>
-                  </div>
-                  <span className="text-xl font-bold text-gray-900">Vivento</span>
+              ) : null}
+              <div className="default-logo-fallback flex items-center space-x-2" style={{display: settings.site_logo ? 'none' : 'flex'}}>
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">V</span>
                 </div>
-              )}
+                <span className="text-xl font-bold text-gray-900">Vivento</span>
+              </div>
             </Link>
           </div>
 
