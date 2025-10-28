@@ -91,6 +91,7 @@ class Template(BaseModel):
     thumbnail_url: str
     design_data: Dict[str, Any]
     is_premium: bool = False
+    price_per_invitation: float = 0.10  # AZN per invitation for premium templates
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class Guest(BaseModel):
