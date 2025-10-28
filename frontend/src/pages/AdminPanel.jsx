@@ -313,6 +313,7 @@ const AdminPanel = () => {
       console.log('Starting upload...');
       console.log('API Base URL:', API_BASE_URL);
       console.log('Token present:', !!token);
+      console.log('Full upload URL:', `${API_BASE_URL}/api/upload/image`);
 
       const formData = new FormData();
       formData.append('file', file);
