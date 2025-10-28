@@ -542,6 +542,180 @@ async def upload_background_image(file: UploadFile = File(...)):
         logger.error(f"Background upload error: {e}")
         raise HTTPException(status_code=500, detail="Background şəkil yüklənərkən xəta baş verdi")
 
+# Balance and Payment endpoints
+@api_router.get("/user/balance")
+async def get_user_balance(current_user: User = Depends(get_current_user)):
+    """Get user's current balance and free invitation count"""
+    return {
+        "balance": current_user.balance,
+        "free_invitations_used": current_user.free_invitations_used,
+        "free_invitations_remaining": max(0, 30 - current_user.free_invitations_used),
+        "currency": "AZN"
+    }
+
+@api_router.post("/payments/create")
+async def create_payment(
+    amount: float,
+    payment_method: str = "card",
+    current_user: User = Depends(get_current_user)
+):
+    """Create a new payment for balance top-up"""
+    if amount <= 0:
+        raise HTTPException(status_code=400, detail="Məbləğ müsbət olmalıdır")
+    
+    if amount > 1000:  # Max 1000 AZN per transaction
+        raise HTTPException(status_code=400, detail="Maksimum məbləğ 1000 AZN")
+    
+    # Create payment record
+    payment = Payment(
+        user_id=current_user.id,
+        amount=amount,
+        payment_method=payment_method,
+        payment_url=f"https://payment.gateway.com/pay/{uuid.uuid4()}"  # Mock payment URL
+    )
+    
+    await db.payments.insert_one(payment.dict())
+    
+    return {
+        "payment_id": payment.id,
+        "payment_url": payment.payment_url,
+        "amount": payment.amount,
+        "status": payment.status
+    }
+
+@api_router.post("/payments/{payment_id}/complete")
+async def complete_payment(
+    payment_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Complete a payment and add balance to user account (Mock implementation)"""
+    payment_doc = await db.payments.find_one({"id": payment_id, "user_id": current_user.id})
+    if not payment_doc:
+        raise HTTPException(status_code=404, detail="Ödəmə tapılmadı")
+    
+    payment = Payment(**payment_doc)
+    if payment.status != "pending":
+        raise HTTPException(status_code=400, detail="Ödəmə artıq tamamlanıb")
+    
+    # Update payment status
+    await db.payments.update_one(
+        {"id": payment_id}, 
+        {
+            "$set": {
+                "status": "completed",
+                "completed_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    # Add balance to user
+    await db.users.update_one(
+        {"id": current_user.id},
+        {"$inc": {"balance": payment.amount}}
+    )
+    
+    # Create balance transaction record
+    transaction = BalanceTransaction(
+        user_id=current_user.id,
+        amount=payment.amount,
+        transaction_type="payment",
+        description=f"Balans artırılması - {payment.amount} AZN",
+        payment_method=payment.payment_method,
+        payment_id=payment.id
+    )
+    
+    await db.balance_transactions.insert_one(transaction.dict())
+    
+    # Get updated user balance
+    updated_user = await db.users.find_one({"id": current_user.id})
+    
+    return {
+        "success": True,
+        "message": "Ödəmə uğurla tamamlandı",
+        "new_balance": updated_user.get("balance", 0),
+        "amount_added": payment.amount
+    }
+
+@api_router.get("/user/transactions")
+async def get_user_transactions(current_user: User = Depends(get_current_user)):
+    """Get user's balance transaction history"""
+    transactions = await db.balance_transactions.find(
+        {"user_id": current_user.id}
+    ).sort("created_at", -1).to_list(length=50)
+    
+    return [BalanceTransaction(**tx) for tx in transactions]
+
+@api_router.post("/invitations/charge")
+async def charge_for_invitation(
+    event_id: str,
+    guest_count: int,
+    current_user: User = Depends(get_current_user)
+):
+    """Charge user for sending invitations based on template pricing"""
+    # Get event and template info
+    event_doc = await db.events.find_one({"id": event_id, "user_id": current_user.id})
+    if not event_doc:
+        raise HTTPException(status_code=404, detail="Tədbir tapılmadı")
+    
+    event = Event(**event_doc)
+    
+    # Check if template has pricing
+    template_price = 0.10  # Default price per invitation
+    if event.template_id:
+        template_doc = await db.templates.find_one({"id": event.template_id})
+        if template_doc:
+            template = Template(**template_doc)
+            if template.is_premium:
+                template_price = template.price_per_invitation
+            else:
+                template_price = 0  # Standard templates are free after 30 invitations
+    
+    # Calculate cost
+    free_remaining = max(0, 30 - current_user.free_invitations_used)
+    paid_invitations = max(0, guest_count - free_remaining)
+    total_cost = paid_invitations * template_price
+    
+    # Check if user has enough balance
+    if total_cost > current_user.balance:
+        return {
+            "success": False,
+            "insufficient_balance": True,
+            "required_balance": total_cost,
+            "current_balance": current_user.balance,
+            "message": f"Kifayət qədər balansınız yoxdur. Lazım: {total_cost:.2f} AZN"
+        }
+    
+    # Deduct balance and update free invitation count
+    updates = {}
+    if total_cost > 0:
+        updates["$inc"] = {"balance": -total_cost}
+    
+    if free_remaining > 0:
+        free_used = min(guest_count, free_remaining)
+        updates["$inc"] = updates.get("$inc", {})
+        updates["$inc"]["free_invitations_used"] = free_used
+    
+    if updates:
+        await db.users.update_one({"id": current_user.id}, updates)
+    
+    # Create transaction record
+    if total_cost > 0:
+        transaction = BalanceTransaction(
+            user_id=current_user.id,
+            amount=-total_cost,
+            transaction_type="invitation_charge",
+            description=f"Dəvətnamə göndərmə - {paid_invitations} ədəd x {template_price} AZN"
+        )
+        await db.balance_transactions.insert_one(transaction.dict())
+    
+    return {
+        "success": True,
+        "total_cost": total_cost,
+        "paid_invitations": paid_invitations,
+        "free_invitations_used": min(guest_count, free_remaining),
+        "remaining_balance": current_user.balance - total_cost
+    }
+
 # Include the router in the main app
 app.include_router(api_router)
 
