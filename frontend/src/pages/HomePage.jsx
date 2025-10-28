@@ -393,11 +393,26 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="space-y-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">V</span>
-                </div>
-                <span className="text-xl font-bold">Vivento</span>
+              <div className="flex items-center">
+                {settings.site_logo ? (
+                  <img 
+                    src={settings.site_logo} 
+                    alt="Site Logo" 
+                    className="h-10 w-auto max-w-[200px] object-contain filter brightness-0 invert"
+                    onError={(e) => {
+                      // Fallback to default logo if image fails to load
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                ) : (
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                      <span className="text-white font-bold text-sm">V</span>
+                    </div>
+                    <span className="text-xl font-bold">Vivento</span>
+                  </div>
+                )}
               </div>
               <p className="text-gray-400">
                 Rəqəmsal dəvətnamə platforması
