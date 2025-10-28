@@ -103,6 +103,34 @@ const AdminPanel = () => {
     }
   };
 
+  const fetchSiteSettings = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/site/settings`);
+      if (response.ok) {
+        const settings = await response.json();
+        console.log('Loaded site settings:', settings);
+        
+        // Update state and form fields
+        setSiteLogoUrl(settings.site_logo || '');
+        
+        // Update form inputs
+        setTimeout(() => {
+          const heroTitleInput = document.getElementById('hero-title');
+          const heroSubtitleInput = document.getElementById('hero-subtitle');
+          
+          if (heroTitleInput && settings.hero_title) {
+            heroTitleInput.value = settings.hero_title;
+          }
+          if (heroSubtitleInput && settings.hero_subtitle) {
+            heroSubtitleInput.value = settings.hero_subtitle;
+          }
+        }, 100);
+      }
+    } catch (error) {
+      console.error('Site settings fetch error:', error);
+    }
+  };
+
   const updateUserSubscription = (userId, newType) => {
     setUsers(prev => prev.map(user => 
       user.id === userId ? { ...user, subscription_type: newType } : user
