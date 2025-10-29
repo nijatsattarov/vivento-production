@@ -4,7 +4,7 @@ import json
 import time
 
 class AdminFunctionalityTester:
-    def __init__(self, base_url="https://event-cards-5.preview.emergentagent.com"):
+    def __init__(self, base_url="https://digital-invite-az.preview.emergentagent.com"):
         self.base_url = base_url
         self.admin_token = None
         self.regular_token = None
