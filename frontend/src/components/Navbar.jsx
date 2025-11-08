@@ -112,8 +112,8 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 relative">
           
-          {/* LEFT SIDE - Mobile Menu (visible on mobile only) */}
-          <div className="flex items-center md:hidden">
+          {/* LEFT SIDE - Mobile Menu & Search (visible on mobile) */}
+          <div className="flex items-center space-x-2 md:hidden">
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="hover:bg-gray-100 h-10 w-10" data-testid="menu-button">
@@ -157,16 +157,23 @@ const Navbar = () => {
                 </div>
               </SheetContent>
             </Sheet>
+            
+            {/* Search Icon - Mobile */}
+            <Button variant="ghost" size="icon" className="hover:bg-gray-100 h-10 w-10" data-testid="search-button-mobile">
+              <svg className="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </Button>
           </div>
 
-          {/* CENTER - Logo (Centered on mobile, Left on Desktop) */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 md:relative md:left-0 md:transform-none md:flex md:items-center">
+          {/* LEFT SIDE - Desktop Logo & Search */}
+          <div className="hidden md:flex items-center space-x-3">
             <Link to="/" className="flex items-center">
               {safeSettings.site_logo ? (
                 <img 
                   src={safeSettings.site_logo} 
                   alt="Site Logo" 
-                  className="h-8 w-auto max-w-[120px] md:max-w-[150px] object-contain"
+                  className="h-8 w-auto max-w-[150px] object-contain"
                   onError={(e) => {
                     try {
                       console.error('Navbar logo load error:', e);
@@ -189,7 +196,49 @@ const Navbar = () => {
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-sm">V</span>
                 </div>
-                <span className="text-lg md:text-xl font-bold text-gray-900">Vivento</span>
+                <span className="text-xl font-bold text-gray-900">Vivento</span>
+              </div>
+            </Link>
+            
+            {/* Search Icon - Desktop */}
+            <Button variant="ghost" size="icon" className="hover:bg-gray-100 h-10 w-10" data-testid="search-button-desktop">
+              <svg className="h-5 w-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </Button>
+          </div>
+
+          {/* CENTER - Logo (Mobile) */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 md:hidden z-10 pointer-events-none">
+            <Link to="/" className="flex items-center pointer-events-auto">
+              {safeSettings.site_logo ? (
+                <img 
+                  src={safeSettings.site_logo} 
+                  alt="Site Logo" 
+                  className="h-8 w-auto max-w-[120px] object-contain"
+                  onError={(e) => {
+                    try {
+                      console.error('Navbar logo load error:', e);
+                      if (e && e.target && e.target.style) {
+                        e.target.style.display = 'none';
+                      }
+                      if (e && e.target && e.target.parentElement) {
+                        const fallbackDiv = e.target.parentElement.querySelector('.default-logo-fallback');
+                        if (fallbackDiv && fallbackDiv.style) {
+                          fallbackDiv.style.display = 'flex';
+                        }
+                      }
+                    } catch (error) {
+                      console.error('Error in onError handler:', error);
+                    }
+                  }}
+                />
+              ) : null}
+              <div className="default-logo-fallback flex items-center space-x-2" style={{display: safeSettings.site_logo ? 'none' : 'flex'}}>
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">V</span>
+                </div>
+                <span className="text-lg font-bold text-gray-900">Vivento</span>
               </div>
             </Link>
           </div>
@@ -239,7 +288,9 @@ const Navbar = () => {
           <div className="flex items-center space-x-2 md:space-x-3">
             {/* Favorites Icon */}
             <Button variant="ghost" size="icon" className="hover:bg-gray-100 h-10 w-10" data-testid="favorites-button">
-              <Heart className="h-6 w-6 text-gray-700" />
+              <svg className="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
             </Button>
 
             {/* User Menu / Auth Icon */}
@@ -296,7 +347,9 @@ const Navbar = () => {
                 onClick={() => navigate('/login')}
                 data-testid="login-icon"
               >
-                <User className="h-6 w-6 text-gray-700" />
+                <svg className="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
               </Button>
             )}
           </div>
