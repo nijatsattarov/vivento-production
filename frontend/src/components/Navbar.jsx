@@ -100,17 +100,71 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <div className="flex-shrink-0">
+          
+          {/* LEFT SIDE - Menu Button (Mobile & Desktop) */}
+          <div className="flex items-center space-x-4">
+            {/* Hamburger Menu */}
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="hover:bg-gray-100" data-testid="menu-button">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-80 overflow-y-auto">
+                <SheetHeader>
+                  <SheetTitle className="text-xl font-semibold">Kateqoriyalar</SheetTitle>
+                </SheetHeader>
+                <div className="mt-6 space-y-1">
+                  {categories.map((category) => (
+                    <div key={category.id} className="space-y-1">
+                      <button
+                        onClick={() => setOpenCategory(openCategory === category.id ? null : category.id)}
+                        className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                      >
+                        <span className="font-medium text-gray-900">{category.name}</span>
+                        {category.subcategories.length > 0 && (
+                          <ChevronRight 
+                            className={`h-4 w-4 transition-transform ${openCategory === category.id ? 'rotate-90' : ''}`} 
+                          />
+                        )}
+                      </button>
+                      {openCategory === category.id && category.subcategories.length > 0 && (
+                        <div className="ml-4 space-y-1">
+                          {category.subcategories.map((sub) => (
+                            <Link
+                              key={sub.id}
+                              to={`/templates/${sub.id}`}
+                              className="block px-4 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors"
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              {sub.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </SheetContent>
+            </Sheet>
+
+            {/* Search Icon (Desktop) */}
+            <Button variant="ghost" size="icon" className="hidden md:flex hover:bg-gray-100">
+              <Search className="h-5 w-5" />
+            </Button>
+          </div>
+
+          {/* CENTER - Logo (Always centered on mobile) */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 md:relative md:left-0 md:transform-none">
             <Link to="/" className="flex items-center">
               {safeSettings.site_logo ? (
                 <img 
                   src={safeSettings.site_logo} 
                   alt="Site Logo" 
-                  className="h-10 w-auto max-w-[200px] object-contain"
+                  className="h-8 w-auto max-w-[150px] object-contain"
                   onError={(e) => {
                     try {
                       console.error('Navbar logo load error:', e);
@@ -138,74 +192,21 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {isAuthenticated ? (
-              <>
-                <Link 
-                  to="/dashboard" 
-                  className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors"
-                  data-testid="nav-dashboard"
-                >
-                  <Home size={16} />
-                  <span>Ana səhifə</span>
-                </Link>
-                <Link 
-                  to="/create-event" 
-                  className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors"
-                  data-testid="nav-create-event"
-                >
-                  <Plus size={16} />
-                  <span>Yeni tədbir</span>
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors">
-                  Ana səhifə
-                </Link>
-                
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="text-gray-700 hover:text-blue-600" data-testid="nav-categories">
-                      Kateqoriyalar
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem>
-                      💍 Toy dəvətnamələri
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      💖 Nişan mərasimləri
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      🎂 Ad günü partiyaları
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      🏢 Korporativ tədbirlər
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                
-                <Link to="/#features" className="text-gray-700 hover:text-blue-600 transition-colors">
-                  Xüsusiyyətlər
-                </Link>
-                <Link to="/#pricing" className="text-gray-700 hover:text-blue-600 transition-colors">
-                  Qiymətlər
-                </Link>
-              </>
-            )}
-          </div>
+          {/* RIGHT SIDE - Favorites & Auth */}
+          <div className="flex items-center space-x-2 md:space-x-3">
+            {/* Favorites Icon */}
+            <Button variant="ghost" size="icon" className="hover:bg-gray-100" data-testid="favorites-button">
+              <Heart className="h-5 w-5" />
+            </Button>
 
-          {/* User Menu / Auth Buttons */}
-          <div className="flex items-center space-x-4">
+            {/* User Menu / Auth Buttons */}
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full" data-testid="user-menu">
-                    <Avatar className="h-10 w-10">
+                  <Button variant="ghost" className="relative h-9 w-9 rounded-full" data-testid="user-menu">
+                    <Avatar className="h-9 w-9">
                       <AvatarImage src={user?.profile_picture} alt={user?.name} />
-                      <AvatarFallback className="bg-blue-600 text-white">
+                      <AvatarFallback className="bg-blue-600 text-white text-sm">
                         {user?.name?.charAt(0)?.toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
@@ -245,107 +246,25 @@ const Navbar = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <div className="hidden md:flex items-center space-x-3">
+              <div className="flex items-center space-x-2">
                 <Link to="/login">
-                  <Button variant="ghost" data-testid="nav-login">
+                  <Button variant="ghost" size="sm" className="hidden sm:inline-flex" data-testid="nav-login">
                     Giriş
                   </Button>
                 </Link>
                 <Link to="/register">
-                  <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700" data-testid="nav-register">
+                  <Button 
+                    size="sm" 
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-sm" 
+                    data-testid="nav-register"
+                  >
                     Qeydiyyat
                   </Button>
                 </Link>
               </div>
             )}
-
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                data-testid="mobile-menu-button"
-              >
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
-                  />
-                </svg>
-              </Button>
-            </div>
           </div>
         </div>
-
-        {/* Mobile Navigation Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden border-t border-gray-200 py-4 space-y-2">
-            {isAuthenticated ? (
-              <>
-                <Link
-                  to="/dashboard"
-                  className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md"
-                  onClick={() => setIsMenuOpen(false)}
-                  data-testid="mobile-nav-dashboard"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  to="/create-event"
-                  className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md"
-                  onClick={() => setIsMenuOpen(false)}
-                  data-testid="mobile-nav-create-event"
-                >
-                  Yeni tədbir
-                </Link>
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    setIsMenuOpen(false);
-                  }}
-                  className="block w-full text-left px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md"
-                  data-testid="mobile-nav-logout"
-                >
-                  Çıxış
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  to="/"
-                  className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Ana səhifə
-                </Link>
-                <Link
-                  to="/login"
-                  className="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-md"
-                  onClick={() => setIsMenuOpen(false)}
-                  data-testid="mobile-nav-login"
-                >
-                  Giriş
-                </Link>
-                <Link
-                  to="/register"
-                  className="block px-3 py-2 text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-md mx-3"
-                  onClick={() => setIsMenuOpen(false)}
-                  data-testid="mobile-nav-register"
-                >
-                  Qeydiyyat
-                </Link>
-              </>
-            )}
-          </div>
-        )}
       </div>
     </nav>
   );
