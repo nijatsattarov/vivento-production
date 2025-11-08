@@ -5,7 +5,8 @@ import { useSiteSettings } from '../contexts/SiteSettingsContext';
 import { Button } from './ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from './ui/dropdown-menu';
-import { LogOut, User, Settings, Plus, Calendar, Home } from 'lucide-react';
+import { LogOut, User, Settings, Plus, Home, Menu, Search, Heart, ChevronRight } from 'lucide-react';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
 
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
