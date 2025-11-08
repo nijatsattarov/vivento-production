@@ -110,15 +110,14 @@ const Navbar = () => {
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-16 relative">
           
-          {/* LEFT SIDE - Logo & Mobile Menu */}
-          <div className="flex items-center space-x-3">
-            {/* Mobile Hamburger Menu */}
+          {/* LEFT SIDE - Mobile Menu (visible on mobile only) */}
+          <div className="flex items-center md:hidden">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden hover:bg-gray-100 h-10 w-10" data-testid="menu-button">
-                  <Menu className="h-6 w-6" />
+                <Button variant="ghost" size="icon" className="hover:bg-gray-100 h-10 w-10" data-testid="menu-button">
+                  <Menu className="h-6 w-6 text-gray-700" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-80 overflow-y-auto bg-white border-r border-gray-200">
@@ -158,9 +157,11 @@ const Navbar = () => {
                 </div>
               </SheetContent>
             </Sheet>
+          </div>
 
-            {/* Logo - Left on Desktop, Center on Mobile */}
-            <Link to="/" className="flex items-center md:flex-shrink-0">
+          {/* CENTER - Logo (Centered on mobile, Left on Desktop) */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 md:relative md:left-0 md:transform-none md:flex md:items-center">
+            <Link to="/" className="flex items-center">
               {safeSettings.site_logo ? (
                 <img 
                   src={safeSettings.site_logo} 
