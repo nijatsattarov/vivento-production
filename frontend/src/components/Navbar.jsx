@@ -121,7 +121,7 @@ const Navbar = () => {
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-80 overflow-y-auto bg-white">
+              <SheetContent side="left" className="w-80 overflow-y-auto bg-white border-r border-gray-200">
                 <SheetHeader>
                   <SheetTitle className="text-xl font-semibold text-gray-900">Kateqoriyalar</SheetTitle>
                 </SheetHeader>
