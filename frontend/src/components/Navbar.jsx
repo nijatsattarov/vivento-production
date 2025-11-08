@@ -112,12 +112,12 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           
-          {/* LEFT SIDE - Menu Button (Mobile & Desktop) */}
+          {/* LEFT SIDE - Logo & Mobile Menu */}
           <div className="flex items-center space-x-4">
-            {/* Hamburger Menu */}
+            {/* Mobile Hamburger Menu */}
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="hover:bg-gray-100" data-testid="menu-button">
+                <Button variant="ghost" size="icon" className="md:hidden hover:bg-gray-100" data-testid="menu-button">
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
@@ -159,14 +159,7 @@ const Navbar = () => {
               </SheetContent>
             </Sheet>
 
-            {/* Search Icon (Desktop) */}
-            <Button variant="ghost" size="icon" className="hidden md:flex hover:bg-gray-100">
-              <Search className="h-5 w-5" />
-            </Button>
-          </div>
-
-          {/* CENTER - Logo (Always centered on mobile) */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 md:relative md:left-0 md:transform-none">
+            {/* Logo */}
             <Link to="/" className="flex items-center">
               {safeSettings.site_logo ? (
                 <img 
@@ -200,6 +193,47 @@ const Navbar = () => {
             </Link>
           </div>
 
+          {/* CENTER - Desktop Categories Navigation */}
+          <div className="hidden md:flex items-center space-x-1">
+            <NavigationMenu>
+              <NavigationMenuList className="flex space-x-1">
+                {categories.map((category) => (
+                  <NavigationMenuItem key={category.id}>
+                    {category.subcategories.length > 0 ? (
+                      <>
+                        <NavigationMenuTrigger className="text-sm font-medium text-gray-700 hover:text-blue-600 h-9">
+                          {category.name}
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                          <div className="w-[200px] p-2">
+                            {category.subcategories.map((sub) => (
+                              <Link
+                                key={sub.id}
+                                to={`/templates/${sub.id}`}
+                                className="block px-3 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
+                              >
+                                {sub.name}
+                              </Link>
+                            ))}
+                          </div>
+                        </NavigationMenuContent>
+                      </>
+                    ) : (
+                      <NavigationMenuLink asChild>
+                        <Link
+                          to={`/templates/${category.id}`}
+                          className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+                        >
+                          {category.name}
+                        </Link>
+                      </NavigationMenuLink>
+                    )}
+                  </NavigationMenuItem>
+                ))}
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
+
           {/* RIGHT SIDE - Favorites & Auth */}
           <div className="flex items-center space-x-2 md:space-x-3">
             {/* Favorites Icon */}
@@ -207,7 +241,7 @@ const Navbar = () => {
               <Heart className="h-5 w-5" />
             </Button>
 
-            {/* User Menu / Auth Buttons */}
+            {/* User Menu / Auth Icon */}
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -254,22 +288,15 @@ const Navbar = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <div className="flex items-center space-x-2">
-                <Link to="/login">
-                  <Button variant="ghost" size="sm" className="hidden sm:inline-flex" data-testid="nav-login">
-                    Giriş
-                  </Button>
-                </Link>
-                <Link to="/register">
-                  <Button 
-                    size="sm" 
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-sm" 
-                    data-testid="nav-register"
-                  >
-                    Qeydiyyat
-                  </Button>
-                </Link>
-              </div>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="hover:bg-gray-100" 
+                onClick={() => navigate('/login')}
+                data-testid="login-icon"
+              >
+                <User className="h-5 w-5" />
+              </Button>
             )}
           </div>
         </div>
