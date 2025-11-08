@@ -113,17 +113,17 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           
           {/* LEFT SIDE - Logo & Mobile Menu */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             {/* Mobile Hamburger Menu */}
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden hover:bg-gray-100" data-testid="menu-button">
-                  <Menu className="h-5 w-5" />
+                <Button variant="ghost" size="icon" className="md:hidden hover:bg-gray-100 h-10 w-10" data-testid="menu-button">
+                  <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-80 overflow-y-auto">
+              <SheetContent side="left" className="w-80 overflow-y-auto bg-white">
                 <SheetHeader>
-                  <SheetTitle className="text-xl font-semibold">Kateqoriyalar</SheetTitle>
+                  <SheetTitle className="text-xl font-semibold text-gray-900">Kateqoriyalar</SheetTitle>
                 </SheetHeader>
                 <div className="mt-6 space-y-1">
                   {categories.map((category) => (
@@ -135,7 +135,7 @@ const Navbar = () => {
                         <span className="font-medium text-gray-900">{category.name}</span>
                         {category.subcategories.length > 0 && (
                           <ChevronRight 
-                            className={`h-4 w-4 transition-transform ${openCategory === category.id ? 'rotate-90' : ''}`} 
+                            className={`h-4 w-4 text-gray-600 transition-transform ${openCategory === category.id ? 'rotate-90' : ''}`} 
                           />
                         )}
                       </button>
@@ -159,13 +159,13 @@ const Navbar = () => {
               </SheetContent>
             </Sheet>
 
-            {/* Logo */}
-            <Link to="/" className="flex items-center">
+            {/* Logo - Left on Desktop, Center on Mobile */}
+            <Link to="/" className="flex items-center md:flex-shrink-0">
               {safeSettings.site_logo ? (
                 <img 
                   src={safeSettings.site_logo} 
                   alt="Site Logo" 
-                  className="h-8 w-auto max-w-[150px] object-contain"
+                  className="h-8 w-auto max-w-[120px] md:max-w-[150px] object-contain"
                   onError={(e) => {
                     try {
                       console.error('Navbar logo load error:', e);
@@ -188,7 +188,7 @@ const Navbar = () => {
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-sm">V</span>
                 </div>
-                <span className="text-xl font-bold text-gray-900">Vivento</span>
+                <span className="text-lg md:text-xl font-bold text-gray-900">Vivento</span>
               </div>
             </Link>
           </div>
@@ -205,7 +205,7 @@ const Navbar = () => {
                           {category.name}
                         </NavigationMenuTrigger>
                         <NavigationMenuContent>
-                          <div className="w-[200px] p-2">
+                          <div className="w-[200px] p-2 bg-white">
                             {category.subcategories.map((sub) => (
                               <Link
                                 key={sub.id}
@@ -237,16 +237,16 @@ const Navbar = () => {
           {/* RIGHT SIDE - Favorites & Auth */}
           <div className="flex items-center space-x-2 md:space-x-3">
             {/* Favorites Icon */}
-            <Button variant="ghost" size="icon" className="hover:bg-gray-100" data-testid="favorites-button">
-              <Heart className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="hover:bg-gray-100 h-10 w-10" data-testid="favorites-button">
+              <Heart className="h-6 w-6 text-gray-700" />
             </Button>
 
             {/* User Menu / Auth Icon */}
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-9 w-9 rounded-full" data-testid="user-menu">
-                    <Avatar className="h-9 w-9">
+                  <Button variant="ghost" className="relative h-10 w-10 rounded-full" data-testid="user-menu">
+                    <Avatar className="h-10 w-10">
                       <AvatarImage src={user?.profile_picture} alt={user?.name} />
                       <AvatarFallback className="bg-blue-600 text-white text-sm">
                         {user?.name?.charAt(0)?.toUpperCase()}
@@ -291,11 +291,11 @@ const Navbar = () => {
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="hover:bg-gray-100" 
+                className="hover:bg-gray-100 h-10 w-10" 
                 onClick={() => navigate('/login')}
                 data-testid="login-icon"
               >
-                <User className="h-5 w-5" />
+                <User className="h-6 w-6 text-gray-700" />
               </Button>
             )}
           </div>
