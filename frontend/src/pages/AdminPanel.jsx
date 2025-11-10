@@ -439,7 +439,10 @@ const AdminPanel = () => {
 
   const handleBuilderSave = async (templateData) => {
     try {
-      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        toast.error('Giriş tələb olunur. Zəhmət olmasa yenidən daxil olun.');
+        return;
+      }
       
       if (editingTemplate) {
         // Update existing template
@@ -466,7 +469,9 @@ const AdminPanel = () => {
       setEditingTemplate(null);
       setBuilderTemplate(null);
     } catch (error) {
-      toast.error('Şablon saxlanıla bilmədi: ' + (error.response?.data?.detail || error.message));
+      console.error('Şablon saxlanma xətası:', error);
+      console.error('Error response:', error.response?.data);
+      toast.error('Şablon əlavə edilə bilmədi: ' + (error.response?.data?.detail || error.message));
     }
   };
 
