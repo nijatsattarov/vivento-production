@@ -1991,7 +1991,7 @@ async def create_payment(
             {"$set": {"payment_url": payment_request["checkout_url"], "order_id": order_id}}
         )
         
-        logger.info(f"Payment created: {order_id} for user {user.id}, amount: {request.amount} AZN")
+        logger.info(f"Payment created: {order_id} for user {user.id}, amount: {amount} AZN")
         
         return {
             "order_id": order_id,
@@ -1999,7 +1999,7 @@ async def create_payment(
             "checkout_url": payment_request["checkout_url"],
             "data": payment_request["data"],
             "signature": payment_request["signature"],
-            "amount": request.amount
+            "amount": amount
         }
         
     except HTTPException:
