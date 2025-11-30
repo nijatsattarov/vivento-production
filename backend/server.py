@@ -1091,58 +1091,7 @@ async def get_user_balance(current_user: User = Depends(get_current_user)):
 
 # Old mock payment endpoint - removed (replaced by Epoint integration)
 
-@api_router.post("/payments/{payment_id}/complete")
-async def complete_payment(
-    payment_id: str,
-    current_user: User = Depends(get_current_user)
-):
-    """Complete a payment and add balance to user account (Mock implementation)"""
-    payment_doc = await db.payments.find_one({"id": payment_id, "user_id": current_user.id})
-    if not payment_doc:
-        raise HTTPException(status_code=404, detail="Ödəmə tapılmadı")
-    
-    payment = Payment(**payment_doc)
-    if payment.status != "pending":
-        raise HTTPException(status_code=400, detail="Ödəmə artıq tamamlanıb")
-    
-    # Update payment status
-    await db.payments.update_one(
-        {"id": payment_id}, 
-        {
-            "$set": {
-                "status": "completed",
-                "completed_at": datetime.now(timezone.utc).isoformat()
-            }
-        }
-    )
-    
-    # Add balance to user
-    await db.users.update_one(
-        {"id": current_user.id},
-        {"$inc": {"balance": payment.amount}}
-    )
-    
-    # Create balance transaction record
-    transaction = BalanceTransaction(
-        user_id=current_user.id,
-        amount=payment.amount,
-        transaction_type="payment",
-        description=f"Balans artırılması - {payment.amount} AZN",
-        payment_method=payment.payment_method,
-        payment_id=payment.id
-    )
-    
-    await db.balance_transactions.insert_one(transaction.dict())
-    
-    # Get updated user balance
-    updated_user = await db.users.find_one({"id": current_user.id})
-    
-    return {
-        "success": True,
-        "message": "Ödəmə uğurla tamamlandı",
-        "new_balance": updated_user.get("balance", 0),
-        "amount_added": payment.amount
-    }
+# Old mock complete endpoint - removed
 
 @api_router.get("/user/transactions")
 async def get_user_transactions(current_user: User = Depends(get_current_user)):
