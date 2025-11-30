@@ -85,55 +85,69 @@ const AddBalance = () => {
       return;
     }
 
-    if (amountNum > 1000) {
-      toast.error('Maksimum məbləğ 1000 AZN');
+    if (amountNum < 1) {
+      toast.error('Minimum məbləğ 1 AZN olmalıdır');
+      return;
+    }
+
+    if (amountNum > 10000) {
+      toast.error('Maksimum məbləğ 10,000 AZN ola bilər');
       return;
     }
 
     setIsProcessing(true);
 
     try {
-      // Create payment
-      const paymentResponse = await axios.post(
+      // Create payment with Epoint
+      const response = await axios.post(
         `${API_BASE_URL}/api/payments/create`,
         {
           amount: amountNum,
-          payment_method: selectedMethod
+          description: `Balans artırma: ${amountNum} AZN`
         },
         {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
         }
       );
 
-      const { payment_id, payment_url } = paymentResponse.data;
+      const { checkout_url, data, signature, payment_id } = response.data;
 
-      // Simulate payment process (in real app, redirect to payment gateway)
-      toast.success('Ödəmə səhifəsinə yönləndirilirik...');
-      
-      // For demo purposes, auto-complete the payment after 2 seconds
-      setTimeout(async () => {
-        try {
-          await axios.post(
-            `${API_BASE_URL}/api/payments/${payment_id}/complete`,
-            {},
-            {
-              headers: { Authorization: `Bearer ${token}` }
-            }
-          );
-          
-          toast.success('Ödəmə uğurla tamamlandı!');
-          navigate('/dashboard');
-        } catch (error) {
-          console.error('Payment completion error:', error);
-          toast.error('Ödəmə tamamlanarkən xəta baş verdi');
-        } finally {
-          setIsProcessing(false);
-        }
-      }, 2000);
+      // Store payment ID for later status check
+      localStorage.setItem('pending_payment_id', payment_id);
+      localStorage.setItem('pending_payment_amount', amountNum);
+
+      toast.success('Ödəniş səhifəsinə yönləndirilirik...');
+
+      // Create a form and submit to Epoint checkout
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = checkout_url;
+      form.style.display = 'none';
+
+      // Add data field
+      const dataInput = document.createElement('input');
+      dataInput.type = 'hidden';
+      dataInput.name = 'data';
+      dataInput.value = data;
+      form.appendChild(dataInput);
+
+      // Add signature field
+      const signatureInput = document.createElement('input');
+      signatureInput.type = 'hidden';
+      signatureInput.name = 'signature';
+      signatureInput.value = signature;
+      form.appendChild(signatureInput);
+
+      // Append form to body and submit
+      document.body.appendChild(form);
+      form.submit();
 
     } catch (error) {
       console.error('Payment creation error:', error);
-      toast.error('Ödəmə yaradılarkən xəta baş verdi');
+      toast.error(error.response?.data?.detail || 'Ödəmə yaradılarkən xəta baş verdi');
       setIsProcessing(false);
     }
   };
