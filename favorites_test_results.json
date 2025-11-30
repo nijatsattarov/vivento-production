@@ -1,7 +1,7 @@
 {
   "test_name": "Favorites Functionality Test",
   "timestamp": "2025-11-30T15:03:09.015300",
-  "base_url": "https://cms-integration-2.preview.emergentagent.com",
+  "base_url": "https://epoint-payment.preview.emergentagent.com",
   "overall_success": true,
   "total_steps": 7,
   "passed_steps": 7,
