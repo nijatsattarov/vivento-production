@@ -1928,6 +1928,11 @@ class PaymentCallbackRequest(BaseModel):
     data: str
     signature: str
 
+@api_router.post("/test-payment")
+async def test_payment_endpoint(data: dict = Body(...)):
+    """Test endpoint"""
+    return {"received": data}
+
 @api_router.get("/balance")
 async def get_balance(current_user: User = Depends(get_current_user)):
     """Get user's current balance"""
