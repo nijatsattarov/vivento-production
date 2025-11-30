@@ -1089,35 +1089,7 @@ async def get_user_balance(current_user: User = Depends(get_current_user)):
         "currency": "AZN"
     }
 
-@api_router.post("/payments/create")
-async def create_payment(
-    amount: float,
-    payment_method: str = "card",
-    current_user: User = Depends(get_current_user)
-):
-    """Create a new payment for balance top-up"""
-    if amount <= 0:
-        raise HTTPException(status_code=400, detail="Məbləğ müsbət olmalıdır")
-    
-    if amount > 1000:  # Max 1000 AZN per transaction
-        raise HTTPException(status_code=400, detail="Maksimum məbləğ 1000 AZN")
-    
-    # Create payment record
-    payment = Payment(
-        user_id=current_user.id,
-        amount=amount,
-        payment_method=payment_method,
-        payment_url=f"https://payment.gateway.com/pay/{uuid.uuid4()}"  # Mock payment URL
-    )
-    
-    await db.payments.insert_one(payment.dict())
-    
-    return {
-        "payment_id": payment.id,
-        "payment_url": payment.payment_url,
-        "amount": payment.amount,
-        "status": payment.status
-    }
+# Old mock payment endpoint - removed (replaced by Epoint integration)
 
 @api_router.post("/payments/{payment_id}/complete")
 async def complete_payment(
