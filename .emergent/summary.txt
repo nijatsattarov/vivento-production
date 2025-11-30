@@ -1,0 +1,58 @@
+<analysis>
+The trajectory chronicles an intensive development phase for the Vivento application. Initially, the focus was on deploying the frontend to Netlify, which involved troubleshooting  configuration, Node.js version conflicts, and fixing incorrect build paths. Concurrently, a backend URL issue was resolved. Subsequently, the AI engineer tackled multiple critical bugs: a broken background image upload in the Admin Panel, template saving failures, incorrect Next Step navigation in the user editor, and a non-functional preview. These were addressed through  integration, API call corrections, and router adjustments. A major new feature—a balance-based pricing system—was implemented, requiring extensive backend model and API updates, alongside frontend UI integration. Branding removal (Made with Emergent) was initiated. Throughout, persistent authentication session issues and dynamic logo display inconsistencies were debugged, leading to the creation of  and numerous null-safe code adjustments. The work frequently alternated between feature implementation and fixing newly reported or recurring bugs, often involving local testing environment configuration.
+</analysis>
+
+<product_requirements>
+Vivento is a Paperless Post-like web application in Azerbaijani for digital event invitations. It features user authentication, event creation, a customizable template system with a Canva-like editor, unique invitation link sharing, and an Admin Panel. The Admin Panel allows template creation with dynamic placeholders, manages site settings (including logo uploads), and defines template pricing. Recent implementations include a file upload system for images, an enhanced Next Step workflow in the template editor, and a balance-based pricing model: 30 free invitations, then 0.10 AZN per invitation. Users can add balance via a payment page, and admins can set templates as premium with specific prices. The application’s core functionality is built, with ongoing efforts to finalize deployment, ensure authentication persistence, and refine UI consistency.
+</product_requirements>
+
+<key_technical_concepts>
+- **Backend:** FastAPI (Python), MongoDB (Atlas).
+- **Frontend:** React (JavaScript) with CRACO, Shadcn UI, custom React canvas.
+- **Authentication:** JWT, React Context ().
+- **Deployment:** Netlify (frontend), Render.com (backend), GitHub.
+- **State Management:** React Context ().
+- **File Handling:** .
+</key_technical_concepts>
+
+<code_architecture>
+The application employs a monorepo structure with  (React) and  (FastAPI) directories.
+
+-   ****: Handles all API endpoints.
+    -   **Changes:**  model (),  model (, ), new , ,  models. Added , ,  (GET/PUT) endpoints. Fixed  blocks.
+-   ****: Main router.
+    -   **Changes:** Wrapped with  and . Added new routes: , , .
+-   ****: Admin template editor.
+    -   **Changes:** Integrated  for token. Dual URL/file upload for background images. Added  field.
+-   ****: User template editor.
+    -   **Changes:** Fixed  (background image), corrected Next Step navigation, fixed preview URL generation. Integrated  and  fixes.
+-   ****: Admin dashboard for site settings.
+    -   **Changes:** Integrated , . Implemented URL and file upload for site logo with  API call. Fetches settings on load. Improved error handling and null checks for logo display.
+-   ****: Landing page.
+    -   **Changes:** Added category navigation. Integrated  for dynamic footer logo. Removed Vivento text from footer.
+-   ****: User dashboard.
+    -   **Changes:** Integrated . Added balance display, free invitations, and Add Balance button.
+-   ****: Auth state.
+    -   **Changes:** Stores and exposes . Enhanced login/register/logout with token management and improved error handling.
+-   ****: Global site settings.
+    -   **New file:** Provides  and other settings to components.
+-   ****: Main HTML.
+    -   **Changes:** Commented out Made with Emergent branding.
+-   ****: Netlify config.
+    -   **Changes:** Corrected , , , .
+</code_architecture>
+
+<pending_tasks>
+- Remove all Emergent and emergent.sh branding from the site.
+- Thoroughly debug and resolve persistent login/registration issues reported by the user.
+- Implement full payment gateway integration for the Add Balance functionality.
+- Fulfill remaining product requirements like RSVP tracking and advanced Admin CMS features.
+</pending_tasks>
+
+<current_work>
+Immediately before this summary request, the AI engineer was tasked with resolving recurring login and registration failures. Despite previous fixes and testing showing these functionalities working correctly, the user reported that errors persist, preventing both login and registration. This led to a re-evaluation of backend API status (confirmed working), frontend environment variables, and further enhancements to error handling and debugging logs within  and . Concurrently, the engineer has just started working on a new user request to remove all Emergent and emergent.sh branding from the application, having begun by searching HTML files for relevant text.
+</current_work>
+
+<optional_next_step>
+Continue searching for and removing all Emergent and emergent.sh branding from the application.
+</optional_next_step>

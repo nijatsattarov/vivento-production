@@ -1,0 +1,20 @@
+
+🌐 NETLIFY DEPLOYMENT GUIDE
+==========================
+
+1. Netlify.com-a daxil olun
+2. 'New site from Git' → GitHub
+3. 'nijatsattarov/vivento-production' seçin
+
+4. Build Settings:
+   Base directory: frontend
+   Build command: npm run build
+   Publish directory: frontend/build
+   
+5. Environment Variables:
+   REACT_APP_BACKEND_URL = https://your-railway-backend-url
+
+6. Deploy!
+
+Netlify daha yaxşı CRACO support edir!
+

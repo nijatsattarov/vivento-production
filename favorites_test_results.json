@@ -1,0 +1,99 @@
+{
+  "test_name": "Favorites Functionality Test",
+  "timestamp": "2025-11-30T15:03:09.015300",
+  "base_url": "https://cms-integration-2.preview.emergentagent.com",
+  "overall_success": true,
+  "total_steps": 7,
+  "passed_steps": 7,
+  "failed_steps": 0,
+  "step_results": [
+    {
+      "step": "1: Register User (Login Fallback)",
+      "success": true,
+      "details": "Existing user logged in successfully. Token: eyJhbGciOiJIUzI1NiIs...",
+      "response": {
+        "user_id": "0bea4093-5265-4a2a-bdf9-96c4fcfdcd5e",
+        "email": "favoritetest@vivento.test"
+      }
+    },
+    {
+      "step": "2: Login User",
+      "success": true,
+      "details": "Login successful. Token matches: True",
+      "response": {
+        "login_token": "eyJhbGciOiJIUzI1NiIs...",
+        "user": {
+          "id": "0bea4093-5265-4a2a-bdf9-96c4fcfdcd5e",
+          "email": "favoritetest@vivento.test",
+          "name": "Favorites Test User",
+          "facebook_id": null,
+          "google_id": null,
+          "profile_picture": null,
+          "is_active": true,
+          "subscription_type": "free",
+          "balance": 0.0,
+          "free_invitations_used": 0,
+          "favorites": [],
+          "created_at": "2025-11-30T15:02:09.991000",
+          "updated_at": "2025-11-30T15:02:09.991000"
+        }
+      }
+    },
+    {
+      "step": "3: Get Templates",
+      "success": true,
+      "details": "Found 9 templates. Selected template ID: 0f410e2c-3b69-43b7-80da-51b17f0224a2",
+      "response": {
+        "total_templates": 9,
+        "selected_template": {
+          "id": "0f410e2c-3b69-43b7-80da-51b17f0224a2",
+          "name": "Klassik Toy Dəvətnaməsi",
+          "category": "toy"
+        }
+      }
+    },
+    {
+      "step": "4: Add to Favorites",
+      "success": true,
+      "details": "Template 0f410e2c-3b69-43b7-80da-51b17f0224a2 added to favorites successfully",
+      "response": {
+        "message": "Sevimlilərə əlavə edildi",
+        "template_id": "0f410e2c-3b69-43b7-80da-51b17f0224a2"
+      }
+    },
+    {
+      "step": "5: Verify Favorites Added",
+      "success": true,
+      "details": "Template 0f410e2c-3b69-43b7-80da-51b17f0224a2 found in favorites list (1 total favorites)",
+      "response": {
+        "total_favorites": 1,
+        "template_found": true,
+        "favorites": [
+          {
+            "id": "0f410e2c-3b69-43b7-80da-51b17f0224a2",
+            "name": "Klassik Toy Dəvətnaməsi"
+          }
+        ]
+      }
+    },
+    {
+      "step": "6: Remove from Favorites",
+      "success": true,
+      "details": "Template 0f410e2c-3b69-43b7-80da-51b17f0224a2 removed from favorites successfully",
+      "response": {
+        "message": "Sevimlilərən silindi",
+        "template_id": "0f410e2c-3b69-43b7-80da-51b17f0224a2"
+      }
+    },
+    {
+      "step": "7: Verify Favorites Removed",
+      "success": true,
+      "details": "Template 0f410e2c-3b69-43b7-80da-51b17f0224a2 successfully removed from favorites (0 remaining favorites)",
+      "response": {
+        "total_favorites": 0,
+        "template_found": false,
+        "favorites": []
+      }
+    }
+  ]
+}

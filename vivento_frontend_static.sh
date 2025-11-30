@@ -1,0 +1,393 @@
+#!/bin/bash
+# Vivento Frontend Static Build for Shared Hosting
+
+echo "🎨 Vivento Frontend Static Build"
+echo "================================"
+
+cd vivento-php-deploy
+
+# 10. Frontend Static Build (React-i static HTML-ə convert edir)
+mkdir -p frontend-build/{js,css,images}
+
+# Main HTML File
+cat > frontend-build/index.html << 'EOF'
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vivento - Rəqəmsal Dəvətnamə Platforması</title>
+    <meta name="description" content="Vivento ilə gözəl dəvətnamələr yaradın və paylaşın">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold">V</div>
+                    </div>
+                    <div class="ml-3">
+                        <span class="text-xl font-bold text-gray-900">Vivento</span>
+                    </div>
+                </div>
+                
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#" class="text-gray-600 hover:text-purple-600 px-3 py-2">Ana səhifə</a>
+                        <a href="#" class="text-gray-600 hover:text-purple-600 px-3 py-2">Kateqoriyalar</a>
+                        <a href="#" class="text-gray-600 hover:text-purple-600 px-3 py-2">Xüsusiyyətlər</a>
+                        <a href="#" class="text-gray-600 hover:text-purple-600 px-3 py-2">Qiymətlər</a>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button onclick="showAuth('login')" class="text-purple-600 hover:text-purple-700 font-medium" id="loginBtn">
+                        Giriş
+                    </button>
+                    <button onclick="showAuth('register')" class="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 font-medium" id="registerBtn">
+                        Qeydiyyat
+                    </button>
+                    
+                    <!-- User Menu (hidden initially) -->
+                    <div class="hidden" id="userMenu">
+                        <button class="flex items-center space-x-2 text-gray-600 hover:text-purple-600">
+                            <i class="fas fa-user-circle text-xl"></i>
+                            <span id="userName"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main id="mainContent">
+        <!-- Home Page -->
+        <div id="homePage" class="page-content">
+            <!-- Hero Section -->
+            <div class="bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 py-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+                        Rəqəmsal dəvətnamə yaratmaq heç vaxt bu qədər 
+                        <span class="text-purple-600">asan olmayıb</span>
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                        Vivento ilə toy, nişan, doğum günü və digər tədbir üçün gözəl dəvətnamələr yaradın. 
+                        Qonaqlarınızı dəvət edin və RSVP cavablarını real vaxtda izləyin.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="showAuth('register')" class="bg-purple-600 text-white px-8 py-3 rounded-lg text-lg font-medium hover:bg-purple-700 transition-colors">
+                            Pulsuz başla →
+                        </button>
+                        <button onclick="showPage('templates')" class="border border-gray-300 text-gray-700 px-8 py-3 rounded-lg text-lg font-medium hover:bg-gray-50 transition-colors">
+                            Şablonlara bax
+                        </button>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-8 mt-16 max-w-2xl mx-auto">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-purple-600">10K+</div>
+                            <div class="text-gray-600">Yaradılmış dəvətnamə</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-purple-600">5K+</div>
+                            <div class="text-gray-600">Xoşbəxt müştəri</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-purple-600">99%</div>
+                            <div class="text-gray-600">Məmnuniyyət dərəcəsi</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="py-20 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Niyə Vivento seçməlisiniz?</h2>
+                        <p class="text-xl text-gray-600">Dəvətnamə yaratmaqdan RSVP cavablarını toplamağa qədər bütün prosesi asanlaşdırırıq</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="text-center p-6">
+                            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-palette text-purple-600 text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3">Gözəl Şablonlar</h3>
+                            <p class="text-gray-600">Peşəkar dizaynerlərimiz tərəfindən hazırlanmış yüzlərlə şablon arasından seçin</p>
+                        </div>
+                        
+                        <div class="text-center p-6">
+                            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-edit text-blue-600 text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3">Asan Redaktə</h3>
+                            <p class="text-gray-600">Drag & drop ilə şəkil, mətn və rəngləri dəyişdirin. Heç bir texniki bilgi lazım deyil</p>
+                        </div>
+                        
+                        <div class="text-center p-6">
+                            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-share-alt text-green-600 text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3">Asan Paylaşım</h3>
+                            <p class="text-gray-600">WhatsApp, email və ya QR kod ilə dəvətnamələrinizi bir kliklə paylaşın</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Templates Page -->
+        <div id="templatesPage" class="page-content hidden">
+            <div class="py-8 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-8">
+                        <h1 class="text-3xl font-bold text-gray-900 mb-4">Şablonlar</h1>
+                        <p class="text-lg text-gray-600">Tədbir növünüzə uyğun şablonu seçin</p>
+                    </div>
+                    
+                    <!-- Category Filter -->
+                    <div class="flex justify-center mb-8">
+                        <div class="flex space-x-4">
+                            <button onclick="filterTemplates('all')" class="category-btn active px-4 py-2 rounded-full border">
+                                Hamısı
+                            </button>
+                            <button onclick="filterTemplates('toy')" class="category-btn px-4 py-2 rounded-full border">
+                                💍 Toy
+                            </button>
+                            <button onclick="filterTemplates('nişan')" class="category-btn px-4 py-2 rounded-full border">
+                                💖 Nişan
+                            </button>
+                            <button onclick="filterTemplates('doğum_günü')" class="category-btn px-4 py-2 rounded-full border">
+                                🎂 Ad günü
+                            </button>
+                            <button onclick="filterTemplates('korporativ')" class="category-btn px-4 py-2 rounded-full border">
+                                🏢 Korporativ
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Templates Grid -->
+                    <div id="templatesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Templates will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboardPage" class="page-content hidden">
+            <div class="py-8">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between items-center mb-8">
+                        <h1 class="text-3xl font-bold text-gray-900">Mənim Tədbirlərim</h1>
+                        <button onclick="showCreateEvent()" class="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700">
+                            + Yeni tədbir
+                        </button>
+                    </div>
+                    
+                    <!-- Events Grid -->
+                    <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Events will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 id="authTitle" class="text-xl font-bold">Hesabınıza daxil olun</h2>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email ünvanı</label>
+                    <input type="email" id="loginEmail" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Parol</label>
+                    <input type="password" id="loginPassword" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500">
+                </div>
+                <button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700">
+                    Giriş et
+                </button>
+                <p class="text-center text-sm text-gray-600">
+                    Hesabınız yoxdur? 
+                    <a href="#" onclick="showAuth('register')" class="text-purple-600 hover:text-purple-700">Qeydiyyat</a>
+                </p>
+            </form>
+            
+            <!-- Register Form -->
+            <form id="registerForm" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ad və soyad</label>
+                    <input type="text" id="registerName" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email ünvanı</label>
+                    <input type="email" id="registerEmail" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Parol</label>
+                    <input type="password" id="registerPassword" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-purple-500 focus:border-purple-500">
+                </div>
+                <button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700">
+                    Qeydiyyat
+                </button>
+                <p class="text-center text-sm text-gray-600">
+                    Artıq hesabınız var? 
+                    <a href="#" onclick="showAuth('login')" class="text-purple-600 hover:text-purple-700">Giriş et</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6">
+            <div class="flex items-center space-x-3">
+                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
+                <span>Yüklənir...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/app.js"></script>
+</body>
+</html>
+EOF
+
+# CSS File
+cat > frontend-build/css/style.css << 'EOF'
+/* Vivento Custom Styles */
+
+.page-content {
+    min-height: 80vh;
+}
+
+.category-btn {
+    transition: all 0.3s ease;
+}
+
+.category-btn:hover {
+    background-color: #f3f4f6;
+    border-color: #9333ea;
+}
+
+.category-btn.active {
+    background-color: #9333ea;
+    color: white;
+    border-color: #9333ea;
+}
+
+.template-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.template-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.event-card {
+    transition: all 0.3s ease;
+}
+
+.event-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Toast notification */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 6px;
+    color: white;
+    font-weight: 500;
+    z-index: 1000;
+    animation: slideIn 0.3s ease-out;
+}
+
+.toast.success { background-color: #10b981; }
+.toast.error { background-color: #ef4444; }
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .flex-col {
+        flex-direction: column;
+    }
+    
+    .space-x-4 > * + * {
+        margin-left: 0;
+        margin-top: 1rem;
+    }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}
+EOF
+
+echo "✅ Frontend HTML hazırdır!"
+echo ""
