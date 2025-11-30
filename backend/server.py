@@ -1914,6 +1914,253 @@ async def delete_slide(slide_id: str, current_user: User = Depends(get_current_u
         logger.error(f"Delete slide error: {e}")
         raise HTTPException(status_code=500, detail="Slider silinərkən xəta baş verdi")
 
+# ============================================
+# PAYMENT & BALANCE ENDPOINTS
+# ============================================
+
+from epoint_service import epoint_service
+
+class CreatePaymentRequest(BaseModel):
+    amount: float = Field(gt=0, description="Amount in AZN to add to balance")
+    description: Optional[str] = "Balans artırma"
+
+class PaymentCallbackRequest(BaseModel):
+    data: str
+    signature: str
+
+@api_router.get("/balance")
+async def get_balance(credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer())):
+    """Get user's current balance"""
+    try:
+        user = await verify_auth(credentials)
+        
+        return {
+            "balance": user.balance,
+            "free_invitations_used": user.free_invitations_used,
+            "free_invitations_remaining": max(0, 30 - user.free_invitations_used)
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Get balance error: {e}")
+        raise HTTPException(status_code=500, detail="Balans məlumatı alınarkən xəta baş verdi")
+
+@api_router.post("/payments/create")
+async def create_payment(
+    request: CreatePaymentRequest,
+    credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer())
+):
+    """
+    Create a payment request for balance top-up
+    Returns checkout URL for Epoint.az
+    """
+    try:
+        user = await verify_auth(credentials)
+        
+        # Generate unique order ID
+        order_id = f"BAL-{user.id[:8]}-{uuid.uuid4().hex[:8].upper()}"
+        
+        # Create payment record in database
+        payment = Payment(
+            id=str(uuid.uuid4()),
+            user_id=user.id,
+            amount=request.amount,
+            payment_method="epoint",
+            status="pending"
+        )
+        
+        await db.payments.insert_one(payment.model_dump())
+        
+        # Create payment request with Epoint
+        payment_request = epoint_service.create_payment_request(
+            order_id=order_id,
+            amount=request.amount,
+            currency="AZN",
+            description=request.description or f"Balans artırma: {request.amount} AZN",
+            language="az"
+        )
+        
+        # Store order_id in payment record for callback matching
+        await db.payments.update_one(
+            {"id": payment.id},
+            {"$set": {"payment_url": payment_request["checkout_url"], "order_id": order_id}}
+        )
+        
+        logger.info(f"Payment created: {order_id} for user {user.id}, amount: {request.amount} AZN")
+        
+        return {
+            "order_id": order_id,
+            "payment_id": payment.id,
+            "checkout_url": payment_request["checkout_url"],
+            "data": payment_request["data"],
+            "signature": payment_request["signature"],
+            "amount": request.amount
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Create payment error: {e}")
+        raise HTTPException(status_code=500, detail="Ödəniş yaradılarkən xəta baş verdi")
+
+@api_router.post("/payments/callback")
+async def payment_callback(request: PaymentCallbackRequest):
+    """
+    Handle payment callback from Epoint.az
+    Verify signature and update balance
+    """
+    try:
+        # Verify signature
+        if not epoint_service.verify_callback_signature(request.data, request.signature):
+            logger.warning("Invalid payment callback signature")
+            raise HTTPException(status_code=401, detail="Invalid signature")
+        
+        # Decode callback data
+        callback_data = epoint_service.decode_callback_data(request.data)
+        
+        logger.info(f"Payment callback received: {callback_data}")
+        
+        # Extract payment information
+        order_id = callback_data.get("order_id")
+        status = callback_data.get("status", "").lower()
+        transaction_id = callback_data.get("transaction")
+        
+        # Find payment record
+        payment = await db.payments.find_one({"order_id": order_id}, {"_id": 0})
+        
+        if not payment:
+            logger.warning(f"Payment not found for order_id: {order_id}")
+            return {"status": "ignored", "message": "Payment not found"}
+        
+        # Update payment status
+        if status == "success":
+            # Update payment record
+            await db.payments.update_one(
+                {"order_id": order_id},
+                {
+                    "$set": {
+                        "status": "completed",
+                        "completed_at": datetime.now(timezone.utc),
+                        "transaction_id": transaction_id
+                    }
+                }
+            )
+            
+            # Update user balance
+            user = await db.users.find_one({"id": payment["user_id"]}, {"_id": 0})
+            if user:
+                new_balance = user.get("balance", 0.0) + payment["amount"]
+                await db.users.update_one(
+                    {"id": payment["user_id"]},
+                    {
+                        "$set": {
+                            "balance": new_balance,
+                            "updated_at": datetime.now(timezone.utc)
+                        }
+                    }
+                )
+                
+                # Create balance transaction record
+                transaction = BalanceTransaction(
+                    id=str(uuid.uuid4()),
+                    user_id=payment["user_id"],
+                    amount=payment["amount"],
+                    transaction_type="payment",
+                    description=f"Balans artırma: {payment['amount']} AZN",
+                    payment_method="epoint",
+                    payment_id=transaction_id,
+                    status="completed"
+                )
+                
+                await db.balance_transactions.insert_one(transaction.model_dump())
+                
+                logger.info(f"Balance updated for user {payment['user_id']}: +{payment['amount']} AZN (new balance: {new_balance} AZN)")
+        else:
+            # Payment failed
+            await db.payments.update_one(
+                {"order_id": order_id},
+                {
+                    "$set": {
+                        "status": "failed",
+                        "completed_at": datetime.now(timezone.utc)
+                    }
+                }
+            )
+            logger.info(f"Payment failed for order: {order_id}")
+        
+        return {
+            "status": "processed",
+            "order_id": order_id,
+            "payment_status": status
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Payment callback error: {e}")
+        raise HTTPException(status_code=500, detail="Ödəniş callback xətası")
+
+@api_router.get("/payments/{payment_id}/status")
+async def get_payment_status(
+    payment_id: str,
+    credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer())
+):
+    """Get payment status"""
+    try:
+        user = await verify_auth(credentials)
+        
+        payment = await db.payments.find_one(
+            {"id": payment_id, "user_id": user.id},
+            {"_id": 0}
+        )
+        
+        if not payment:
+            raise HTTPException(status_code=404, detail="Ödəniş tapılmadı")
+        
+        return {
+            "payment_id": payment["id"],
+            "amount": payment["amount"],
+            "status": payment["status"],
+            "created_at": payment["created_at"],
+            "completed_at": payment.get("completed_at")
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Get payment status error: {e}")
+        raise HTTPException(status_code=500, detail="Ödəniş statusu alınarkən xəta baş verdi")
+
+@api_router.get("/balance/transactions")
+async def get_balance_transactions(
+    credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer()),
+    limit: int = 50,
+    offset: int = 0
+):
+    """Get user's balance transaction history"""
+    try:
+        user = await verify_auth(credentials)
+        
+        transactions = await db.balance_transactions.find(
+            {"user_id": user.id},
+            {"_id": 0}
+        ).sort("created_at", -1).skip(offset).limit(limit).to_list(limit)
+        
+        total_count = await db.balance_transactions.count_documents({"user_id": user.id})
+        
+        return {
+            "transactions": transactions,
+            "total": total_count,
+            "limit": limit,
+            "offset": offset
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Get transactions error: {e}")
+        raise HTTPException(status_code=500, detail="Tranzaksiya tarixçəsi alınarkən xəta baş verdi")
+
 # Include the router in the main app
 app.include_router(api_router)
 
