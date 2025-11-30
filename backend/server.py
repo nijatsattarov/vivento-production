@@ -1947,7 +1947,8 @@ async def get_balance(current_user: User = Depends(get_current_user)):
 
 @api_router.post("/payments/create")
 async def create_payment(
-    request: CreatePaymentRequest,
+    amount: float,
+    description: Optional[str] = "Balans artırma",
     current_user: User = Depends(get_current_user)
 ):
     """
@@ -1956,6 +1957,10 @@ async def create_payment(
     """
     try:
         user = current_user
+        
+        # Validate amount
+        if amount <= 0:
+            raise HTTPException(status_code=400, detail="Məbləğ 0-dan böyük olmalıdır")
         
         # Generate unique order ID
         order_id = f"BAL-{user.id[:8]}-{uuid.uuid4().hex[:8].upper()}"
