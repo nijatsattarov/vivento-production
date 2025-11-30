@@ -1979,9 +1979,9 @@ async def create_payment(
         # Create payment request with Epoint
         payment_request = epoint_service.create_payment_request(
             order_id=order_id,
-            amount=request.amount,
+            amount=amount,
             currency="AZN",
-            description=request.description or f"Balans artırma: {request.amount} AZN",
+            description=description or f"Balans artırma: {amount} AZN",
             language="az"
         )
         
