@@ -61,10 +61,10 @@ const AddBalance = () => {
 
   const fetchBalance = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/user/balance`, {
+      const response = await axios.get(`${API_BASE_URL}/api/balance`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setBalance(response.data.balance);
+      setBalance(response.data.balance || 0);
     } catch (error) {
       console.error('Balance fetch error:', error);
       toast.error('Balans məlumatları alına bilmədi');
