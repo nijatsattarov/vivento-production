@@ -2133,13 +2133,13 @@ async def get_payment_status(
 
 @api_router.get("/balance/transactions")
 async def get_balance_transactions(
-    credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer()),
+    current_user: User = Depends(get_current_user),
     limit: int = 50,
     offset: int = 0
 ):
     """Get user's balance transaction history"""
     try:
-        user = await verify_auth(credentials)
+        user = current_user
         
         transactions = await db.balance_transactions.find(
             {"user_id": user.id},
