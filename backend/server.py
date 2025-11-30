@@ -1947,8 +1947,8 @@ async def get_balance(current_user: User = Depends(get_current_user)):
 
 @api_router.post("/payments/create")
 async def create_payment(
-    request: CreatePaymentRequest,
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
+    request: CreatePaymentRequest = Body(...)
 ):
     """
     Create a payment request for balance top-up
