@@ -2103,11 +2103,11 @@ async def payment_callback(request: PaymentCallbackRequest):
 @api_router.get("/payments/{payment_id}/status")
 async def get_payment_status(
     payment_id: str,
-    credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer())
+    current_user: User = Depends(get_current_user)
 ):
     """Get payment status"""
     try:
-        user = await verify_auth(credentials)
+        user = current_user
         
         payment = await db.payments.find_one(
             {"id": payment_id, "user_id": user.id},
