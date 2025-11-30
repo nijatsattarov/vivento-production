@@ -1952,9 +1952,8 @@ async def get_balance(current_user: User = Depends(get_current_user)):
 
 @api_router.post("/payments/create")
 async def create_payment(
-    current_user: User = Depends(get_current_user),
-    amount: float = Body(...),
-    description: Optional[str] = Body(default="Balans artırma")
+    request: Request,
+    current_user: User = Depends(get_current_user)
 ):
     """
     Create a payment request for balance top-up
@@ -1963,8 +1962,13 @@ async def create_payment(
     try:
         user = current_user
         
+        # Parse request body
+        body = await request.json()
+        amount = body.get("amount")
+        description = body.get("description", "Balans artırma")
+        
         # Validate amount
-        if amount <= 0:
+        if not amount or amount <= 0:
             raise HTTPException(status_code=400, detail="Məbləğ 0-dan böyük olmalıdır")
         
         # Generate unique order ID
