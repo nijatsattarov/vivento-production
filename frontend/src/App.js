@@ -117,6 +117,24 @@ const AppRoutes = () => {
       />
       
       <Route 
+        path="/payment-success" 
+        element={
+          <ProtectedRoute>
+            <PaymentSuccess />
+          </ProtectedRoute>
+        } 
+      />
+      
+      <Route 
+        path="/payment-cancel" 
+        element={
+          <ProtectedRoute>
+            <PaymentCancel />
+          </ProtectedRoute>
+        } 
+      />
+      
+      <Route 
         path="/favorites" 
         element={
           <ProtectedRoute>
