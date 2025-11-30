@@ -1969,7 +1969,7 @@ async def create_payment(
         payment = Payment(
             id=str(uuid.uuid4()),
             user_id=user.id,
-            amount=request.amount,
+            amount=amount,
             payment_method="epoint",
             status="pending"
         )
