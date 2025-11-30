@@ -15,6 +15,8 @@ import AdminPanel from "./pages/AdminPanel";
 import Templates from "./pages/Templates";
 import TemplateDetail from "./pages/TemplateDetail";
 import AddBalance from "./pages/AddBalance";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentCancel from "./pages/PaymentCancel";
 import Favorites from "./pages/Favorites";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
