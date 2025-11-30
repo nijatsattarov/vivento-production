@@ -101,10 +101,15 @@ const Dashboard = () => {
 
   const fetchBalance = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/user/balance`, {
+      const response = await axios.get(`${API_BASE_URL}/api/balance`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setBalance(response.data);
+      setBalance({
+        balance: response.data.balance || 0,
+        free_invitations_used: response.data.free_invitations_used || 0,
+        free_invitations_remaining: response.data.free_invitations_remaining || 30,
+        currency: 'AZN'
+      });
     } catch (error) {
       console.error('Balance fetch error:', error);
     }
