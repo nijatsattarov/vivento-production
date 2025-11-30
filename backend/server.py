@@ -1929,10 +1929,10 @@ class PaymentCallbackRequest(BaseModel):
     signature: str
 
 @api_router.get("/balance")
-async def get_balance(credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer())):
+async def get_balance(current_user: User = Depends(get_current_user)):
     """Get user's current balance"""
     try:
-        user = await verify_auth(credentials)
+        user = current_user
         
         return {
             "balance": user.balance,
