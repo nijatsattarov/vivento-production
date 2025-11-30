@@ -1948,14 +1948,14 @@ async def get_balance(current_user: User = Depends(get_current_user)):
 @api_router.post("/payments/create")
 async def create_payment(
     request: CreatePaymentRequest,
-    credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer())
+    current_user: User = Depends(get_current_user)
 ):
     """
     Create a payment request for balance top-up
     Returns checkout URL for Epoint.az
     """
     try:
-        user = await verify_auth(credentials)
+        user = current_user
         
         # Generate unique order ID
         order_id = f"BAL-{user.id[:8]}-{uuid.uuid4().hex[:8].upper()}"
