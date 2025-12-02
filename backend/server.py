@@ -27,6 +27,15 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
+# Helper function to generate absolute file URLs
+def get_absolute_file_url(relative_path: str) -> str:
+    """Convert relative file path to absolute URL"""
+    if relative_path.startswith('http'):
+        return relative_path
+    # Remove leading slash if present
+    path = relative_path.lstrip('/')
+    return f"{BACKEND_URL}/{path}"
+
 # Security
 import hashlib
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
