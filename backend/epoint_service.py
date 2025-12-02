@@ -72,7 +72,7 @@ class EpointService:
         """
         try:
             # Get backend URL for callbacks
-            backend_url = os.environ.get("REACT_APP_BACKEND_URL", "http://localhost:8001")
+            backend_url = os.environ.get("BACKEND_URL", "http://localhost:8001")
             
             # Prepare payment data
             payment_data = {
