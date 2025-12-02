@@ -1076,8 +1076,8 @@ async def upload_background_image(file: UploadFile = File(...)):
             content = await file.read()
             buffer.write(content)
         
-        # Return the full URL for backgrounds (using /api/uploads/ path)
-        file_url = f"/api/uploads/{unique_filename}"
+        # Return absolute URL for backgrounds
+        file_url = get_absolute_file_url(f"/api/uploads/{unique_filename}")
         
         return {
             "filename": unique_filename,
