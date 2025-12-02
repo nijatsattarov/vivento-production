@@ -20,7 +20,7 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 # Get backend URL from environment
-BACKEND_URL = os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:8001')
+BACKEND_URL = os.environ.get('BACKEND_URL', 'http://localhost:8001')
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
