@@ -806,8 +806,8 @@ async def upload_profile_picture(
     with open(file_path, 'wb') as f:
         f.write(contents)
     
-    # Return file URL (using /api/uploads/ path)
-    file_url = f"/api/uploads/{filename}"
+    # Return absolute file URL
+    file_url = get_absolute_file_url(f"/api/uploads/{filename}")
     
     return {"file_url": file_url, "filename": filename}
 
