@@ -1627,8 +1627,8 @@ async def upload_custom_font(
         with open(file_path, "wb") as f:
             f.write(contents)
         
-        # Generate file URL
-        file_url = f"/api/uploads/{unique_filename}"
+        # Generate absolute file URL
+        file_url = get_absolute_file_url(f"/api/uploads/{unique_filename}")
         
         # Determine font format
         format_map = {
