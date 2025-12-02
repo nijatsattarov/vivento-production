@@ -888,13 +888,76 @@ async def add_guest(event_id: str, request: GuestCreate, current_user: User = De
     if not event:
         raise HTTPException(status_code=404, detail="Tədbir tapılmadı")
     
+    # Get current user data with balance
+    user = await db.users.find_one({"id": current_user.id}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="İstifadəçi tapılmadı")
+    
+    free_invitations_used = user.get("free_invitations_used", 0)
+    current_balance = user.get("balance", 0.0)
+    
+    # Check if user needs to pay (after 30 free invitations)
+    invitation_cost = 0.10  # AZN per invitation
+    needs_payment = free_invitations_used >= 30
+    
+    if needs_payment:
+        # Check if balance is sufficient
+        if current_balance < invitation_cost:
+            raise HTTPException(
+                status_code=402,
+                detail=f"Balansınız kifayət deyil. Qonaq əlavə etmək üçün {invitation_cost} AZN lazımdır. Cari balans: {current_balance} AZN"
+            )
+        
+        # Deduct from balance
+        new_balance = current_balance - invitation_cost
+        
+        # Update user balance
+        await db.users.update_one(
+            {"id": current_user.id},
+            {
+                "$set": {
+                    "balance": new_balance,
+                    "updated_at": datetime.now(timezone.utc)
+                }
+            }
+        )
+        
+        # Create transaction record
+        transaction = BalanceTransaction(
+            id=str(uuid.uuid4()),
+            user_id=current_user.id,
+            amount=-invitation_cost,  # Negative for deduction
+            transaction_type="invitation_charge",
+            description=f"Qonaq əlavə edilməsi: {request.name}",
+            payment_method=None,
+            payment_id=None,
+            status="completed"
+        )
+        
+        await db.balance_transactions.insert_one(transaction.model_dump())
+        
+        logger.info(f"Charged {invitation_cost} AZN from user {current_user.id}. New balance: {new_balance} AZN")
+    
+    # Increment free invitations counter
+    await db.users.update_one(
+        {"id": current_user.id},
+        {
+            "$inc": {"free_invitations_used": 1},
+            "$set": {"updated_at": datetime.now(timezone.utc)}
+        }
+    )
+    
+    # Create guest
     guest = Guest(
         event_id=event_id,
         name=request.name,
         phone=request.phone,
         email=request.email
     )
-    await db.guests.insert_one(guest.dict())
+    await db.guests.insert_one(guest.model_dump())
+    
+    logger.info(f"Guest added: {guest.name} (Free invitations used: {free_invitations_used + 1}/30, Charged: {needs_payment})")
+    
     return guest
 
 @api_router.get("/events/{event_id}/guests")
