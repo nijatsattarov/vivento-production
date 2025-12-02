@@ -1039,8 +1039,8 @@ async def upload_image(file: UploadFile = File(...), current_user: User = Depend
             content = await file.read()
             buffer.write(content)
         
-        # Return the URL (using /api/uploads/ path)
-        file_url = f"/api/uploads/{unique_filename}"
+        # Return absolute URL
+        file_url = get_absolute_file_url(f"/api/uploads/{unique_filename}")
         
         return {
             "filename": unique_filename,
