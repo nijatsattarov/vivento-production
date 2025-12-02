@@ -41,11 +41,25 @@ file_url = get_absolute_file_url(f"/api/uploads/{filename}")
 - ✅ Image serving tested - accessible via HTTP
 - ⏳ Production deployment pending user's environment variable configuration
 
-**User Action Required for Production**:
-Add to Render.com backend environment variables:
+**User Action Required for Production** (CRITICAL):
+
+1. **Render.com Backend - Add Environment Variable**:
+```bash
+BACKEND_URL=https://your-backend-url.onrender.com
 ```
-REACT_APP_BACKEND_URL=https://your-backend-url.onrender.com
+⚠️ Bu olmadan şəkillər hələ də `localhost:8001` ünvanından yüklənməyə çalışacaq!
+
+2. **Verify CORS_ORIGINS includes**:
+```bash
+CORS_ORIGINS=https://myvivento.com,https://www.myvivento.com
 ```
+
+3. **Check all required variables are set**:
+- BACKEND_URL ✅
+- MONGO_URL ✅
+- DB_NAME ✅
+- CORS_ORIGINS ✅
+- SECRET_KEY ✅
 
 ---
 
