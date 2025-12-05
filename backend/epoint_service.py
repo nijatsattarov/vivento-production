@@ -73,6 +73,8 @@ class EpointService:
         try:
             # Get backend URL for callbacks
             backend_url = os.environ.get("BACKEND_URL", "http://localhost:8001")
+            # Get frontend URL for user redirects
+            frontend_url = os.environ.get("REACT_APP_BACKEND_URL", backend_url).replace("/api", "")
             
             # Prepare payment data
             payment_data = {
@@ -81,7 +83,11 @@ class EpointService:
                 "currency": currency,
                 "description": description,
                 "order_id": order_id,
-                "language": language
+                "language": language,
+                # Callback URLs (Epoint-ə bildirmək üçün)
+                "success_redirect_url": f"{frontend_url}/success",
+                "error_redirect_url": f"{frontend_url}/error",
+                "callback_url": f"{backend_url}/api/payments/callback"
             }
             
             # Convert to JSON and base64 encode
