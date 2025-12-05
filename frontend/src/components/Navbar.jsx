@@ -385,10 +385,16 @@ const Navbar = () => {
                     Parametrlər
                   </DropdownMenuItem>
                   {(user?.email === 'admin@vivento.az' || user?.email?.includes('admin')) && (
-                    <DropdownMenuItem onClick={() => navigate('/admin')} data-testid="menu-admin">
-                      <User className="mr-2 h-4 w-4" />
-                      Admin Panel
-                    </DropdownMenuItem>
+                    <>
+                      <DropdownMenuItem onClick={() => navigate('/admin')} data-testid="menu-admin">
+                        <User className="mr-2 h-4 w-4" />
+                        Admin Panel
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => navigate('/admin/pages')} data-testid="menu-admin-pages">
+                        <User className="mr-2 h-4 w-4" />
+                        Səhifələr
+                      </DropdownMenuItem>
+                    </>
                   )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout} data-testid="menu-logout">
