@@ -191,15 +191,78 @@ const AdminPages = () => {
           </Label>
           
           {!preview ? (
-            <ReactQuill
-              theme="snow"
-              value={data.content || ''}
-              onChange={(value) => handleInputChange(slug, 'content', value)}
-              modules={modules}
-              formats={formats}
-              className="bg-white"
-              style={{ height: '400px', marginBottom: '50px' }}
-            />
+            <>
+              {/* HTML Toolbar */}
+              <div className="flex flex-wrap gap-2 mb-3 p-3 bg-gray-100 rounded-lg border">
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => insertHTML(slug, 'h2')}
+                  className="text-xs"
+                >
+                  H2
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => insertHTML(slug, 'h3')}
+                  className="text-xs"
+                >
+                  H3
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => insertHTML(slug, 'p')}
+                  className="text-xs"
+                >
+                  P
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => insertHTML(slug, 'bold')}
+                  className="text-xs font-bold"
+                >
+                  <strong>B</strong>
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => insertHTML(slug, 'link')}
+                  className="text-xs"
+                >
+                  🔗 Link
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => insertHTML(slug, 'ul')}
+                  className="text-xs"
+                >
+                  • List
+                </Button>
+              </div>
+              
+              {/* Textarea Editor */}
+              <Textarea
+                id={`content-${slug}`}
+                value={data.content || ''}
+                onChange={(e) => handleInputChange(slug, 'content', e.target.value)}
+                className="font-mono text-sm"
+                rows={20}
+                placeholder="HTML məzmun daxil edin..."
+              />
+              <p className="text-xs text-gray-500 mt-2">
+                💡 HTML tag-lərindən istifadə edə bilərsiniz: &lt;h2&gt;, &lt;h3&gt;, &lt;p&gt;, &lt;strong&gt;, &lt;a&gt;, &lt;ul&gt;, &lt;li&gt;
+              </p>
+            </>
           ) : (
             <div 
               className="prose max-w-none p-6 bg-gray-50 rounded-lg border min-h-[400px]"
