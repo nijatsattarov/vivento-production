@@ -17,6 +17,8 @@ import TemplateDetail from "./pages/TemplateDetail";
 import AddBalance from "./pages/AddBalance";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancel from "./pages/PaymentCancel";
+import PaymentResult from "./pages/PaymentResult";
+import PaymentError from "./pages/PaymentError";
 import Favorites from "./pages/Favorites";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
