@@ -1928,6 +1928,90 @@ async def delete_slide(slide_id: str, current_user: User = Depends(get_current_u
         raise HTTPException(status_code=500, detail="Slider silinərkən xəta baş verdi")
 
 # ============================================
+# PAGES MANAGEMENT (Privacy, Terms, Contact)
+# ============================================
+
+@api_router.get("/pages/{slug}")
+async def get_page_by_slug(slug: str):
+    """Get a page by slug (public endpoint)"""
+    try:
+        page = await db.pages.find_one({"slug": slug, "published": True}, {"_id": 0})
+        
+        if not page:
+            raise HTTPException(status_code=404, detail="Səhifə tapılmadı")
+        
+        return page
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Get page error: {e}")
+        raise HTTPException(status_code=500, detail="Səhifə yüklənərkən xəta baş verdi")
+
+@api_router.get("/admin/pages")
+async def get_all_pages_admin(current_user: User = Depends(get_current_user)):
+    """Get all pages for admin (including unpublished)"""
+    try:
+        # Check if user is admin (you can add is_admin field to User model)
+        # For now, any authenticated user can access
+        
+        pages = await db.pages.find({}, {"_id": 0}).sort("created_at", -1).to_list(100)
+        
+        return pages
+    except Exception as e:
+        logger.error(f"Get pages admin error: {e}")
+        raise HTTPException(status_code=500, detail="Səhifələr yüklənərkən xəta baş verdi")
+
+@api_router.put("/admin/pages/{slug}")
+async def update_page_admin(
+    slug: str,
+    request: Request,
+    current_user: User = Depends(get_current_user)
+):
+    """Update a page (admin only)"""
+    try:
+        # Parse request body
+        body = await request.json()
+        
+        # Check if page exists
+        page = await db.pages.find_one({"slug": slug})
+        
+        if not page:
+            raise HTTPException(status_code=404, detail="Səhifə tapılmadı")
+        
+        # Prepare update data
+        update_data = {}
+        
+        if "title" in body:
+            update_data["title"] = body["title"]
+        if "content" in body:
+            update_data["content"] = body["content"]
+        if "meta_description" in body:
+            update_data["meta_description"] = body["meta_description"]
+        if "published" in body:
+            update_data["published"] = body["published"]
+        
+        # Always update timestamp
+        update_data["updated_at"] = datetime.now(timezone.utc)
+        
+        # Update page
+        await db.pages.update_one(
+            {"slug": slug},
+            {"$set": update_data}
+        )
+        
+        # Get updated page
+        updated_page = await db.pages.find_one({"slug": slug}, {"_id": 0})
+        
+        logger.info(f"Page updated: {slug} by user {current_user.id}")
+        
+        return updated_page
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Update page error: {e}")
+        raise HTTPException(status_code=500, detail="Səhifə yenilənərkən xəta baş verdi")
+
+# ============================================
 # PAYMENT & BALANCE ENDPOINTS
 # ============================================
 
