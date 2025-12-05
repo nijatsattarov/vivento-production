@@ -297,43 +297,38 @@ const Navbar = () => {
 
           {/* CENTER - Desktop Categories Navigation */}
           <div className="hidden md:flex items-center space-x-1">
-            <NavigationMenu>
-              <NavigationMenuList className="flex space-x-1">
-                {categories.map((category) => (
-                  <NavigationMenuItem key={category.id}>
-                    {category.subcategories.length > 0 ? (
-                      <>
-                        <NavigationMenuTrigger className="text-sm font-medium text-gray-700 hover:text-blue-600 h-9">
-                          {category.name}
-                        </NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                          <div className="w-[200px] p-2 bg-white">
-                            {category.subcategories.map((sub) => (
-                              <Link
-                                key={sub.id}
-                                to={`/templates/${category.id}/${sub.id}`}
-                                className="block px-3 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
-                              >
-                                {sub.name}
-                              </Link>
-                            ))}
-                          </div>
-                        </NavigationMenuContent>
-                      </>
-                    ) : (
-                      <NavigationMenuLink asChild>
-                        <Link
-                          to={`/templates/${category.id}`}
-                          className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
-                        >
-                          {category.name}
-                        </Link>
-                      </NavigationMenuLink>
-                    )}
-                  </NavigationMenuItem>
-                ))}
-              </NavigationMenuList>
-            </NavigationMenu>
+            {categories.map((category) => (
+              <div key={category.id} className="relative group">
+                {category.subcategories.length > 0 ? (
+                  <>
+                    <button className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors rounded-md group-hover:bg-gray-50">
+                      {category.name}
+                      <ChevronDown className="ml-1 h-3 w-3 transition-transform group-hover:rotate-180" />
+                    </button>
+                    <div className="absolute left-0 top-full mt-1 hidden group-hover:block z-50">
+                      <div className="w-[200px] p-2 bg-white rounded-md shadow-lg border">
+                        {category.subcategories.map((sub) => (
+                          <Link
+                            key={sub.id}
+                            to={`/templates/${category.id}/${sub.id}`}
+                            className="block px-3 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md transition-colors"
+                          >
+                            {sub.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <Link
+                    to={`/templates/${category.id}`}
+                    className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors rounded-md hover:bg-gray-50"
+                  >
+                    {category.name}
+                  </Link>
+                )}
+              </div>
+            ))}
           </div>
 
           {/* RIGHT SIDE - Favorites & Auth */}
