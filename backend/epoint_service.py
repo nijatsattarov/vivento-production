@@ -74,7 +74,7 @@ class EpointService:
             # Get backend URL for callbacks
             backend_url = os.environ.get("BACKEND_URL", "http://localhost:8001")
             # Get frontend URL for user redirects
-            frontend_url = os.environ.get("REACT_APP_BACKEND_URL", backend_url).replace("/api", "")
+            frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:3000")
             
             # Prepare payment data
             payment_data = {
