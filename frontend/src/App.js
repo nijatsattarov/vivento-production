@@ -147,6 +147,34 @@ const AppRoutes = () => {
         } 
       />
       
+      {/* Epoint.az callback URLs */}
+      <Route 
+        path="/success" 
+        element={
+          <ProtectedRoute>
+            <PaymentResult />
+          </ProtectedRoute>
+        } 
+      />
+      
+      <Route 
+        path="/result" 
+        element={
+          <ProtectedRoute>
+            <PaymentResult />
+          </ProtectedRoute>
+        } 
+      />
+      
+      <Route 
+        path="/error" 
+        element={
+          <ProtectedRoute>
+            <PaymentError />
+          </ProtectedRoute>
+        } 
+      />
+      
       <Route 
         path="/favorites" 
         element={
