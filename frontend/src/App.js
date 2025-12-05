@@ -110,6 +110,15 @@ const AppRoutes = () => {
       />
       
       <Route 
+        path="/admin/pages" 
+        element={
+          <ProtectedRoute>
+            <AdminPages />
+          </ProtectedRoute>
+        } 
+      />
+      
+      <Route 
         path="/add-balance" 
         element={
           <ProtectedRoute>
