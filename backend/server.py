@@ -213,6 +213,23 @@ class UpdateBlogRequest(BaseModel):
     published: Optional[bool] = None
 
 
+# Page Model (for static pages like Privacy, Terms, Contact)
+class Page(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    slug: str  # privacy, terms, contact
+    title: str
+    content: str
+    meta_description: Optional[str] = None
+    published: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class UpdatePageRequest(BaseModel):
+    title: Optional[str] = None
+    content: Optional[str] = None
+    meta_description: Optional[str] = None
+    published: Optional[bool] = None
+
 # Font Model
 class CustomFont(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
