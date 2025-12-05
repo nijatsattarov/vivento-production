@@ -7,12 +7,15 @@ import axios from 'axios';
 import { FileText } from 'lucide-react';
 
 const PublicPage = () => {
-  const { slug } = useParams();
+  const { slug: paramSlug } = useParams();
   const [page, setPage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
+  
+  // Get slug from URL path or params
+  const slug = paramSlug || window.location.pathname.split('/').pop();
 
   useEffect(() => {
     fetchPage();
