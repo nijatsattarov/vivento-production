@@ -19,6 +19,10 @@ Render.com dashboard-da **Environment** bölməsinə daxil olun və aşağıdak�
 BACKEND_URL=https://your-backend-url.onrender.com
 # Nümunə: BACKEND_URL=https://vivento-backend.onrender.com
 
+# 2. Frontend URL (Epoint redirect URLs üçün)
+FRONTEND_URL=https://myvivento.com
+# Epoint.az istifadəçini ödənişdən sonra bu URL-ə yönləndirir
+
 # 2. MongoDB Connection
 MONGO_URL=your_mongodb_connection_string
 # Nümunə: MONGO_URL=mongodb+srv://user:pass@cluster.mongodb.net/dbname
