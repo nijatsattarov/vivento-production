@@ -27,6 +27,8 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import AdminPages from "./pages/AdminPages";
+import PublicPage from "./pages/PublicPage";
 import LoadingSpinner from "./components/LoadingSpinner";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./App.css";
