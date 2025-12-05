@@ -18,8 +18,8 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+// React Quill removed due to React 19 compatibility issues
+// Using textarea with HTML preview instead
 
 const AdminPages = () => {
   const { user, token } = useAuth();
