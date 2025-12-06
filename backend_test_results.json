@@ -1,6 +1,6 @@
 {
-  "total_tests": 44,
-  "passed_tests": 44,
+  "total_tests": 47,
+  "passed_tests": 47,
   "failed_tests": 0,
   "success_rate": "100.0%",
   "test_details": [
@@ -183,6 +183,21 @@
       "test": "Envelope Animation Field Verification",
       "success": true,
       "details": "show_envelope_animation field present: True"
+    },
+    {
+      "test": "Add Guest",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Envelope Animation in Guest Invitation",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Envelope Animation Guest Access",
+      "success": true,
+      "details": "Guest can access envelope animation: True"
     },
     {
       "test": "Add Guest",
