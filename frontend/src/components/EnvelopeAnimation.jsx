@@ -167,12 +167,18 @@ const EnvelopeAnimation = ({
                 {/* Center Logo/Seal - CLICKABLE AREA */}
                 {stage === 'closed' && (
                   <motion.button
+                    type="button"
                     initial={{ scale: 0, rotate: -180 }}
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ delay: 0.3, duration: 0.6, type: "spring" }}
-                    onClick={handleOpenEnvelope}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleOpenEnvelope();
+                    }}
                     onTouchEnd={(e) => {
                       e.preventDefault();
+                      e.stopPropagation();
                       handleOpenEnvelope();
                     }}
                     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer touch-manipulation"
