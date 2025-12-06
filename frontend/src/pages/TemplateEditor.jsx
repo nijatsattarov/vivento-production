@@ -263,10 +263,12 @@ const TemplateEditor = () => {
             weekday: 'long',
             day: 'numeric',
             month: 'long',
-            year: 'numeric'
+            year: 'numeric',
+            timeZone: 'Asia/Baku'
           }) + '\n' + new Date(event.date).toLocaleTimeString('az-AZ', {
             hour: '2-digit',
-            minute: '2-digit'
+            minute: '2-digit',
+            timeZone: 'Asia/Baku'
           }) : 'Tarix və vaxt' };
         }
         // Məkan məlumatları
