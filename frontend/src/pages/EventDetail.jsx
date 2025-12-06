@@ -70,6 +70,10 @@ const EventDetail = () => {
   const fetchEventData = async () => {
     try {
       if (!token) {
+        // Don't redirect during envelope animation
+        if (showEnvelope && !animationComplete) {
+          return;
+        }
         toast.error('Giriş tələb olunur');
         navigate('/login');
         return;
