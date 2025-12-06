@@ -258,17 +258,17 @@ const TemplateEditor = () => {
         }
         // Tarix məlumatları
         else if (element.content === 'Tədbir tarixi' || element.content?.includes('Dekabr') || element.content?.includes('18:00')) {
-          return { ...element, content: event ? new Date(event.date).toLocaleDateString('az-AZ', {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-            timeZone: 'Asia/Baku'
-          }) + '\n' + new Date(event.date).toLocaleTimeString('az-AZ', {
-            hour: '2-digit',
-            minute: '2-digit',
-            timeZone: 'Asia/Baku'
-          }) : 'Tarix və vaxt' };
+          if (event) {
+            const date = event.date.replace('T', ' ').substring(0, 16);
+            const [datePart, timePart] = date.split(' ');
+            const [year, month, day] = datePart.split('-');
+            const monthNames = ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avqust', 'sentyabr', 'oktyabr', 'noyabr', 'dekabr'];
+            const weekDays = ['bazar', 'bazar ertəsi', 'çərşənbə axşamı', 'çərşənbə', 'cümə axşamı', 'cümə', 'şənbə'];
+            const dateObj = new Date(year, parseInt(month) - 1, parseInt(day));
+            const weekDay = weekDays[dateObj.getDay()];
+            return { ...element, content: `${weekDay}, ${parseInt(day)} ${monthNames[parseInt(month) - 1]} ${year}\n${timePart}` };
+          }
+          return { ...element, content: 'Tarix və vaxt' };
         }
         // Məkan məlumatları
         else if (element.content === 'Tədbir yeri' || element.content?.includes('məkanı ünvanı')) {
