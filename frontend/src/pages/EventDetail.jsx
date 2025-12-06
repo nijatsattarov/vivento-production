@@ -43,10 +43,15 @@ const EventDetail = () => {
   const [newGuest, setNewGuest] = useState({ name: '', phone: '', email: '' });
   const [isAddingGuest, setIsAddingGuest] = useState(false);
   
-  // Envelope animation - only show once per session
+  // Envelope animation - only for guest/public links (not authenticated users from dashboard)
   const sessionKey = `envelope_shown_${eventId}`;
   const [showEnvelope, setShowEnvelope] = useState(() => {
-    return !sessionStorage.getItem(sessionKey);
+    // Don't show envelope if user is authenticated (came from dashboard)
+    // Only show for public/guest links
+    if (user) {
+      return false; // Logged in users don't see envelope
+    }
+    return !sessionStorage.getItem(sessionKey); // Guests see it once
   });
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
