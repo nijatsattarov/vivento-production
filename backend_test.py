@@ -381,6 +381,33 @@ class ViventoAPITester:
             200
         )[0]
 
+    def test_get_event_detail_with_envelope_animation(self, event_id):
+        """Test getting event details and verify envelope animation parameter"""
+        if not self.token or not event_id:
+            self.log_test("Get Event Detail with Envelope Animation", False, "No token or event_id available")
+            return False
+            
+        success, response = self.run_test(
+            "Get Event Detail with Envelope Animation",
+            "GET",
+            f"events/{event_id}",
+            200
+        )
+        
+        if success and isinstance(response, dict):
+            # Verify show_envelope_animation field exists and is correct
+            if 'show_envelope_animation' in response:
+                animation_status = response['show_envelope_animation']
+                print(f"   ✅ Event envelope animation status: {animation_status}")
+                self.log_test("Envelope Animation Field Verification", True, 
+                             f"show_envelope_animation field present: {animation_status}")
+                return True
+            else:
+                self.log_test("Envelope Animation Field Verification", False, 
+                             "show_envelope_animation field missing from event response")
+                return False
+        return False
+
     def test_update_event(self, event_id):
         """Test updating an event"""
         if not self.token or not event_id:
