@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
-import LexicalEditor from '../components/LexicalEditor';
 
 // PageEditor component moved outside to fix React Hook rules
 const PageEditor = ({ page, formData, handleInputChange, handleSave, saving, preview, setPreview }) => {
