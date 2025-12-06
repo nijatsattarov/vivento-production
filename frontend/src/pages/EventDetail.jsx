@@ -48,35 +48,21 @@ const EventDetail = () => {
   const [showEnvelope, setShowEnvelope] = useState(() => {
     return !sessionStorage.getItem(sessionKey);
   });
-  const [animationComplete, setAnimationComplete] = useState(false);
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
-    // Fetch data immediately if no envelope, or after animation completes
-    if (!showEnvelope) {
-      // No envelope - fetch immediately
+    // Always fetch data on mount or when eventId changes
+    fetchEventData();
+    
+    // Set up polling for RSVP updates (every 30 seconds)
+    const pollInterval = setInterval(() => {
       fetchEventData();
-      
-      // Set up polling for RSVP updates (every 30 seconds)
-      const pollInterval = setInterval(() => {
-        fetchEventData();
-      }, 30000);
-      
-      // Cleanup on unmount
-      return () => clearInterval(pollInterval);
-    } else if (animationComplete) {
-      // Envelope was shown and completed - fetch now
-      fetchEventData();
-      
-      const pollInterval = setInterval(() => {
-        fetchEventData();
-      }, 30000);
-      
-      return () => clearInterval(pollInterval);
-    }
-    // If showEnvelope=true and animationComplete=false, don't fetch yet
-  }, [eventId, showEnvelope, animationComplete]);
+    }, 30000);
+    
+    // Cleanup on unmount
+    return () => clearInterval(pollInterval);
+  }, [eventId]);
 
   const fetchEventData = async () => {
     try {
