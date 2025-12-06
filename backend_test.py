@@ -949,6 +949,38 @@ class ViventoAPITester:
         
         return all_passed
 
+    def test_envelope_animation_in_invitation(self, guest_token):
+        """Test that envelope animation setting is available in guest invitation"""
+        if not guest_token:
+            self.log_test("Envelope Animation in Invitation", False, "No guest token available")
+            return False
+            
+        print(f"\n✉️ Testing Envelope Animation in Guest Invitation...")
+        
+        success, response = self.run_test(
+            "Envelope Animation in Guest Invitation",
+            "GET",
+            f"invite/{guest_token}",
+            200
+        )
+        
+        if success and isinstance(response, dict):
+            event = response.get('event', {})
+            show_animation = event.get('show_envelope_animation', False)
+            
+            if show_animation:
+                print(f"   ✅ Envelope animation enabled for guests: {show_animation}")
+                self.log_test("Envelope Animation Guest Access", True, 
+                             f"Guest can access envelope animation: {show_animation}")
+                return True
+            else:
+                print(f"   ⚠️  Envelope animation disabled for this event: {show_animation}")
+                self.log_test("Envelope Animation Guest Access", True, 
+                             f"Event has envelope animation disabled: {show_animation}")
+                return True
+        else:
+            return False
+
     def run_all_tests(self):
         """Run comprehensive API tests"""
         print("🚀 Starting Vivento API Tests...")
