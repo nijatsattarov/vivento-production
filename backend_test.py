@@ -824,6 +824,131 @@ class ViventoAPITester:
         
         return True
 
+    def run_test_with_token(self, name, method, endpoint, expected_status, data=None, headers=None, token=None):
+        """Run a test with a specific token"""
+        url = f"{self.base_url}/api/{endpoint}"
+        test_headers = {'Content-Type': 'application/json'}
+        
+        if token:
+            test_headers['Authorization'] = f'Bearer {token}'
+        elif self.token:
+            test_headers['Authorization'] = f'Bearer {self.token}'
+        
+        if headers:
+            test_headers.update(headers)
+
+        print(f"\n🔍 Testing {name}...")
+        print(f"   URL: {url}")
+        
+        try:
+            if method == 'GET':
+                response = requests.get(url, headers=test_headers, timeout=10)
+            elif method == 'POST':
+                response = requests.post(url, json=data, headers=test_headers, timeout=10)
+            elif method == 'PUT':
+                response = requests.put(url, json=data, headers=test_headers, timeout=10)
+            elif method == 'DELETE':
+                response = requests.delete(url, headers=test_headers, timeout=10)
+
+            success = response.status_code == expected_status
+            
+            if success:
+                self.log_test(name, True)
+                try:
+                    return True, response.json()
+                except:
+                    return True, response.text
+            else:
+                error_msg = f"Expected {expected_status}, got {response.status_code}"
+                try:
+                    error_detail = response.json()
+                    error_msg += f" - {error_detail}"
+                except:
+                    error_msg += f" - {response.text}"
+                
+                self.log_test(name, False, error_msg)
+                return False, {}
+
+        except Exception as e:
+            self.log_test(name, False, f"Exception: {str(e)}")
+            return False, {}
+
+    def test_admin_pages_api(self):
+        """Test admin pages API endpoints"""
+        if not self.admin_token:
+            self.log_test("Admin Pages API", False, "No admin token available")
+            return False
+            
+        print(f"\n📄 Testing Admin Pages API...")
+        
+        # Test GET /api/admin/pages
+        success, response = self.run_test_with_token(
+            "Get Admin Pages",
+            "GET",
+            "admin/pages",
+            200,
+            token=self.admin_token
+        )
+        
+        if success and isinstance(response, list):
+            print(f"   ✅ Found {len(response)} pages in admin")
+            
+            # Test updating a page if any exist
+            if len(response) > 0:
+                page = response[0]
+                slug = page.get('slug', 'privacy')
+                
+                update_data = {
+                    "title": "Updated Privacy Policy",
+                    "content": "<h2>Updated Privacy Policy</h2><p>This is updated content from ReactQuill editor test.</p>",
+                    "meta_description": "Updated privacy policy description",
+                    "published": True
+                }
+                
+                success_update, response_update = self.run_test_with_token(
+                    f"Update Admin Page - {slug}",
+                    "PUT",
+                    f"admin/pages/{slug}",
+                    200,
+                    data=update_data,
+                    token=self.admin_token
+                )
+                
+                if success_update:
+                    print(f"   ✅ Successfully updated page: {slug}")
+                    return True
+                else:
+                    return False
+            else:
+                print(f"   ⚠️  No existing pages found to update")
+                return True
+        else:
+            return False
+
+    def test_public_pages_endpoints(self):
+        """Test public pages endpoints (privacy, terms, contact)"""
+        print(f"\n🌐 Testing Public Pages Endpoints...")
+        
+        page_slugs = ["privacy", "terms", "contact"]
+        all_passed = True
+        
+        for slug in page_slugs:
+            success, response = self.run_test(
+                f"Public Page - {slug}",
+                "GET",
+                f"pages/{slug}",
+                200
+            )
+            
+            if success and isinstance(response, dict):
+                title = response.get('title', 'No title')
+                content_length = len(response.get('content', ''))
+                print(f"   ✅ {slug}: {title} ({content_length} chars)")
+            else:
+                print(f"   ⚠️  {slug}: Page not found (may need to be created)")
+        
+        return all_passed
+
     def run_all_tests(self):
         """Run comprehensive API tests"""
         print("🚀 Starting Vivento API Tests...")
