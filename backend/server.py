@@ -1165,40 +1165,49 @@ async def upload_image(file: UploadFile = File(...), current_user: User = Depend
 
 @api_router.post("/upload/background")
 async def upload_background_image(file: UploadFile = File(...)):
-    """Upload background image for admin templates (no auth required for admin users)"""
+    """Upload background image to Cloudinary for admin templates (no auth required for admin users)"""
     
     # Validate file type
     if not file.content_type or not file.content_type.startswith('image/'):
         raise HTTPException(status_code=400, detail="Yalnız şəkil faylları qəbul edilir")
     
+    # Read file contents
+    contents = await file.read()
+    
     # Validate file size (max 10MB for backgrounds)
-    if file.size and file.size > 10 * 1024 * 1024:
+    if len(contents) > 10 * 1024 * 1024:
         raise HTTPException(status_code=400, detail="Fayl ölçüsü 10MB-dan böyük ola bilməz")
     
     try:
-        # Generate unique filename
-        file_extension = file.filename.split('.')[-1] if file.filename else 'jpg'
-        unique_filename = f"bg_{uuid.uuid4()}.{file_extension}"
-        file_path = UPLOAD_DIR / unique_filename
-        
-        # Save file
-        with open(file_path, "wb") as buffer:
-            content = await file.read()
-            buffer.write(content)
-        
-        # Return absolute URL for backgrounds
-        file_url = get_absolute_file_url(f"/api/uploads/{unique_filename}")
+        # Upload to Cloudinary
+        result = cloudinary.uploader.upload(
+            contents,
+            folder="backgrounds",
+            public_id=f"bg_{uuid.uuid4()}",
+            transformation={
+                'width': 1920,
+                'height': 1080,
+                'crop': 'fill',
+                'gravity': 'center',
+                'quality': 'auto',
+                'fetch_format': 'auto'
+            },
+            tags=["background", "template"]
+        )
         
         return {
-            "filename": unique_filename,
-            "file_url": file_url,
-            "url": file_url,
+            "filename": result['public_id'],
+            "file_url": result['secure_url'],
+            "url": result['secure_url'],
+            "public_id": result['public_id'],
+            "width": result.get('width'),
+            "height": result.get('height'),
             "message": "Background şəkil uğurla yükləndi"
         }
         
     except Exception as e:
-        logger.error(f"Background upload error: {e}")
-        raise HTTPException(status_code=500, detail="Background şəkil yüklənərkən xəta baş verdi")
+        logger.error(f"Cloudinary upload error: {e}")
+        raise HTTPException(status_code=500, detail=f"Background şəkil yüklənərkən xəta baş verdi: {str(e)}")
 
 # Balance and Payment endpoints
 @api_router.get("/user/balance")
