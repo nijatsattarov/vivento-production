@@ -1167,6 +1167,18 @@ async def upload_image(file: UploadFile = File(...), current_user: User = Depend
 async def upload_background_image(file: UploadFile = File(...)):
     """Upload background image to Cloudinary for admin templates (no auth required for admin users)"""
     
+    # Check Cloudinary credentials
+    cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME')
+    api_key = os.environ.get('CLOUDINARY_API_KEY')
+    api_secret = os.environ.get('CLOUDINARY_API_SECRET')
+    
+    if not all([cloud_name, api_key, api_secret]):
+        logger.error("Cloudinary credentials missing!")
+        raise HTTPException(
+            status_code=500, 
+            detail="Cloudinary konfiqurasiyası səhvdir. Zəhmət olmasa environment variables-i yoxlayın."
+        )
+    
     # Validate file type
     if not file.content_type or not file.content_type.startswith('image/'):
         raise HTTPException(status_code=400, detail="Yalnız şəkil faylları qəbul edilir")
@@ -1179,6 +1191,8 @@ async def upload_background_image(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail="Fayl ölçüsü 10MB-dan böyük ola bilməz")
     
     try:
+        logger.info(f"Uploading background image to Cloudinary: {file.filename}, size: {len(contents)} bytes")
+        
         # Upload to Cloudinary
         result = cloudinary.uploader.upload(
             contents,
@@ -1195,6 +1209,8 @@ async def upload_background_image(file: UploadFile = File(...)):
             tags=["background", "template"]
         )
         
+        logger.info(f"Successfully uploaded to Cloudinary: {result['secure_url']}")
+        
         return {
             "filename": result['public_id'],
             "file_url": result['secure_url'],
@@ -1206,8 +1222,11 @@ async def upload_background_image(file: UploadFile = File(...)):
         }
         
     except Exception as e:
-        logger.error(f"Cloudinary upload error: {e}")
-        raise HTTPException(status_code=500, detail=f"Background şəkil yüklənərkən xəta baş verdi: {str(e)}")
+        logger.error(f"Cloudinary upload error: {type(e).__name__}: {str(e)}")
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Şəkil yüklənərkən xəta: {str(e)}. Cloudinary əlaqəsi və credentials-i yoxlayın."
+        )
 
 # Balance and Payment endpoints
 @api_router.get("/user/balance")
