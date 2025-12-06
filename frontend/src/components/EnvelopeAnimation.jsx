@@ -156,23 +156,31 @@ const EnvelopeAnimation = ({
 
                 {/* Center Logo/Seal - CLICKABLE AREA */}
                 {stage === 'closed' && (
-                  <motion.div
+                  <motion.button
                     initial={{ scale: 0, rotate: -180 }}
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ delay: 0.3, duration: 0.6, type: "spring" }}
                     onClick={handleOpenEnvelope}
-                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer"
+                    onTouchEnd={(e) => {
+                      e.preventDefault();
+                      handleOpenEnvelope();
+                    }}
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer touch-manipulation"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
+                    style={{
+                      WebkitTapHighlightColor: 'transparent',
+                      touchAction: 'manipulation'
+                    }}
                   >
                     <div 
-                      className="w-32 h-32 rounded-full flex items-center justify-center"
+                      className="w-32 h-32 md:w-40 md:h-40 rounded-full flex items-center justify-center"
                       style={{
                         background: colors.border,
                         boxShadow: `0 4px 20px ${colors.shadow}`
                       }}
                     >
-                      <span className="text-5xl">💌</span>
+                      <span className="text-5xl md:text-6xl">💌</span>
                     </div>
                     
                     {/* Tap to Open text inside seal */}
@@ -180,16 +188,16 @@ const EnvelopeAnimation = ({
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 1, duration: 0.5 }}
-                      className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 whitespace-nowrap"
+                      className="absolute -bottom-14 md:-bottom-16 left-1/2 transform -translate-x-1/2 whitespace-nowrap pointer-events-none"
                     >
                       <p 
-                        className="text-base md:text-lg font-serif italic"
+                        className="text-sm md:text-lg font-serif italic"
                         style={{ color: colors.border }}
                       >
                         Açmaq üçün toxunun
                       </p>
                     </motion.div>
-                  </motion.div>
+                  </motion.button>
                 )}
               </motion.div>
 
