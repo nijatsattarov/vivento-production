@@ -216,6 +216,41 @@ class ViventoAPITester:
             return True, response['id']
         return False, None
 
+    def test_create_event_with_envelope_animation(self):
+        """Test creating an event with envelope animation enabled"""
+        if not self.token:
+            self.log_test("Create Event with Envelope Animation", False, "No token available")
+            return False, None
+            
+        event_data = {
+            "name": "Test Premium Zərf Animasiyası Tədbiri",
+            "date": "2024-12-25T18:00:00Z",
+            "location": "Bakı, Azərbaycan",
+            "map_link": "https://maps.google.com/test",
+            "additional_notes": "Premium zərf animasiyası aktiv edilmiş tədbir",
+            "template_id": "template-toy-1",
+            "show_envelope_animation": True
+        }
+        
+        success, response = self.run_test(
+            "Create Event with Envelope Animation",
+            "POST",
+            "events",
+            200,
+            data=event_data
+        )
+        
+        if success and 'id' in response:
+            # Verify show_envelope_animation was saved
+            if response.get('show_envelope_animation') == True:
+                print(f"   ✅ Envelope animation enabled: {response.get('show_envelope_animation')}")
+                return True, response['id']
+            else:
+                self.log_test("Envelope Animation Verification", False, 
+                             f"Expected show_envelope_animation=True, got {response.get('show_envelope_animation')}")
+                return False, None
+        return False, None
+
     def test_create_event_with_custom_design(self):
         """Test creating an event with custom design data"""
         if not self.token:
