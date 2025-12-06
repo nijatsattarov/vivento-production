@@ -1125,40 +1125,43 @@ async def root():
 # File upload endpoints
 @api_router.post("/upload/image")
 async def upload_image(file: UploadFile = File(...), current_user: User = Depends(get_current_user)):
-    """Upload an image file and return the URL"""
+    """Upload an image file to Cloudinary and return the URL"""
     
     # Validate file type
     if not file.content_type or not file.content_type.startswith('image/'):
         raise HTTPException(status_code=400, detail="Yalnız şəkil faylları qəbul edilir")
     
-    # Validate file size (max 5MB)
-    if file.size and file.size > 5 * 1024 * 1024:
-        raise HTTPException(status_code=400, detail="Fayl ölçüsü 5MB-dan böyük ola bilməz")
+    # Read file contents
+    contents = await file.read()
+    
+    # Validate file size (max 10MB)
+    if len(contents) > 10 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="Fayl ölçüsü 10MB-dan böyük ola bilməz")
     
     try:
-        # Generate unique filename
-        file_extension = file.filename.split('.')[-1] if file.filename else 'jpg'
-        unique_filename = f"{uuid.uuid4()}.{file_extension}"
-        file_path = UPLOAD_DIR / unique_filename
-        
-        # Save file
-        with open(file_path, "wb") as buffer:
-            content = await file.read()
-            buffer.write(content)
-        
-        # Return absolute URL
-        file_url = get_absolute_file_url(f"/api/uploads/{unique_filename}")
+        # Upload to Cloudinary
+        result = cloudinary.uploader.upload(
+            contents,
+            folder="images",
+            public_id=f"image_{uuid.uuid4()}",
+            quality='auto',
+            fetch_format='auto',
+            tags=["generic", "user"]
+        )
         
         return {
-            "filename": unique_filename,
-            "file_url": file_url,
-            "url": file_url,
+            "filename": result['public_id'],
+            "file_url": result['secure_url'],
+            "url": result['secure_url'],
+            "public_id": result['public_id'],
+            "width": result.get('width'),
+            "height": result.get('height'),
             "message": "Şəkil uğurla yükləndi"
         }
         
     except Exception as e:
-        logger.error(f"File upload error: {e}")
-        raise HTTPException(status_code=500, detail="Fayl yüklənərkən xəta baş verdi")
+        logger.error(f"Cloudinary upload error: {e}")
+        raise HTTPException(status_code=500, detail=f"Fayl yüklənərkən xəta baş verdi: {str(e)}")
 
 @api_router.post("/upload/background")
 async def upload_background_image(file: UploadFile = File(...)):
