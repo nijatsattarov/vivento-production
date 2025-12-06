@@ -572,7 +572,10 @@ const EventDetail = () => {
         <EnvelopeAnimation 
           envelopeColor="premium"
           autoPlay={false}
-          onComplete={() => setShowEnvelope(false)}
+          onComplete={() => {
+            setShowEnvelope(false);
+            sessionStorage.setItem(sessionKey, 'true');
+          }}
         >
           {mainContent}
         </EnvelopeAnimation>
