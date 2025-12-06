@@ -80,6 +80,13 @@ const EventDetail = () => {
       setEvent(eventResponse.data);
       setGuests(guestsResponse.data);
       
+      // Check if envelope animation should be shown
+      // Only show if event.show_envelope_animation is true AND user is NOT logged in (guest view)
+      const sessionKey = `envelope_shown_${eventId}`;
+      const hasShownBefore = sessionStorage.getItem(sessionKey);
+      const shouldShowEnvelope = eventResponse.data.show_envelope_animation && !user && !hasShownBefore;
+      setShowEnvelope(shouldShowEnvelope);
+      
       // Debug: Log RSVP statistics
       const guestsList = guestsResponse.data;
       const stats = {
