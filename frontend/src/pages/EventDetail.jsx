@@ -568,7 +568,7 @@ const EventDetail = () => {
     </div>
   );
 
-  // Return with envelope animation on first visit
+  // Return with envelope animation if enabled and user is guest
   return (
     <>
       {showEnvelope ? (
@@ -577,6 +577,7 @@ const EventDetail = () => {
           autoPlay={false}
           onComplete={() => {
             setShowEnvelope(false);
+            const sessionKey = `envelope_shown_${eventId}`;
             sessionStorage.setItem(sessionKey, 'true');
           }}
         >
