@@ -80,18 +80,15 @@ const CreateEvent = () => {
     try {
       const token = localStorage.getItem('accessToken');
       
-      // Convert to Baku timezone (UTC+4) - preserve local time
-      const localDate = new Date(formData.date);
-      const bakuOffset = 4 * 60; // 4 hours in minutes
-      const utcOffset = localDate.getTimezoneOffset(); // User's timezone offset
-      const offsetDiff = bakuOffset + utcOffset; // Difference to add
-      const bakuDate = new Date(localDate.getTime() + offsetDiff * 60 * 1000);
+      // Keep the selected date/time as is (user enters in Baku time)
+      // Just convert to ISO string without timezone conversion
+      const dateString = formData.date; // "2024-12-22T18:00" format from datetime-local input
       
       const response = await axios.post(
         `${API_BASE_URL}/api/events`,
         {
           ...formData,
-          date: bakuDate.toISOString(),
+          date: dateString,
           template_id: templateId || null
         },
         {
