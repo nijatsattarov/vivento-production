@@ -20,7 +20,8 @@ const CreateEvent = () => {
     date: '',
     location: '',
     map_link: '',
-    additional_notes: ''
+    additional_notes: '',
+    show_envelope_animation: false
   });
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
