@@ -972,6 +972,14 @@ class ViventoAPITester:
         self.test_facebook_login()
         self.test_get_current_user()
         
+        # Admin authentication and tests
+        print("\n👑 Testing Admin Features...")
+        if self.test_admin_login():
+            self.test_admin_pages_api()
+        
+        # Test public pages
+        self.test_public_pages_endpoints()
+        
         # Test demo invitation (requires auth for event creation)
         self.test_demo_invitation()
         
