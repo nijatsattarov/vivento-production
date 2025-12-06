@@ -64,20 +64,14 @@ const PageEditor = ({ page, formData, handleInputChange, handleSave, saving, pre
         
         {!preview ? (
           <>
-            {/* React Quill WYSIWYG Editor */}
-            <div className="bg-white rounded-lg border">
-              <ReactQuill
-                theme="snow"
-                value={data.content || ''}
-                onChange={(content) => handleInputChange(slug, 'content', content)}
-                modules={quillModules}
-                formats={quillFormats}
-                className="min-h-[400px]"
-                placeholder="Məzmun daxil edin..."
-              />
-            </div>
+            {/* Lexical WYSIWYG Editor */}
+            <LexicalEditor
+              value={data.content || ''}
+              onChange={(content) => handleInputChange(slug, 'content', content)}
+              placeholder="Məzmun daxil edin..."
+            />
             <p className="text-xs text-gray-500 mt-2">
-              💡 Yuxarıdakı toolbar ilə mətnə format verə bilərsiniz
+              💡 Yuxarıdakı redaktorda mətn daxil edə bilərsiniz
             </p>
           </>
         ) : (
