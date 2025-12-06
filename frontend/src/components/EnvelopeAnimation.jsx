@@ -195,7 +195,7 @@ const EnvelopeAnimation = ({
 
               {/* Envelope Flap (Top) */}
               <motion.div
-                className="absolute top-0 left-0 right-0 h-[200px] origin-top rounded-t-lg shadow-lg cursor-pointer"
+                className="absolute top-0 left-0 right-0 h-[200px] origin-top rounded-t-lg shadow-lg pointer-events-none"
                 style={{
                   background: colors.flap,
                   border: `3px solid ${colors.border}`,
@@ -212,7 +212,6 @@ const EnvelopeAnimation = ({
                   duration: 0.8, 
                   ease: [0.43, 0.13, 0.23, 0.96]
                 }}
-                onClick={stage === 'closed' ? handleOpenEnvelope : undefined}
               >
                 {/* Flap decorative line */}
                 <div 
