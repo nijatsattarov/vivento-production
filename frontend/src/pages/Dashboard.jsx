@@ -160,16 +160,13 @@ const Dashboard = () => {
   };
 
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    // Display in Baku timezone (UTC+4)
-    return date.toLocaleDateString('az-AZ', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZone: 'Asia/Baku'
-    });
+    // Parse the date string as-is (already in Baku time)
+    const date = dateString.replace('T', ' ').substring(0, 16);
+    const [datePart, timePart] = date.split(' ');
+    const [year, month, day] = datePart.split('-');
+    
+    const monthNames = ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avqust', 'sentyabr', 'oktyabr', 'noyabr', 'dekabr'];
+    return `${parseInt(day)} ${monthNames[parseInt(month) - 1]} ${year}, ${timePart}`;
   };
 
   const isUpcoming = (dateString) => {
