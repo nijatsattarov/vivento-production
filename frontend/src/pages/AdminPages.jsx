@@ -63,14 +63,104 @@ const PageEditor = ({ page, formData, handleInputChange, handleSave, saving, pre
         
         {!preview ? (
           <>
-            {/* Lexical WYSIWYG Editor */}
-            <LexicalEditor
+            {/* HTML Toolbar */}
+            <div className="flex flex-wrap gap-2 mb-3 p-3 bg-gray-100 rounded-lg border">
+              <button
+                type="button"
+                onClick={() => {
+                  const textarea = document.getElementById(`content-${slug}`);
+                  const start = textarea.selectionStart;
+                  const end = textarea.selectionEnd;
+                  const selectedText = data.content.substring(start, end) || 'Başlıq';
+                  const newContent = data.content.substring(0, start) + `<h2>${selectedText}</h2>` + data.content.substring(end);
+                  handleInputChange(slug, 'content', newContent);
+                }}
+                className="px-3 py-1 text-sm border rounded hover:bg-gray-200"
+              >
+                H2
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const textarea = document.getElementById(`content-${slug}`);
+                  const start = textarea.selectionStart;
+                  const end = textarea.selectionEnd;
+                  const selectedText = data.content.substring(start, end) || 'Alt başlıq';
+                  const newContent = data.content.substring(0, start) + `<h3>${selectedText}</h3>` + data.content.substring(end);
+                  handleInputChange(slug, 'content', newContent);
+                }}
+                className="px-3 py-1 text-sm border rounded hover:bg-gray-200"
+              >
+                H3
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const textarea = document.getElementById(`content-${slug}`);
+                  const start = textarea.selectionStart;
+                  const end = textarea.selectionEnd;
+                  const selectedText = data.content.substring(start, end) || 'Paraqraf';
+                  const newContent = data.content.substring(0, start) + `<p>${selectedText}</p>` + data.content.substring(end);
+                  handleInputChange(slug, 'content', newContent);
+                }}
+                className="px-3 py-1 text-sm border rounded hover:bg-gray-200"
+              >
+                P
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const textarea = document.getElementById(`content-${slug}`);
+                  const start = textarea.selectionStart;
+                  const end = textarea.selectionEnd;
+                  const selectedText = data.content.substring(start, end) || 'Qalın mətn';
+                  const newContent = data.content.substring(0, start) + `<strong>${selectedText}</strong>` + data.content.substring(end);
+                  handleInputChange(slug, 'content', newContent);
+                }}
+                className="px-3 py-1 text-sm font-bold border rounded hover:bg-gray-200"
+              >
+                B
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const textarea = document.getElementById(`content-${slug}`);
+                  const start = textarea.selectionStart;
+                  const end = textarea.selectionEnd;
+                  const selectedText = data.content.substring(start, end) || 'Link';
+                  const newContent = data.content.substring(0, start) + `<a href="https://example.com">${selectedText}</a>` + data.content.substring(end);
+                  handleInputChange(slug, 'content', newContent);
+                }}
+                className="px-3 py-1 text-sm border rounded hover:bg-gray-200"
+              >
+                🔗 Link
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const textarea = document.getElementById(`content-${slug}`);
+                  const start = textarea.selectionStart;
+                  const end = textarea.selectionEnd;
+                  const selectedText = data.content.substring(start, end) || 'Siyahı';
+                  const newContent = data.content.substring(0, start) + `<ul>\n  <li>${selectedText}</li>\n</ul>` + data.content.substring(end);
+                  handleInputChange(slug, 'content', newContent);
+                }}
+                className="px-3 py-1 text-sm border rounded hover:bg-gray-200"
+              >
+                • List
+              </button>
+            </div>
+            
+            {/* Textarea HTML Editor */}
+            <Textarea
+              id={`content-${slug}`}
               value={data.content || ''}
-              onChange={(content) => handleInputChange(slug, 'content', content)}
-              placeholder="Məzmun daxil edin..."
+              onChange={(e) => handleInputChange(slug, 'content', e.target.value)}
+              className="font-mono text-sm min-h-[400px]"
+              placeholder="HTML məzmun daxil edin..."
             />
             <p className="text-xs text-gray-500 mt-2">
-              💡 Yuxarıdakı redaktorda mətn daxil edə bilərsiniz
+              💡 HTML tag-lərindən istifadə edin: &lt;h2&gt;, &lt;h3&gt;, &lt;p&gt;, &lt;strong&gt;, &lt;a&gt;, &lt;ul&gt;, &lt;li&gt;
             </p>
           </>
         ) : (
