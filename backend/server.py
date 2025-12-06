@@ -285,6 +285,7 @@ class EventCreate(BaseModel):
     additional_notes: Optional[str] = None
     template_id: Optional[str] = None
     custom_design: Optional[Dict[str, Any]] = None
+    show_envelope_animation: Optional[bool] = False
 
 class GuestCreate(BaseModel):
     name: str
