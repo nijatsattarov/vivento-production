@@ -141,6 +141,29 @@ class ViventoAPITester:
         
         return success and 'access_token' in response
 
+    def test_admin_login(self):
+        """Test admin login with provided credentials"""
+        admin_login_data = {
+            "email": "admin@vivento.az",
+            "password": "Vivento123!"
+        }
+        
+        success, response = self.run_test(
+            "Admin Login",
+            "POST",
+            "auth/login",
+            200,
+            data=admin_login_data
+        )
+        
+        if success and 'access_token' in response:
+            # Store admin token separately
+            self.admin_token = response['access_token']
+            self.admin_user_id = response['user']['id']
+            print(f"   Admin token obtained: {self.admin_token[:20]}...")
+            return True
+        return False
+
     def test_facebook_login(self):
         """Test Facebook login (will fail with invalid token)"""
         facebook_data = {
