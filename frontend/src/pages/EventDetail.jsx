@@ -48,20 +48,24 @@ const EventDetail = () => {
   const [showEnvelope, setShowEnvelope] = useState(() => {
     return !sessionStorage.getItem(sessionKey);
   });
+  const [animationComplete, setAnimationComplete] = useState(false);
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
-    fetchEventData();
-    
-    // Set up polling for RSVP updates (every 30 seconds)
-    const pollInterval = setInterval(() => {
+    // Don't fetch data until animation is complete or skipped
+    if (!showEnvelope || animationComplete) {
       fetchEventData();
-    }, 30000);
-    
-    // Cleanup on unmount
-    return () => clearInterval(pollInterval);
-  }, [eventId]);
+      
+      // Set up polling for RSVP updates (every 30 seconds)
+      const pollInterval = setInterval(() => {
+        fetchEventData();
+      }, 30000);
+      
+      // Cleanup on unmount
+      return () => clearInterval(pollInterval);
+    }
+  }, [eventId, showEnvelope, animationComplete]);
 
   const fetchEventData = async () => {
     try {
