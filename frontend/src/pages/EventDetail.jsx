@@ -46,12 +46,19 @@ const EventDetail = () => {
   // Envelope animation - only for guest/public links (not authenticated users from dashboard)
   const sessionKey = `envelope_shown_${eventId}`;
   const [showEnvelope, setShowEnvelope] = useState(() => {
-    // Don't show envelope if user is authenticated (came from dashboard)
-    // Only show for public/guest links
-    if (user) {
-      return false; // Logged in users don't see envelope
+    try {
+      // Don't show envelope if user is authenticated (came from dashboard)
+      // Only show for public/guest links
+      if (user && token) {
+        return false; // Logged in users don't see envelope
+      }
+      // Check sessionStorage to show envelope only once for guests
+      const hasShown = sessionStorage.getItem(sessionKey);
+      return !hasShown; // Guests see it once
+    } catch (error) {
+      console.error('Envelope state error:', error);
+      return false; // Default to no envelope on error
     }
-    return !sessionStorage.getItem(sessionKey); // Guests see it once
   });
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
