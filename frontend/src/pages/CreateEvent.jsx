@@ -236,6 +236,30 @@ const CreateEvent = () => {
                     />
                   </div>
 
+                  {/* Envelope Animation Checkbox */}
+                  <div className="flex items-start space-x-3 p-4 bg-purple-50 rounded-lg border border-purple-200">
+                    <input
+                      type="checkbox"
+                      id="show_envelope_animation"
+                      name="show_envelope_animation"
+                      checked={formData.show_envelope_animation}
+                      onChange={(e) => setFormData(prev => ({
+                        ...prev,
+                        show_envelope_animation: e.target.checked
+                      }))}
+                      className="mt-1 h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                      data-testid="envelope-animation-checkbox"
+                    />
+                    <div>
+                      <Label htmlFor="show_envelope_animation" className="text-sm font-medium text-gray-900 cursor-pointer">
+                        Premium zərf animasiyasını aktiv et 💌
+                      </Label>
+                      <p className="text-xs text-gray-600 mt-1">
+                        Qonaqlar dəvətnaməni açmazdan əvvəl gözəl zərf açılış animasiyası görəcək
+                      </p>
+                    </div>
+                  </div>
+
                   {/* Submit Button */}
                   <div className="flex items-center justify-end space-x-4 pt-6">
                     <Button
