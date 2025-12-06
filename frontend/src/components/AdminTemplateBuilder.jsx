@@ -904,35 +904,6 @@ const AdminTemplateBuilder = ({
                 </Button>
               </div>
               
-              {/* Auto-generate Thumbnail Button */}
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full"
-                onClick={async () => {
-                  const url = await generateThumbnail();
-                  if (url) {
-                    toast.success('Thumbnail canvas-dan yaradıldı');
-                  }
-                }}
-                disabled={isGeneratingThumbnail}
-              >
-                {isGeneratingThumbnail ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full animate-spin mr-2"></div>
-                    Yaradılır...
-                  </>
-                ) : (
-                  <>
-                    <Image className="mr-2 h-4 w-4" />
-                    Thumbnail Yarat
-                  </>
-                )}
-              </Button>
-              <p className="text-xs text-gray-500 mt-2">
-                Canvas-dan avtomatik thumbnail yaradır
-              </p>
-              
               {/* Thumbnail Preview */}
               {templateData.thumbnail_url && (
                 <div className="mt-4 pt-4 border-t">
