@@ -582,6 +582,7 @@ const EventDetail = () => {
           autoPlay={false}
           onComplete={() => {
             setShowEnvelope(false);
+            setAnimationComplete(true);
             sessionStorage.setItem(sessionKey, 'true');
           }}
         >
