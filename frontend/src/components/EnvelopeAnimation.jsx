@@ -72,13 +72,23 @@ const EnvelopeAnimation = ({
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center overflow-hidden">
+    <div 
+      className="fixed inset-0 z-50 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center overflow-hidden"
+      onClick={(e) => {
+        // Prevent any default click behavior that might cause navigation
+        e.stopPropagation();
+      }}
+    >
       {/* Skip Button */}
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
-        onClick={handleSkip}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          handleSkip();
+        }}
         className="absolute top-8 right-8 text-white/70 hover:text-white transition-colors z-50"
       >
         <X className="h-6 w-6" />
