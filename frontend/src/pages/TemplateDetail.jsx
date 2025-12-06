@@ -178,7 +178,7 @@ const TemplateDetail = () => {
           <div className="space-y-4">
             <Card className="overflow-hidden">
               <CardContent className="p-0">
-                <div className="relative aspect-[2/3] bg-gray-100">
+                <div className="relative bg-gradient-to-br from-gray-50 to-gray-100" style={{ height: '600px' }}>
                   {template.thumbnail_url ? (
                     <img 
                       src={template.thumbnail_url}
