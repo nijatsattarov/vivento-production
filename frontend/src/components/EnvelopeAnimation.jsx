@@ -117,7 +117,7 @@ const EnvelopeAnimation = ({
               }}
               exit={{ scale: 0.8, opacity: 0, y: -100 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="relative w-[600px] h-[400px]"
+              className="relative w-[90vw] max-w-[600px] h-[60vw] max-h-[400px]"
               style={{ transformStyle: 'preserve-3d' }}
             >
               {/* Envelope Body */}
