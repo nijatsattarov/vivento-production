@@ -1,8 +1,8 @@
 {
-  "total_tests": 39,
-  "passed_tests": 38,
-  "failed_tests": 1,
-  "success_rate": "97.4%",
+  "total_tests": 44,
+  "passed_tests": 44,
+  "failed_tests": 0,
+  "success_rate": "100.0%",
   "test_details": [
     {
       "test": "Root API",
@@ -175,9 +175,34 @@
       "details": ""
     },
     {
-      "test": "Envelope Animation Verification",
-      "success": false,
-      "details": "Expected show_envelope_animation=True, got False"
+      "test": "Get Event Detail with Envelope Animation",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Envelope Animation Field Verification",
+      "success": true,
+      "details": "show_envelope_animation field present: True"
+    },
+    {
+      "test": "Add Guest",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Get Event Guests",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Public Invitation",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "RSVP Response",
+      "success": true,
+      "details": ""
     },
     {
       "test": "Create Event with Custom Design",
