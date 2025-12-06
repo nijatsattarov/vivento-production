@@ -205,14 +205,13 @@ const TemplateEditor = () => {
           if (element.id === 'title') {
             return { ...element, content: eventData.name };
           } else if (element.id === 'date') {
-            return { ...element, content: new Date(eventData.date).toLocaleDateString('az-AZ', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-              timeZone: 'Asia/Baku'
-            }) };
+            // Format date without timezone conversion
+            const date = eventData.date.replace('T', ' ').substring(0, 16);
+            const [datePart, timePart] = date.split(' ');
+            const [year, month, day] = datePart.split('-');
+            const monthNames = ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avqust', 'sentyabr', 'oktyabr', 'noyabr', 'dekabr'];
+            const formatted = `${parseInt(day)} ${monthNames[parseInt(month) - 1]} ${year}, ${timePart}`;
+            return { ...element, content: formatted };
           } else if (element.id === 'location') {
             return { ...element, content: eventData.location };
           }
