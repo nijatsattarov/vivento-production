@@ -816,30 +816,43 @@ async def upload_profile_picture(
     file: UploadFile = File(...),
     current_user: User = Depends(get_current_user)
 ):
-    """Upload profile picture"""
+    """Upload profile picture to Cloudinary"""
     # Validate file type
     allowed_types = ["image/jpeg", "image/jpg", "image/png", "image/webp"]
     if file.content_type not in allowed_types:
         raise HTTPException(status_code=400, detail="Yalnız JPG, PNG və WEBP formatları dəstəklənir")
     
-    # Validate file size (5MB)
+    # Validate file size (10MB for Cloudinary free tier)
     contents = await file.read()
-    if len(contents) > 5 * 1024 * 1024:
-        raise HTTPException(status_code=400, detail="Şəkil 5MB-dan kiçik olmalıdır")
+    if len(contents) > 10 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="Şəkil 10MB-dan kiçik olmalıdır")
     
-    # Generate unique filename
-    file_extension = file.filename.split('.')[-1]
-    filename = f"profile_{current_user.id}_{int(datetime.now().timestamp())}.{file_extension}"
-    file_path = UPLOAD_DIR / filename
-    
-    # Save file
-    with open(file_path, 'wb') as f:
-        f.write(contents)
-    
-    # Return absolute file URL
-    file_url = get_absolute_file_url(f"/api/uploads/{filename}")
-    
-    return {"file_url": file_url, "filename": filename}
+    try:
+        # Upload to Cloudinary
+        result = cloudinary.uploader.upload(
+            contents,
+            folder="profiles",
+            public_id=f"profile_{current_user.id}_{int(datetime.now(timezone.utc).timestamp())}",
+            transformation={
+                'width': 400,
+                'height': 400,
+                'crop': 'fill',
+                'gravity': 'face',
+                'quality': 'auto',
+                'fetch_format': 'auto'
+            },
+            tags=["profile", "user"]
+        )
+        
+        return {
+            "file_url": result['secure_url'],
+            "public_id": result['public_id'],
+            "width": result.get('width'),
+            "height": result.get('height')
+        }
+    except Exception as e:
+        logger.error(f"Cloudinary upload error: {e}")
+        raise HTTPException(status_code=500, detail=f"Şəkil yüklənərkən xəta: {str(e)}")
 
 # Template routes
 @api_router.get("/templates", response_model=List[Template])
