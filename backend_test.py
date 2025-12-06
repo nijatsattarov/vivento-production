@@ -997,6 +997,13 @@ class ViventoAPITester:
         if event_created and event_id:
             self.test_get_event_detail(event_id)
             self.test_update_event(event_id)
+        
+        # Envelope Animation Tests
+        print("\n✉️ Testing Envelope Animation Feature...")
+        envelope_event_created, envelope_event_id = self.test_create_event_with_envelope_animation()
+        
+        if envelope_event_created and envelope_event_id:
+            self.test_get_event_detail_with_envelope_animation(envelope_event_id)
             
             # Guest management tests
             guest_added, guest_token = self.test_add_guest(event_id)
