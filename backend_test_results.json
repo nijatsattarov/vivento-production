@@ -1,8 +1,8 @@
 {
-  "total_tests": 35,
-  "passed_tests": 35,
-  "failed_tests": 0,
-  "success_rate": "100.0%",
+  "total_tests": 39,
+  "passed_tests": 38,
+  "failed_tests": 1,
+  "success_rate": "97.4%",
   "test_details": [
     {
       "test": "Root API",
@@ -90,6 +90,36 @@
       "details": ""
     },
     {
+      "test": "Admin Login",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Get Admin Pages",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Update Admin Page - privacy",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Public Page - privacy",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Public Page - terms",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Public Page - contact",
+      "success": true,
+      "details": ""
+    },
+    {
       "test": "Create Event for Demo",
       "success": true,
       "details": ""
@@ -140,24 +170,14 @@
       "details": ""
     },
     {
-      "test": "Add Guest",
+      "test": "Create Event with Envelope Animation",
       "success": true,
       "details": ""
     },
     {
-      "test": "Get Event Guests",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Public Invitation",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "RSVP Response",
-      "success": true,
-      "details": ""
+      "test": "Envelope Animation Verification",
+      "success": false,
+      "details": "Expected show_envelope_animation=True, got False"
     },
     {
       "test": "Create Event with Custom Design",
