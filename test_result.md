@@ -146,6 +146,59 @@ Response: {
 
 ---
 
+## Template Editor Custom Design Save & Load Test (6 Dec 2025)
+
+### 🧪 **Template Editor - Custom Design Save & Load Functionality Test**
+
+**Test Scenario**: User edits invitation design and saves it. Then returns and reopens to verify saved design loads correctly.
+
+**Test Steps Executed**:
+1. ✅ **Login**: Successfully logged in with admin@vivento.az / Vivento123!
+2. ✅ **Dashboard Navigation**: Found existing events on dashboard
+3. ✅ **Event Detail Access**: Successfully navigated to event detail page
+4. ✅ **Design Editor Access**: Opened design editor at `/editor/{eventId}`
+5. ✅ **Design Modifications**: 
+   - Selected title element successfully
+   - Changed text from "Ayşən və Elnurun Toy Mərasimi" to "Yenilenmis Tedbir Basligi - Test Saxlama"
+   - Changed color to red (#ff0000)
+   - Changed font size to 40px
+6. ✅ **Design Save**: Clicked save button successfully
+7. ✅ **Navigation Back**: Returned to event detail page
+8. ✅ **Design Reload**: Reopened design editor
+9. ✅ **Verification**: Saved design loaded correctly with all changes preserved
+
+**Test Results**: ✅ **SUCCESS - Custom Design Save & Load Working Correctly**
+
+**Key Findings**:
+- ✅ **Design Persistence**: All design changes (text, color, font size) were preserved after save and reload
+- ✅ **Save Functionality**: Save button works correctly and triggers backend API call
+- ✅ **Load Functionality**: Saved custom design loads automatically when reopening editor
+- ✅ **Toast Notifications**: Success messages displayed correctly ("Saxlanılmış dizayn yükləndi")
+- ✅ **UI State Management**: Editor properly maintains element selection and property editing
+- ✅ **Canvas Rendering**: Design changes visible in real-time on canvas
+- ✅ **Data Integrity**: No data loss during save/load cycle
+
+**Technical Validation**:
+- ✅ **Backend Integration**: Custom design data successfully stored in event.custom_design field
+- ✅ **Frontend State**: React state management working correctly for design elements
+- ✅ **API Communication**: PUT /api/events/{eventId} endpoint functioning properly
+- ✅ **Console Logging**: Appropriate console messages for design loading operations
+- ✅ **URL Routing**: Proper navigation between dashboard → event detail → editor
+
+**Screenshots Captured**:
+- Login page and dashboard
+- Event detail page
+- Design editor initial state
+- Design changes applied
+- Saved design verification
+- Reloaded editor with preserved changes
+
+**Performance**: All operations completed within acceptable timeframes, no significant delays observed.
+
+**Browser Compatibility**: Tested successfully on Chrome in automated environment.
+
+---
+
 ## Backend Testing Session (6 Dec 2025)
 
 ### 🧪 **Comprehensive Backend API Testing - All Features Verified**
