@@ -42,6 +42,7 @@ const EventDetail = () => {
   const [isAddGuestOpen, setIsAddGuestOpen] = useState(false);
   const [newGuest, setNewGuest] = useState({ name: '', phone: '', email: '' });
   const [isAddingGuest, setIsAddingGuest] = useState(false);
+  const [showEnvelope, setShowEnvelope] = useState(true); // For envelope animation
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
