@@ -35,31 +35,14 @@ import { toast } from 'sonner';
 const EventDetail = () => {
   const { eventId } = useParams();
   const navigate = useNavigate();
-  const { token } = useAuth();
+  const { user, token } = useAuth();
   const [event, setEvent] = useState(null);
   const [guests, setGuests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isAddGuestOpen, setIsAddGuestOpen] = useState(false);
   const [newGuest, setNewGuest] = useState({ name: '', phone: '', email: '' });
   const [isAddingGuest, setIsAddingGuest] = useState(false);
-  
-  // Envelope animation - only for guest/public links (not authenticated users from dashboard)
-  const sessionKey = `envelope_shown_${eventId}`;
-  const [showEnvelope, setShowEnvelope] = useState(() => {
-    try {
-      // Don't show envelope if user is authenticated (came from dashboard)
-      // Only show for public/guest links
-      if (user && token) {
-        return false; // Logged in users don't see envelope
-      }
-      // Check sessionStorage to show envelope only once for guests
-      const hasShown = sessionStorage.getItem(sessionKey);
-      return !hasShown; // Guests see it once
-    } catch (error) {
-      console.error('Envelope state error:', error);
-      return false; // Default to no envelope on error
-    }
-  });
+  const [showEnvelope, setShowEnvelope] = useState(false);
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
