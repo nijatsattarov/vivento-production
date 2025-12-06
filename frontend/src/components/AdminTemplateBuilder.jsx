@@ -877,19 +877,28 @@ const AdminTemplateBuilder = ({
                       const formData = new FormData();
                       formData.append('file', file);
                       
+                      // Get token for authentication
+                      const token = localStorage.getItem('accessToken');
+                      
                       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload/background`, {
                         method: 'POST',
+                        headers: {
+                          'Authorization': `Bearer ${token}`
+                        },
                         body: formData
                       });
                       
-                      if (!response.ok) throw new Error('Upload failed');
+                      if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.detail || 'Upload failed');
+                      }
                       
                       const data = await response.json();
                       setTemplateData(prev => ({ ...prev, thumbnail_url: data.file_url }));
                       toast.success('Thumbnail yükləndi!');
                     } catch (error) {
                       console.error('Thumbnail upload error:', error);
-                      toast.error('Thumbnail yüklənə bilmədi');
+                      toast.error(`Thumbnail yüklənə bilmədi: ${error.message}`);
                     }
                   }}
                 />
