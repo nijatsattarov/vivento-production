@@ -184,23 +184,40 @@ const TemplateEditor = () => {
       const eventData = response.data;
       setEvent(eventData);
       
-      // Update default text elements with event data
-      setElements(prev => prev.map(element => {
-        if (element.id === 'title') {
-          return { ...element, content: eventData.name };
-        } else if (element.id === 'date') {
-          return { ...element, content: new Date(eventData.date).toLocaleDateString('az-AZ', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-          }) };
-        } else if (element.id === 'location') {
-          return { ...element, content: eventData.location };
+      // Check if custom design exists (user has already edited)
+      if (eventData.custom_design && eventData.custom_design.elements) {
+        console.log('✅ Loading saved custom design:', eventData.custom_design);
+        
+        // Load saved custom design
+        setElements(eventData.custom_design.elements);
+        
+        // Load canvas size if saved
+        if (eventData.custom_design.canvasSize) {
+          setCanvasSize(eventData.custom_design.canvasSize);
         }
-        return element;
-      }));
+        
+        toast.success('Saxlanılmış dizayn yükləndi');
+      } else {
+        console.log('ℹ️ No custom design found, loading default elements');
+        
+        // Update default text elements with event data
+        setElements(prev => prev.map(element => {
+          if (element.id === 'title') {
+            return { ...element, content: eventData.name };
+          } else if (element.id === 'date') {
+            return { ...element, content: new Date(eventData.date).toLocaleDateString('az-AZ', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            }) };
+          } else if (element.id === 'location') {
+            return { ...element, content: eventData.location };
+          }
+          return element;
+        }));
+      }
       
     } catch (error) {
       console.error('Tədbir məlumatları alınarkən xəta:', error);
