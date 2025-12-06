@@ -839,7 +839,71 @@ const AdminTemplateBuilder = ({
             </div>
 
             <div className="pt-4 border-t">
-              <Label className="mb-2 block">Thumbnail Önizləmə</Label>
+              <Label className="mb-2 block">Thumbnail Şəkli</Label>
+              
+              {/* Thumbnail URL Input */}
+              <div className="space-y-2 mb-3">
+                <Label htmlFor="thumbnail-url" className="text-sm">Thumbnail URL</Label>
+                <Input
+                  id="thumbnail-url"
+                  value={templateData.thumbnail_url}
+                  onChange={(e) => setTemplateData(prev => ({ ...prev, thumbnail_url: e.target.value }))}
+                  placeholder="https://example.com/thumbnail.jpg"
+                  className="text-sm"
+                />
+              </div>
+              
+              {/* Thumbnail Upload Button */}
+              <div className="space-y-2 mb-3">
+                <Label className="text-sm">və ya Şəkil Yüklə (400x600px)</Label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="thumbnail-upload"
+                  className="hidden"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    
+                    // Validate file size (max 5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                      toast.error('Şəkil 5MB-dan kiçik olmalıdır');
+                      return;
+                    }
+                    
+                    try {
+                      toast.info('Thumbnail yüklənir...');
+                      const formData = new FormData();
+                      formData.append('file', file);
+                      
+                      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload/background`, {
+                        method: 'POST',
+                        body: formData
+                      });
+                      
+                      if (!response.ok) throw new Error('Upload failed');
+                      
+                      const data = await response.json();
+                      setTemplateData(prev => ({ ...prev, thumbnail_url: data.file_url }));
+                      toast.success('Thumbnail yükləndi!');
+                    } catch (error) {
+                      console.error('Thumbnail upload error:', error);
+                      toast.error('Thumbnail yüklənə bilmədi');
+                    }
+                  }}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => document.getElementById('thumbnail-upload').click()}
+                >
+                  <Upload className="mr-2 h-4 w-4" />
+                  Thumbnail Yüklə
+                </Button>
+              </div>
+              
+              {/* Auto-generate Thumbnail Button */}
               <Button
                 type="button"
                 variant="outline"
@@ -847,7 +911,7 @@ const AdminTemplateBuilder = ({
                 onClick={async () => {
                   const url = await generateThumbnail();
                   if (url) {
-                    toast.success('Thumbnail indi yaradıldı və saxlanılacaq');
+                    toast.success('Thumbnail canvas-dan yaradıldı');
                   }
                 }}
                 disabled={isGeneratingThumbnail}
