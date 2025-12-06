@@ -75,3 +75,4 @@ watchfiles==1.1.0
 google-auth==2.41.1
 google-auth-httplib2==0.2.1
 google-auth-oauthlib==1.2.3
+cloudinary==1.44.1
