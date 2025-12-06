@@ -84,3 +84,36 @@ code {
     @apply bg-background text-foreground;
     }
 }
+
+/* Lexical Editor Styles */
+.lexical-editor-container {
+  position: relative;
+}
+
+.lexical-editor-input {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #1f2937;
+}
+
+.lexical-editor-placeholder {
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.lexical-paragraph {
+  margin: 0;
+  padding: 8px 0;
+}
+
+.lexical-bold {
+  font-weight: bold;
+}
+
+.lexical-italic {
+  font-style: italic;
+}
+
+.lexical-underline {
+  text-decoration: underline;
+}
