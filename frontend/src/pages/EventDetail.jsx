@@ -559,6 +559,23 @@ const EventDetail = () => {
       </div>
     </div>
   );
+
+  // Return with envelope animation on first visit
+  return (
+    <>
+      {showEnvelope ? (
+        <EnvelopeAnimation 
+          envelopeColor="premium"
+          autoPlay={false}
+          onComplete={() => setShowEnvelope(false)}
+        >
+          {mainContent}
+        </EnvelopeAnimation>
+      ) : (
+        mainContent
+      )}
+    </>
+  );
 };
 
 export default EventDetail;
