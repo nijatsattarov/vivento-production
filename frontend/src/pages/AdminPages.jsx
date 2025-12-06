@@ -18,26 +18,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-
-// Quill editor configuration
-const quillModules = {
-  toolbar: [
-    [{ 'header': [2, 3, false] }],
-    ['bold', 'italic', 'underline'],
-    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-    ['link'],
-    ['clean']
-  ]
-};
-
-const quillFormats = [
-  'header',
-  'bold', 'italic', 'underline',
-  'list', 'bullet',
-  'link'
-];
+import LexicalEditor from '../components/LexicalEditor';
 
 // PageEditor component moved outside to fix React Hook rules
 const PageEditor = ({ page, formData, handleInputChange, handleSave, saving, preview, setPreview }) => {
