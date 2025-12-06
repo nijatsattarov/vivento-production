@@ -4,7 +4,7 @@ import json
 import time
 
 class AdminFunctionalityTester:
-    def __init__(self, base_url="https://epoint-payment.preview.emergentagent.com"):
+    def __init__(self, base_url="https://payment-deploy-2.preview.emergentagent.com"):
         self.base_url = base_url
         self.admin_token = None
         self.regular_token = None

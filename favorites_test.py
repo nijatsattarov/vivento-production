@@ -17,7 +17,7 @@ import time
 from datetime import datetime
 
 class FavoritesAPITester:
-    def __init__(self, base_url="https://epoint-payment.preview.emergentagent.com"):
+    def __init__(self, base_url="https://payment-deploy-2.preview.emergentagent.com"):
         self.base_url = base_url
         self.token = None
         self.user_id = None
