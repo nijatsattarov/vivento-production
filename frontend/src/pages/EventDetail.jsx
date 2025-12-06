@@ -181,7 +181,8 @@ const EventDetail = () => {
 
   const stats = getStats();
 
-  return (
+  // Main content wrapped in envelope animation
+  const mainContent = (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <Navbar />
       
