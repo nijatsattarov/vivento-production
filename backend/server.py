@@ -25,6 +25,14 @@ load_dotenv(ROOT_DIR / '.env')
 # Get backend URL from environment
 BACKEND_URL = os.environ.get('BACKEND_URL', 'http://localhost:8001')
 
+# Configure Cloudinary
+cloudinary.config(
+    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.environ.get('CLOUDINARY_API_KEY'),
+    api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
+    secure=True
+)
+
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
