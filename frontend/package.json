@@ -4,9 +4,6 @@
   "private": true,
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
-    "@lexical/plain-text": "^0.38.2",
-    "@lexical/react": "^0.38.2",
-    "@lexical/rich-text": "^0.38.2",
     "@radix-ui/react-accordion": "^1.2.8",
     "@radix-ui/react-alert-dialog": "^1.1.11",
     "@radix-ui/react-aspect-ratio": "^1.1.4",
@@ -45,7 +42,6 @@
     "framer-motion": "^12.23.25",
     "html2canvas": "^1.4.1",
     "input-otp": "^1.4.2",
-    "lexical": "^0.38.2",
     "lucide-react": "^0.507.0",
     "next-themes": "^0.4.6",
     "react": "^19.0.0",
