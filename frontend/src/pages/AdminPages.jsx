@@ -33,45 +33,23 @@ const AdminPages = () => {
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
-  // HTML formatting helper buttons
-  const insertHTML = (slug, tag) => {
-    const data = formData[slug] || {};
-    const textarea = document.getElementById(`content-${slug}`);
-    if (!textarea) return;
-    
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selectedText = data.content.substring(start, end);
-    const beforeText = data.content.substring(0, start);
-    const afterText = data.content.substring(end);
-    
-    let newText = '';
-    switch(tag) {
-      case 'h2':
-        newText = `<h2>${selectedText || 'Başlıq'}</h2>`;
-        break;
-      case 'h3':
-        newText = `<h3>${selectedText || 'Alt başlıq'}</h3>`;
-        break;
-      case 'p':
-        newText = `<p>${selectedText || 'Paraqraf'}</p>`;
-        break;
-      case 'bold':
-        newText = `<strong>${selectedText || 'Qalın mətn'}</strong>`;
-        break;
-      case 'link':
-        newText = `<a href="https://example.com">${selectedText || 'Link'}</a>`;
-        break;
-      case 'ul':
-        newText = `<ul>\n  <li>${selectedText || 'Siyahı elementi'}</li>\n</ul>`;
-        break;
-      default:
-        newText = selectedText;
-    }
-    
-    const updatedContent = beforeText + newText + afterText;
-    handleInputChange(slug, 'content', updatedContent);
+  // Quill editor configuration
+  const quillModules = {
+    toolbar: [
+      [{ 'header': [2, 3, false] }],
+      ['bold', 'italic', 'underline'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['link'],
+      ['clean']
+    ]
   };
+
+  const quillFormats = [
+    'header',
+    'bold', 'italic', 'underline',
+    'list', 'bullet',
+    'link'
+  ];
 
   useEffect(() => {
     if (!user) {
