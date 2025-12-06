@@ -210,7 +210,8 @@ const TemplateEditor = () => {
               month: 'long',
               year: 'numeric',
               hour: '2-digit',
-              minute: '2-digit'
+              minute: '2-digit',
+              timeZone: 'Asia/Baku'
             }) };
           } else if (element.id === 'location') {
             return { ...element, content: eventData.location };
