@@ -79,11 +79,19 @@ const CreateEvent = () => {
 
     try {
       const token = localStorage.getItem('accessToken');
+      
+      // Convert to Baku timezone (UTC+4) - preserve local time
+      const localDate = new Date(formData.date);
+      const bakuOffset = 4 * 60; // 4 hours in minutes
+      const utcOffset = localDate.getTimezoneOffset(); // User's timezone offset
+      const offsetDiff = bakuOffset + utcOffset; // Difference to add
+      const bakuDate = new Date(localDate.getTime() + offsetDiff * 60 * 1000);
+      
       const response = await axios.post(
         `${API_BASE_URL}/api/events`,
         {
           ...formData,
-          date: new Date(formData.date).toISOString(),
+          date: bakuDate.toISOString(),
           template_id: templateId || null
         },
         {
