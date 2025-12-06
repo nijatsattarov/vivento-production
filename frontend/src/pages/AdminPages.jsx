@@ -292,7 +292,15 @@ const AdminPages = () => {
 
               {pages.map(page => (
                 <TabsContent key={page.slug} value={page.slug}>
-                  <PageEditor page={page} />
+                  <PageEditor 
+                    page={page}
+                    formData={formData}
+                    handleInputChange={handleInputChange}
+                    handleSave={handleSave}
+                    saving={saving}
+                    preview={preview}
+                    setPreview={setPreview}
+                  />
                 </TabsContent>
               ))}
             </Tabs>
