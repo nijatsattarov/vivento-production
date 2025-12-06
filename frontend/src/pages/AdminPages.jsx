@@ -21,6 +21,149 @@ import { toast } from 'sonner';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
+// Quill editor configuration
+const quillModules = {
+  toolbar: [
+    [{ 'header': [2, 3, false] }],
+    ['bold', 'italic', 'underline'],
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    ['link'],
+    ['clean']
+  ]
+};
+
+const quillFormats = [
+  'header',
+  'bold', 'italic', 'underline',
+  'list', 'bullet',
+  'link'
+];
+
+// PageEditor component moved outside to fix React Hook rules
+const PageEditor = ({ page, formData, handleInputChange, handleSave, saving, preview, setPreview }) => {
+  const slug = page.slug;
+  const data = formData[slug] || {};
+
+  return (
+    <div className="space-y-6">
+      {/* Title */}
+      <div>
+        <Label htmlFor={`title-${slug}`} className="text-base font-semibold">
+          Başlıq
+        </Label>
+        <Input
+          id={`title-${slug}`}
+          value={data.title || ''}
+          onChange={(e) => handleInputChange(slug, 'title', e.target.value)}
+          className="mt-2"
+          placeholder="Səhifə başlığı"
+        />
+      </div>
+
+      {/* Meta Description */}
+      <div>
+        <Label htmlFor={`meta-${slug}`} className="text-base font-semibold">
+          Meta Təsvir (SEO)
+        </Label>
+        <Textarea
+          id={`meta-${slug}`}
+          value={data.meta_description || ''}
+          onChange={(e) => handleInputChange(slug, 'meta_description', e.target.value)}
+          className="mt-2"
+          rows={2}
+          placeholder="Axtarış motorları üçün qısa təsvir"
+        />
+      </div>
+
+      {/* Content Editor */}
+      <div>
+        <Label className="text-base font-semibold mb-2 block">
+          Məzmun
+        </Label>
+        
+        {!preview ? (
+          <>
+            {/* React Quill WYSIWYG Editor */}
+            <div className="bg-white rounded-lg border">
+              <ReactQuill
+                theme="snow"
+                value={data.content || ''}
+                onChange={(content) => handleInputChange(slug, 'content', content)}
+                modules={quillModules}
+                formats={quillFormats}
+                className="min-h-[400px]"
+                placeholder="Məzmun daxil edin..."
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-2">
+              💡 Yuxarıdakı toolbar ilə mətnə format verə bilərsiniz
+            </p>
+          </>
+        ) : (
+          <div 
+            className="prose max-w-none p-6 bg-gray-50 rounded-lg border min-h-[400px]"
+            dangerouslySetInnerHTML={{ __html: data.content }}
+          />
+        )}
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center justify-between pt-4">
+        <Button
+          variant="outline"
+          onClick={() => setPreview(!preview)}
+          className="flex items-center gap-2"
+        >
+          <Eye className="h-4 w-4" />
+          {preview ? 'Redaktə et' : 'Baxış'}
+        </Button>
+
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 text-sm">
+            {data.published ? (
+              <>
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <span className="text-green-600 font-medium">Aktiv</span>
+              </>
+            ) : (
+              <>
+                <AlertCircle className="h-4 w-4 text-orange-600" />
+                <span className="text-orange-600 font-medium">Deaktiv</span>
+              </>
+            )}
+          </div>
+
+          <Button
+            onClick={() => handleSave(slug)}
+            disabled={saving}
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+          >
+            {saving ? (
+              <>Saxlanılır...</>
+            ) : (
+              <>
+                <Save className="mr-2 h-4 w-4" />
+                Yadda Saxla
+              </>
+            )}
+          </Button>
+        </div>
+      </div>
+
+      {/* Last Updated */}
+      <div className="text-sm text-gray-500 pt-4 border-t">
+        Son yenilənmə: {new Date(page.updated_at).toLocaleDateString('az-AZ', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })}
+      </div>
+    </div>
+  );
+};
+
 const AdminPages = () => {
   const { user, token } = useAuth();
   const navigate = useNavigate();
@@ -32,24 +175,6 @@ const AdminPages = () => {
   const [preview, setPreview] = useState(false);
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
-
-  // Quill editor configuration
-  const quillModules = {
-    toolbar: [
-      [{ 'header': [2, 3, false] }],
-      ['bold', 'italic', 'underline'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      ['link'],
-      ['clean']
-    ]
-  };
-
-  const quillFormats = [
-    'header',
-    'bold', 'italic', 'underline',
-    'list', 'bullet',
-    'link'
-  ];
 
   useEffect(() => {
     if (!user) {
