@@ -96,6 +96,7 @@ class Event(BaseModel):
     additional_notes: Optional[str] = None
     template_id: Optional[str] = None
     custom_design: Optional[Dict[str, Any]] = None
+    show_envelope_animation: bool = False  # Enable/disable envelope animation per event
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
