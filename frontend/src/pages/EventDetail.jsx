@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from '../components/ui/label';
 import Navbar from '../components/Navbar';
 import LoadingSpinner from '../components/LoadingSpinner';
+import EnvelopeAnimation from '../components/EnvelopeAnimation';
 import { 
   ArrowLeft, 
   Calendar, 
