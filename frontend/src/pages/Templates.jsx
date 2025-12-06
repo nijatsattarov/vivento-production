@@ -187,7 +187,7 @@ const Templates = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {templates.map((template) => (
               <Card 
                 key={template.id} 
@@ -196,7 +196,7 @@ const Templates = () => {
               >
                 <CardContent className="p-0">
                   {/* Template Preview */}
-                  <div className="relative aspect-[2/3] bg-gray-100 rounded-t-lg overflow-hidden">
+                  <div className="relative aspect-[2/3] bg-white rounded-t-lg overflow-hidden shadow-sm">
                     {template.thumbnail_url ? (
                       <img 
                         src={template.thumbnail_url}
