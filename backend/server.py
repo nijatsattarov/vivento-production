@@ -2065,6 +2065,181 @@ async def update_page_admin(
         raise HTTPException(status_code=500, detail="Səhifə yenilənərkən xəta baş verdi")
 
 # ============================================
+# STATIC PAGES SETUP ENDPOINT (One-time DB Seeding)
+# ============================================
+
+@api_router.post("/admin/setup-pages")
+async def setup_static_pages():
+    """
+    One-time endpoint to create default static pages in the database.
+    This is used to seed the production database with initial page content.
+    Can be called without authentication for initial setup.
+    """
+    try:
+        default_pages = [
+            {
+                "id": str(uuid.uuid4()),
+                "slug": "privacy",
+                "title": "Məxfilik Siyasəti",
+                "content": """<h2>Məxfilik Siyasəti</h2>
+<p>Vivento platformasına xoş gəlmisiniz. Məxfiliyiniz bizim üçün vacibdir.</p>
+
+<h3>1. Toplanılan Məlumatlar</h3>
+<p>Xidmətlərimizdən istifadə etdiyiniz zaman aşağıdakı məlumatları toplaya bilərik:</p>
+<ul>
+  <li>Ad və soyad</li>
+  <li>E-poçt ünvanı</li>
+  <li>Telefon nömrəsi</li>
+  <li>Profil şəkli</li>
+  <li>Tədbir məlumatları (ad, tarix, məkan)</li>
+</ul>
+
+<h3>2. Məlumatların İstifadəsi</h3>
+<p>Topladığımız məlumatları aşağıdakı məqsədlərlə istifadə edirik:</p>
+<ul>
+  <li>Xidmətlərimizi təmin etmək və təkmilləşdirmək</li>
+  <li>Sizinlə əlaqə saxlamaq</li>
+  <li>Dəvətnamələrinizi yaratmaq və göndərmək</li>
+  <li>Texniki dəstək göstərmək</li>
+</ul>
+
+<h3>3. Məlumatların Qorunması</h3>
+<p>Şəxsi məlumatlarınızın təhlükəsizliyini təmin etmək üçün müasir şifrələmə texnologiyalarından istifadə edirik.</p>
+
+<h3>4. Əlaqə</h3>
+<p>Suallarınız üçün bizimlə əlaqə saxlaya bilərsiniz: <a href="mailto:info@vivento.az">info@vivento.az</a></p>""",
+                "meta_description": "Vivento platformasının məxfilik siyasəti",
+                "published": True,
+                "created_at": datetime.now(timezone.utc),
+                "updated_at": datetime.now(timezone.utc)
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "slug": "terms",
+                "title": "İstifadə Şərtləri",
+                "content": """<h2>İstifadə Şərtləri</h2>
+<p>Bu şərtlər Vivento platformasından istifadə qaydalarını müəyyən edir.</p>
+
+<h3>1. Xidmətlərin Təsviri</h3>
+<p>Vivento rəqəmsal dəvətnamə yaratma və göndərmə platformasıdır. İstifadəçilər toy, nişan, doğum günü və digər tədbirlər üçün dəvətnamələr yarada bilərlər.</p>
+
+<h3>2. Hesab Yaratma</h3>
+<p>Xidmətlərimizdən tam istifadə etmək üçün hesab yaratmalısınız. Hesab yaratarkən:</p>
+<ul>
+  <li>Doğru məlumatlar təqdim etməyə</li>
+  <li>Hesabınızın təhlükəsizliyini qorumağa</li>
+  <li>Parolunuzu başqaları ilə paylaşmamağa</li>
+</ul>
+<p>borclusunuz.</p>
+
+<h3>3. Ödəniş Şərtləri</h3>
+<p>Bəzi xidmətlərimiz ödənişlidir. Ödənişlər Azərbaycan manatı (AZN) ilə həyata keçirilir.</p>
+<ul>
+  <li>İlk 30 dəvətnamə pulsuzdur</li>
+  <li>Premium şablonlar əlavə ödəniş tələb edir</li>
+  <li>Balans artırma minimum 5 AZN-dən başlayır</li>
+</ul>
+
+<h3>4. Qadağan Edilmiş Fəaliyyətlər</h3>
+<p>Aşağıdakı fəaliyyətlər qadağandır:</p>
+<ul>
+  <li>Qanunsuz məzmun paylaşmaq</li>
+  <li>Başqalarının hüquqlarını pozmaq</li>
+  <li>Platformadan sui-istifadə etmək</li>
+  <li>Spam və ya zərərli məzmun yaymaq</li>
+</ul>
+
+<h3>5. Məsuliyyətin Məhdudlaşdırılması</h3>
+<p>Vivento xidmətlərin fasiləsiz işləyəcəyinə zəmanət vermir. Texniki problemlər və ya xarici amillər səbəbindən yaranan zərərlərə görə məsuliyyət daşımırıq.</p>
+
+<h3>6. Şərtlərin Dəyişdirilməsi</h3>
+<p>Bu şərtləri istənilən vaxt dəyişdirmək hüququmuzu saxlayırıq. Dəyişikliklər saytda dərc edildikdən sonra qüvvəyə minir.</p>
+
+<h3>7. Əlaqə</h3>
+<p>Suallarınız üçün: <a href="mailto:info@vivento.az">info@vivento.az</a></p>""",
+                "meta_description": "Vivento platformasının istifadə şərtləri",
+                "published": True,
+                "created_at": datetime.now(timezone.utc),
+                "updated_at": datetime.now(timezone.utc)
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "slug": "contact",
+                "title": "Əlaqə",
+                "content": """<h2>Bizimlə Əlaqə</h2>
+<p>Vivento komandası ilə əlaqə saxlamaq üçün aşağıdakı üsullardan istifadə edə bilərsiniz.</p>
+
+<h3>E-poçt</h3>
+<p>Ümumi sorğular üçün: <a href="mailto:info@vivento.az">info@vivento.az</a></p>
+<p>Texniki dəstək üçün: <a href="mailto:support@vivento.az">support@vivento.az</a></p>
+
+<h3>Sosial Şəbəkələr</h3>
+<ul>
+  <li>Instagram: <a href="https://instagram.com/vivento.az" target="_blank">@vivento.az</a></li>
+  <li>Facebook: <a href="https://facebook.com/viventoaz" target="_blank">Vivento Azerbaijan</a></li>
+</ul>
+
+<h3>İş Saatları</h3>
+<p>Bazar ertəsi - Cümə: 09:00 - 18:00</p>
+<p>Şənbə: 10:00 - 14:00</p>
+<p>Bazar: Bağlı</p>
+
+<h3>Ünvan</h3>
+<p>Bakı, Azərbaycan</p>
+
+<p><strong>Sizə kömək etməkdən məmnun olarıq!</strong></p>""",
+                "meta_description": "Vivento ilə əlaqə məlumatları",
+                "published": True,
+                "created_at": datetime.now(timezone.utc),
+                "updated_at": datetime.now(timezone.utc)
+            }
+        ]
+        
+        created_pages = []
+        updated_pages = []
+        
+        for page_data in default_pages:
+            # Check if page already exists
+            existing = await db.pages.find_one({"slug": page_data["slug"]})
+            
+            if existing:
+                # Update existing page if content is empty or minimal
+                if not existing.get("content") or len(existing.get("content", "")) < 100:
+                    await db.pages.update_one(
+                        {"slug": page_data["slug"]},
+                        {"$set": {
+                            "title": page_data["title"],
+                            "content": page_data["content"],
+                            "meta_description": page_data["meta_description"],
+                            "published": True,
+                            "updated_at": datetime.now(timezone.utc)
+                        }}
+                    )
+                    updated_pages.append(page_data["slug"])
+                else:
+                    # Page exists with content, skip
+                    pass
+            else:
+                # Create new page
+                await db.pages.insert_one(page_data)
+                created_pages.append(page_data["slug"])
+        
+        logger.info(f"Setup pages completed. Created: {created_pages}, Updated: {updated_pages}")
+        
+        return {
+            "success": True,
+            "message": "Statik səhifələr uğurla yaradıldı/yeniləndi",
+            "created": created_pages,
+            "updated": updated_pages,
+            "total_pages": len(default_pages)
+        }
+        
+    except Exception as e:
+        logger.error(f"Setup pages error: {e}")
+        raise HTTPException(status_code=500, detail=f"Səhifələr yaradılarkən xəta: {str(e)}")
+
+
+# ============================================
 # PAYMENT & BALANCE ENDPOINTS
 # ============================================
 
