@@ -917,11 +917,12 @@ const AdminTemplateBuilder = ({
               {templateData.thumbnail_url && (
                 <div className="mt-4 pt-4 border-t">
                   <Label className="text-sm mb-2 block">Thumbnail Önizləmə</Label>
-                  <div className="relative aspect-[2/3] bg-white rounded-lg overflow-hidden border flex items-center justify-center">
+                  <div className="relative bg-white rounded-lg overflow-hidden border flex items-center justify-center p-4" style={{ minHeight: '400px' }}>
                     <img 
                       src={templateData.thumbnail_url} 
                       alt="Thumbnail önizləmə"
-                      className="w-full h-full object-contain"
+                      className="max-w-full max-h-full object-contain"
+                      style={{ maxHeight: '380px' }}
                       onError={(e) => {
                         e.target.src = 'https://via.placeholder.com/400x600/f0f0f0/666666?text=No+Image';
                       }}
