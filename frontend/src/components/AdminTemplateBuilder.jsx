@@ -578,76 +578,8 @@ const AdminTemplateBuilder = ({
     };
   }, [isDragging, selectedElement, dragOffset, zoom]);
 
+  // AUTO-GENERATE REMOVED - Manual upload only
   // Save template
-  // Generate thumbnail from canvas
-  const generateThumbnail = async () => {
-    try {
-      setIsGeneratingThumbnail(true);
-      toast.info('Thumbnail yaradılır...');
-      
-      // Wait a bit for canvas to render fully
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // Find the canvas element - try multiple methods
-      let canvasElement = canvasRef.current;
-      
-      if (!canvasElement) {
-        canvasElement = document.getElementById('design-canvas');
-      }
-      
-      if (!canvasElement) {
-        canvasElement = document.querySelector('[data-testid="design-canvas"]');
-      }
-      
-      if (!canvasElement) {
-        console.error('Canvas element not found with any method');
-        console.log('canvasRef.current:', canvasRef.current);
-        console.log('By ID:', document.getElementById('design-canvas'));
-        console.log('By selector:', document.querySelector('[data-testid="design-canvas"]'));
-        throw new Error('Canvas tapılmadı - canvas element mövcud deyil');
-      }
-
-      console.log('Canvas element found:', canvasElement);
-      console.log('Canvas size:', canvasElement.offsetWidth, 'x', canvasElement.offsetHeight);
-      console.log('Canvas element found, generating screenshot...');
-
-      // Capture canvas as image with optimized settings
-      const canvas = await html2canvas(canvasElement, {
-        backgroundColor: templateData.canvasSize.background || '#ffffff',
-        scale: 1.5, // Balanced quality and performance
-        logging: false,
-        useCORS: true,
-        allowTaint: true,
-        foreignObjectRendering: false,
-        width: templateData.canvasSize.width,
-        height: templateData.canvasSize.height
-      });
-
-      console.log('Screenshot captured, converting to blob...');
-
-      // Convert to blob with better error handling
-      const blob = await new Promise((resolve, reject) => {
-        canvas.toBlob(
-          (blob) => {
-            if (blob) {
-              resolve(blob);
-            } else {
-              reject(new Error('Blob yaradıla bilmədi'));
-            }
-          },
-          'image/jpeg',
-          0.85
-        );
-      });
-      
-      console.log('Blob created, size:', blob.size, 'bytes');
-
-      // Create form data
-      const formData = new FormData();
-      formData.append('file', blob, `thumbnail-${Date.now()}.jpg`);
-
-      // Upload to backend
-      const token = localStorage.getItem('accessToken');
       
       console.log('Uploading to backend...');
       
