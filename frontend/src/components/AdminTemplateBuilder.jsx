@@ -638,20 +638,21 @@ const AdminTemplateBuilder = ({
       return;
     }
 
-    // Generate thumbnail from canvas automatically
-    let thumbnailUrl = templateData.thumbnail_url; // Use existing if available
+    // Use manual uploaded thumbnail only
+    let thumbnailUrl = templateData.thumbnail_url;
+    
+    // Validate thumbnail exists
+    if (!thumbnailUrl) {
+      toast.error('Thumbnail yüklənməlidir! "Thumbnail Yüklə" düyməsindən istifadə edin.');
+      setSaving(false);
+      return;
+    }
     
     try {
-      toast.info('Thumbnail yaradılır...');
-      const newThumbnailUrl = await generateThumbnail();
+      // Thumbnail already set from manual upload
+      console.log('Using uploaded thumbnail:', thumbnailUrl);
       
-      if (newThumbnailUrl) {
-        thumbnailUrl = newThumbnailUrl;
-        console.log('New thumbnail created:', thumbnailUrl);
-      } else {
-        console.warn('Thumbnail creation failed, using existing or placeholder');
-        
-        // If no existing thumbnail, use a placeholder
+      if (false) { // Disabled auto-generate
         if (!thumbnailUrl) {
           toast.warning('Thumbnail yaradıla bilmədi, placeholder istifadə olunur');
           thumbnailUrl = 'https://via.placeholder.com/400x600/f0f0f0/666666?text=Template';
