@@ -602,7 +602,6 @@ const AdminTemplateBuilder = ({
     // Validate thumbnail exists
     if (!thumbnailUrl) {
       toast.error('Thumbnail yüklənməlidir! "Thumbnail Yüklə" düyməsindən istifadə edin.');
-      setSaving(false);
       return;
     }
     
