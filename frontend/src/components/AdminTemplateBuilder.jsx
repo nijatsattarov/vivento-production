@@ -579,48 +579,6 @@ const AdminTemplateBuilder = ({
   }, [isDragging, selectedElement, dragOffset, zoom]);
 
   // AUTO-GENERATE REMOVED - Manual upload only
-  // Save template
-      
-      console.log('Uploading to backend...');
-      
-      const response = await axios.post(
-        `${API_BASE_URL}/api/upload/background`,
-        formData,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-          timeout: 30000 // 30 seconds timeout
-        }
-      );
-
-      console.log('Upload response:', response.data);
-
-      const thumbnailUrl = response.data.file_url;
-      
-      // Update template data with new thumbnail
-      setTemplateData(prev => ({ ...prev, thumbnail_url: thumbnailUrl }));
-      
-      toast.success('Thumbnail uğurla yaradıldı!');
-      return thumbnailUrl;
-      
-    } catch (error) {
-      console.error('Thumbnail yaratma xətası:', error);
-      console.error('Error details:', error.response?.data || error.message);
-      
-      let errorMessage = 'Thumbnail yaradıla bilmədi';
-      if (error.response?.data?.detail) {
-        errorMessage += `: ${error.response.data.detail}`;
-      } else if (error.message) {
-        errorMessage += `: ${error.message}`;
-      }
-      
-      toast.error(errorMessage, { duration: 5000 });
-      return null;
-    } finally {
-      setIsGeneratingThumbnail(false);
-    }
-  };
 
   const handleSave = async () => {
     if (!templateData.name.trim()) {
