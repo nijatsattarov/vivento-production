@@ -178,12 +178,12 @@ const TemplateDetail = () => {
           <div className="space-y-4">
             <Card className="overflow-hidden">
               <CardContent className="p-0">
-                <div className="relative aspect-[2/3] bg-gray-50 p-6 flex items-center justify-center">
+                <div className="relative aspect-[3/4] bg-white overflow-hidden">
                   {template.thumbnail_url ? (
                     <img 
                       src={template.thumbnail_url}
                       alt={template.name}
-                      className="max-w-full max-h-full object-contain"
+                      className="w-full h-full object-cover"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
