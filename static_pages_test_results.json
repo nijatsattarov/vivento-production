@@ -1,0 +1,63 @@
+{
+  "total_tests": 11,
+  "passed_tests": 11,
+  "failed_tests": 0,
+  "success_rate": "100.0%",
+  "test_details": [
+    {
+      "test": "Setup Pages Endpoint (No Auth Required)",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Public Page - privacy",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Public Page - terms",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Public Page - contact",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Admin Login",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Get Admin Pages",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Update Privacy Page",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Verify Privacy Page Update",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Page Structure - privacy",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Page Structure - terms",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Page Structure - contact",
+      "success": true,
+      "details": ""
+    }
+  ]
+}
