@@ -196,13 +196,12 @@ const Templates = () => {
               >
                 <CardContent className="p-0">
                   {/* Template Preview */}
-                  <div className="relative bg-white rounded-t-lg overflow-hidden flex items-center justify-center p-4" style={{ minHeight: '400px' }}>
+                  <div className="relative bg-white rounded-t-lg overflow-hidden flex items-center justify-center p-4" style={{ height: '400px' }}>
                     {template.thumbnail_url ? (
                       <img 
                         src={template.thumbnail_url}
                         alt={template.name}
-                        className="max-w-full max-h-full object-contain"
-                        style={{ maxHeight: '380px' }}
+                        className="h-full w-auto object-contain"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
