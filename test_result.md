@@ -281,7 +281,7 @@ Response: {
 - **File Upload System**: Absolute URL generation working ✅
 - **RSVP System**: Guest responses properly stored ✅
 
-**Test Environment**: Production URL `https://payment-deploy-2.preview.emergentagent.com`
+**Test Environment**: Production URL `https://card-preview-repair.preview.emergentagent.com`
 **Test Coverage**: 47 comprehensive test cases covering all major functionality
 **Performance**: All API responses under 10 seconds timeout
 **Data Integrity**: All CRUD operations verified with proper validation
@@ -358,7 +358,7 @@ at ReactQuill.componentDidMount (bundle.js:79081:10)
 - ✅ All other frontend functionality working
 
 #### **6. Test Environment Details**
-- **Frontend URL**: `https://payment-deploy-2.preview.emergentagent.com`
+- **Frontend URL**: `https://card-preview-repair.preview.emergentagent.com`
 - **React Version**: 19.0.0 (from package.json)
 - **ReactQuill Version**: 2.0.0 (from package.json)
 - **Browser**: Chrome (automated testing)
@@ -436,7 +436,7 @@ at ReactQuill.componentDidMount (bundle.js:79081:10)
 - **Cloudinary Integration**: Image uploads and serving working correctly
 - **Database Operations**: MongoDB queries executing successfully
 
-**Test Environment**: Production URL `https://payment-deploy-2.preview.emergentagent.com`
+**Test Environment**: Production URL `https://card-preview-repair.preview.emergentagent.com`
 **Test Coverage**: 6 specific tests covering admin pages editor and thumbnail display backend functionality
 **Performance**: All API responses under 10 seconds
 **Data Integrity**: All CRUD operations verified with proper validation
