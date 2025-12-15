@@ -1193,19 +1193,14 @@ async def upload_background_image(file: UploadFile = File(...)):
     try:
         logger.info(f"Uploading background image to Cloudinary: {file.filename}, size: {len(contents)} bytes")
         
-        # Upload to Cloudinary
+        # Upload to Cloudinary WITHOUT transformation to preserve aspect ratio
+        # For invitation thumbnails (400x600 portrait), we keep original dimensions
         result = cloudinary.uploader.upload(
             contents,
             folder="backgrounds",
             public_id=f"bg_{uuid.uuid4()}",
-            transformation={
-                'width': 1920,
-                'height': 1080,
-                'crop': 'fill',
-                'gravity': 'center',
-                'quality': 'auto',
-                'fetch_format': 'auto'
-            },
+            quality='auto',
+            fetch_format='auto',
             tags=["background", "template"]
         )
         
