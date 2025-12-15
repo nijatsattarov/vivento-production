@@ -196,12 +196,12 @@ const Templates = () => {
               >
                 <CardContent className="p-0">
                   {/* Template Preview */}
-                  <div className="relative bg-white rounded-t-lg overflow-hidden p-2" style={{ height: '500px' }}>
+                  <div className="relative aspect-[2/3] bg-white rounded-t-lg overflow-hidden">
                     {template.thumbnail_url ? (
                       <img 
                         src={template.thumbnail_url}
                         alt={template.name}
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
