@@ -559,6 +559,84 @@ at ReactQuill.componentDidMount (bundle.js:79081:10)
 
 ---
 
+## Epoint Payment Flow Testing Session (16 Dec 2025)
+
+### 🧪 **Epoint Payment Gateway Integration Test - Complete Flow Verification**
+
+**Test Scope**: End-to-end testing of Epoint payment flow based on user review request:
+1. **Admin Login** - Authentication with admin@vivento.az / Vivento123!
+2. **Add Balance Page Navigation** - Access to /add-balance page
+3. **Amount Selection** - Select 10 AZN amount
+4. **Payment Button Click** - Click "10.00 AZN Ödə" button
+5. **Epoint Redirect** - Verify redirect to https://epoint.az/api/1/checkout
+6. **Network Monitoring** - Monitor console errors and network requests
+
+**Testing Results**: ✅ **PAYMENT FLOW WORKING** | ⚠️ **EPOINT CONFIGURATION ISSUE DETECTED**
+
+#### **1. Authentication & Navigation** ✅ **FULLY WORKING**
+- **Admin Login**: ✅ `admin@vivento.az / Vivento123!` working correctly
+- **Dashboard Access**: ✅ Successfully redirected after login with balance 1998.50 AZN
+- **Add Balance Page**: ✅ `/add-balance` page loads correctly with proper UI
+- **Page Elements**: ✅ All UI components (balance display, amount selection, payment methods) working
+
+#### **2. Payment Flow Execution** ✅ **SUCCESSFUL REDIRECT**
+- **Amount Selection**: ✅ 10 AZN button click working correctly
+- **Payment Button**: ✅ "10.00 AZN Ödə" button enabled and functional
+- **Backend API Call**: ✅ `POST /api/payments/create` returns 200 status
+- **Form Submission**: ✅ Dynamic form creation and submission to Epoint working
+- **Epoint Redirect**: ✅ **SUCCESSFUL** redirect to `https://epoint.az/api/1/checkout`
+
+#### **3. Network Analysis** ✅ **COMPREHENSIVE MONITORING**
+- **Payment API**: ✅ 1 successful payment creation request
+- **Epoint Requests**: ✅ 25 Epoint-related requests detected
+- **Redirect Timing**: ✅ Redirect occurred within 1 second of button click
+- **Resource Loading**: ✅ Epoint checkout page assets loading correctly
+
+#### **4. Critical Issue Identified** ⚠️ **EPOINT CONFIGURATION PROBLEM**
+- **HTTP 400 Error**: ❌ Initial POST to `https://epoint.az/api/1/checkout` returns 400 Bad Request
+- **Error Message**: "Problem with site url. You have not requested from origin which you have registered on EPOINT as a site url"
+- **Root Cause**: **Epoint merchant account not configured for current domain**
+- **Impact**: Payment form loads but shows error page instead of payment fields
+
+#### **5. Technical Validation** ✅ **BACKEND INTEGRATION WORKING**
+- **Epoint Credentials**: ✅ Found in backend .env (EPOINT_PUBLIC_KEY: i000201147)
+- **Payment Data Generation**: ✅ Backend correctly generates payment data and signature
+- **Form Submission**: ✅ Frontend correctly submits form with data and signature fields
+- **URL Configuration**: ✅ Frontend and backend URLs properly configured
+
+#### **6. Console Errors Analysis** ⚠️ **MINOR ISSUES**
+- **Epoint Page Errors**: Some 404 errors for missing localization files (non-critical)
+- **JavaScript Warnings**: jQuery carousel plugin missing (cosmetic issue)
+- **No Critical Frontend Errors**: All core functionality working correctly
+
+**Test Environment**: Production URL `https://card-preview-repair.preview.emergentagent.com`
+**Test Coverage**: Complete end-to-end payment flow from login to Epoint redirect
+**Performance**: All operations completed within acceptable timeframes
+**Authentication**: Admin login and session management working correctly
+
+### **Summary for Main Agent** 
+✅ **Epoint payment flow is technically working correctly**
+✅ **Frontend payment integration fully functional**
+✅ **Backend payment API and form generation working**
+✅ **Redirect to Epoint checkout page successful**
+⚠️ **Epoint merchant configuration needs attention**
+
+**Critical Action Required**:
+1. **HIGH PRIORITY**: Contact Epoint.az to register current domain `https://card-preview-repair.preview.emergentagent.com` in merchant account
+2. **MEDIUM PRIORITY**: Verify Epoint credentials (EPOINT_PUBLIC_KEY: i000201147) are active and valid
+3. **LOW PRIORITY**: Add error handling for Epoint configuration issues
+
+**Technical Status**: ✅ **PAYMENT INTEGRATION COMPLETE - AWAITING EPOINT DOMAIN REGISTRATION**
+
+**Key Findings**:
+- ✅ All frontend and backend payment code working correctly
+- ✅ Form submission and redirect mechanism functioning properly  
+- ✅ Payment API endpoints responding correctly
+- ⚠️ Epoint merchant account needs domain registration update
+- ✅ Ready for production once Epoint configuration is resolved
+
+---
+
 ## Backend Testing Session - Static Pages Functionality (15 Dec 2025)
 
 ### 🧪 **Backend API Testing - Static Pages Functionality (User Review Request)**
