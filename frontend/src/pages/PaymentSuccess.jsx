@@ -14,11 +14,12 @@ const PaymentSuccess = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [paymentDetails, setPaymentDetails] = useState(null);
+  const [newBalance, setNewBalance] = useState(null);
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
-    const checkPaymentStatus = async () => {
+    const confirmPayment = async () => {
       try {
         // Get payment ID from localStorage
         const paymentId = localStorage.getItem('pending_payment_id');
@@ -30,38 +31,55 @@ const PaymentSuccess = () => {
           return;
         }
 
-        // Check payment status
-        const response = await axios.get(
-          `${API_BASE_URL}/api/payments/${paymentId}/status`,
+        // Confirm payment and add balance
+        const response = await axios.post(
+          `${API_BASE_URL}/api/payments/confirm-success`,
+          { payment_id: paymentId },
           {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: { 
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
           }
         );
 
-        setPaymentDetails({
-          ...response.data,
-          amount: paymentAmount || response.data.amount
-        });
+        if (response.data.success) {
+          setPaymentDetails({
+            amount: response.data.amount || paymentAmount,
+            status: 'completed'
+          });
+          setNewBalance(response.data.new_balance);
+          
+          // Clear localStorage
+          localStorage.removeItem('pending_payment_id');
+          localStorage.removeItem('pending_payment_amount');
 
-        // Clear localStorage
-        localStorage.removeItem('pending_payment_id');
-        localStorage.removeItem('pending_payment_amount');
-
-        // Show success toast
-        toast.success('Ödəniş uğurla tamamlandı! Balansınız yeniləndi.');
+          // Show success toast
+          toast.success(`${response.data.amount} AZN balansınıza əlavə edildi!`);
+        }
       } catch (error) {
-        console.error('Payment status check error:', error);
-        toast.error('Ödəniş statusu yoxlanılarkən xəta baş verdi');
+        console.error('Payment confirmation error:', error);
+        
+        // Even if there's an error, try to show the amount from localStorage
+        const paymentAmount = localStorage.getItem('pending_payment_amount');
+        if (paymentAmount) {
+          setPaymentDetails({
+            amount: paymentAmount,
+            status: 'pending'
+          });
+        }
+        
+        toast.error('Ödəniş təsdiqlənərkən xəta. Balansınız bir neçə dəqiqə ərzində yenilənəcək.');
       } finally {
         setLoading(false);
       }
     };
 
-    checkPaymentStatus();
-  }, []);
+    confirmPayment();
+  }, [token, navigate, API_BASE_URL]);
 
   if (loading) {
-    return <LoadingSpinner text="Ödəniş yoxlanılır..." />;
+    return <LoadingSpinner text="Balans yenilənir..." />;
   }
 
   return (
@@ -92,33 +110,23 @@ const PaymentSuccess = () => {
                 <h3 className="font-semibold text-gray-900 mb-4">Ödəniş Detalları</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Məbləğ:</span>
-                    <span className="font-semibold text-gray-900">
-                      {parseFloat(paymentDetails.amount).toFixed(2)} AZN
+                    <span className="text-gray-600">Əlavə edilən məbləğ:</span>
+                    <span className="font-semibold text-green-600 text-lg">
+                      +{parseFloat(paymentDetails.amount).toFixed(2)} AZN
                     </span>
                   </div>
+                  {newBalance !== null && (
+                    <div className="flex justify-between border-t pt-3">
+                      <span className="text-gray-600">Yeni balans:</span>
+                      <span className="font-bold text-blue-600 text-xl">
+                        {parseFloat(newBalance).toFixed(2)} AZN
+                      </span>
+                    </div>
+                  )}
                   <div className="flex justify-between">
                     <span className="text-gray-600">Status:</span>
                     <span className="font-semibold text-green-600">
-                      {paymentDetails.status === 'completed' ? 'Tamamlandı' : paymentDetails.status}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Tarix:</span>
-                    <span className="font-semibold text-gray-900">
-                      {new Date(paymentDetails.created_at).toLocaleDateString('az-AZ', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Ödəniş ID:</span>
-                    <span className="font-mono text-sm text-gray-900">
-                      {paymentDetails.payment_id}
+                      ✓ Tamamlandı
                     </span>
                   </div>
                 </div>
