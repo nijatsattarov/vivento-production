@@ -126,6 +126,8 @@ const AddBalance = () => {
       form.method = 'POST';
       form.action = checkout_url;
       form.style.display = 'none';
+      form.setAttribute('enctype', 'application/x-www-form-urlencoded');
+      form.setAttribute('accept-charset', 'UTF-8');
 
       // Add data field
       const dataInput = document.createElement('input');
@@ -143,7 +145,11 @@ const AddBalance = () => {
 
       // Append form to body and submit
       document.body.appendChild(form);
-      form.submit();
+      
+      // Small delay to ensure form is in DOM
+      setTimeout(() => {
+        form.submit();
+      }, 100);
 
     } catch (error) {
       console.error('Payment creation error:', error);
