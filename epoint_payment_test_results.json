@@ -1,0 +1,46 @@
+{
+  "test_type": "Epoint Payment Integration",
+  "total_tests": 6,
+  "passed_tests": 6,
+  "failed_tests": 0,
+  "success_rate": "100.0%",
+  "test_details": [
+    {
+      "test": "Admin Login",
+      "success": true,
+      "details": "Successfully logged in as admin@vivento.az",
+      "timestamp": "2025-12-16T08:28:44.920388"
+    },
+    {
+      "test": "Balance Endpoint",
+      "success": true,
+      "details": "Balance: 1998.5000000000007 AZN",
+      "timestamp": "2025-12-16T08:28:44.965620"
+    },
+    {
+      "test": "Payment Creation",
+      "success": true,
+      "details": "Payment ID: cedc7247-9182-4798-bb37-5f44a6bdd53c",
+      "timestamp": "2025-12-16T08:28:45.017206"
+    },
+    {
+      "test": "Epoint Data Structure",
+      "success": true,
+      "details": "All required fields present and valid",
+      "timestamp": "2025-12-16T08:28:45.017431"
+    },
+    {
+      "test": "Payment Status Check",
+      "success": true,
+      "details": "Status: pending",
+      "timestamp": "2025-12-16T08:28:45.077713"
+    },
+    {
+      "test": "Transaction History",
+      "success": true,
+      "details": "Retrieved 10 transactions",
+      "timestamp": "2025-12-16T08:28:45.126111"
+    }
+  ],
+  "timestamp": "2025-12-16T08:28:45.126129"
+}
