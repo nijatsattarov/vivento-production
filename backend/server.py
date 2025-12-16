@@ -2343,21 +2343,60 @@ async def create_payment(
         raise HTTPException(status_code=500, detail="Ödəniş yaradılarkən xəta baş verdi")
 
 @api_router.post("/payments/callback")
-async def payment_callback(request: PaymentCallbackRequest):
+async def payment_callback(request: Request):
     """
     Handle payment callback from Epoint.az
+    Accepts both JSON and form-urlencoded data
     Verify signature and update balance
     """
     try:
+        # Get content type
+        content_type = request.headers.get("content-type", "")
+        logger.info(f"Payment callback received. Content-Type: {content_type}")
+        
+        # Parse request data based on content type
+        if "application/x-www-form-urlencoded" in content_type:
+            # Form data from Epoint
+            form_data = await request.form()
+            data = form_data.get("data", "")
+            signature = form_data.get("signature", "")
+            logger.info(f"Received form data - data length: {len(data)}, signature: {signature[:20] if signature else 'None'}...")
+        elif "application/json" in content_type:
+            # JSON data
+            json_data = await request.json()
+            data = json_data.get("data", "")
+            signature = json_data.get("signature", "")
+            logger.info(f"Received JSON data - data length: {len(data)}, signature: {signature[:20] if signature else 'None'}...")
+        else:
+            # Try to parse as form data first, then JSON
+            try:
+                form_data = await request.form()
+                data = form_data.get("data", "")
+                signature = form_data.get("signature", "")
+                logger.info(f"Parsed as form data - data length: {len(data)}")
+            except:
+                try:
+                    json_data = await request.json()
+                    data = json_data.get("data", "")
+                    signature = json_data.get("signature", "")
+                    logger.info(f"Parsed as JSON - data length: {len(data)}")
+                except:
+                    logger.error("Failed to parse callback request")
+                    raise HTTPException(status_code=400, detail="Invalid request format")
+        
+        if not data or not signature:
+            logger.error(f"Missing data or signature. Data: {bool(data)}, Signature: {bool(signature)}")
+            raise HTTPException(status_code=400, detail="Missing data or signature")
+        
         # Verify signature
-        if not epoint_service.verify_callback_signature(request.data, request.signature):
+        if not epoint_service.verify_callback_signature(data, signature):
             logger.warning("Invalid payment callback signature")
             raise HTTPException(status_code=401, detail="Invalid signature")
         
         # Decode callback data
-        callback_data = epoint_service.decode_callback_data(request.data)
+        callback_data = epoint_service.decode_callback_data(data)
         
-        logger.info(f"Payment callback received: {callback_data}")
+        logger.info(f"Payment callback decoded successfully: {callback_data}")
         
         # Extract payment information
         order_id = callback_data.get("order_id")
