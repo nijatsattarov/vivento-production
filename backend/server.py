@@ -2258,6 +2258,94 @@ async def test_payment_endpoint(data: dict = Body(...)):
     """Test endpoint"""
     return {"received": data}
 
+@api_router.post("/payments/confirm-success")
+async def confirm_payment_success(
+    payment_id: str = Body(..., embed=True),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Confirm successful payment and add balance.
+    Called when user is redirected to success page.
+    """
+    try:
+        logger.info(f"Confirming payment success: {payment_id} for user {current_user.id}")
+        
+        # Find the payment
+        payment = await db.payments.find_one({
+            "id": payment_id,
+            "user_id": current_user.id
+        }, {"_id": 0})
+        
+        if not payment:
+            logger.warning(f"Payment not found: {payment_id}")
+            raise HTTPException(status_code=404, detail="Ödəniş tapılmadı")
+        
+        # Check if already completed
+        if payment.get("status") == "completed":
+            logger.info(f"Payment already completed: {payment_id}")
+            # Return current balance
+            user = await db.users.find_one({"id": current_user.id}, {"_id": 0})
+            return {
+                "success": True,
+                "message": "Ödəniş artıq tamamlanıb",
+                "amount": payment["amount"],
+                "new_balance": user.get("balance", 0)
+            }
+        
+        # Mark payment as completed
+        await db.payments.update_one(
+            {"id": payment_id},
+            {
+                "$set": {
+                    "status": "completed",
+                    "completed_at": datetime.now(timezone.utc)
+                }
+            }
+        )
+        
+        # Update user balance
+        user = await db.users.find_one({"id": current_user.id}, {"_id": 0})
+        current_balance = user.get("balance", 0.0)
+        new_balance = current_balance + payment["amount"]
+        
+        await db.users.update_one(
+            {"id": current_user.id},
+            {
+                "$set": {
+                    "balance": new_balance,
+                    "updated_at": datetime.now(timezone.utc)
+                }
+            }
+        )
+        
+        # Create balance transaction record
+        transaction = BalanceTransaction(
+            id=str(uuid.uuid4()),
+            user_id=current_user.id,
+            amount=payment["amount"],
+            transaction_type="payment",
+            description=f"Balans artırma: {payment['amount']} AZN",
+            payment_method="epoint",
+            payment_id=payment_id,
+            status="completed"
+        )
+        await db.balance_transactions.insert_one(transaction.model_dump())
+        
+        logger.info(f"Payment confirmed! User {current_user.id} balance updated: {current_balance} -> {new_balance} AZN")
+        
+        return {
+            "success": True,
+            "message": "Ödəniş uğurla tamamlandı",
+            "amount": payment["amount"],
+            "new_balance": new_balance
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Confirm payment error: {e}")
+        raise HTTPException(status_code=500, detail="Ödəniş təsdiqlənərkən xəta baş verdi")
+
 @api_router.get("/balance")
 async def get_balance(current_user: User = Depends(get_current_user)):
     """Get user's current balance"""
