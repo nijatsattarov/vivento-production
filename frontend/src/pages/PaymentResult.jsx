@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import Navbar from '../components/Navbar';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { CheckCircle, XCircle, AlertCircle, Home, Wallet } from 'lucide-react';
+import { CheckCircle, XCircle, AlertCircle, Home, Wallet, RefreshCw } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
 
@@ -14,58 +14,123 @@ const PaymentResult = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
+  const [checking, setChecking] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(null);
   const [paymentDetails, setPaymentDetails] = useState(null);
+  const [checkAttempts, setCheckAttempts] = useState(0);
+  const [newBalance, setNewBalance] = useState(null);
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
-  useEffect(() => {
-    checkPaymentResult();
-  }, []);
+  const checkPaymentStatus = useCallback(async (isManualCheck = false) => {
+    if (isManualCheck) {
+      setChecking(true);
+    }
 
-  const checkPaymentResult = async () => {
     try {
-      // Get order_id from URL params (Epoint sends this)
-      const orderId = searchParams.get('order_id');
-      const status = searchParams.get('status');
+      // Get payment ID from localStorage
+      const paymentId = localStorage.getItem('pending_payment_id');
+      const pendingAmount = localStorage.getItem('pending_payment_amount');
       
-      if (!orderId) {
-        // Try to get from localStorage
-        const paymentId = localStorage.getItem('pending_payment_id');
+      // Get order_id and status from URL params (Epoint sends this on redirect)
+      const orderId = searchParams.get('order_id');
+      const urlStatus = searchParams.get('status');
+
+      // If we have URL status from Epoint redirect
+      if (urlStatus === 'success') {
+        setPaymentStatus('completed');
+        setPaymentDetails({
+          order_id: orderId,
+          amount: pendingAmount,
+          status: 'completed'
+        });
         
-        if (paymentId) {
-          const response = await axios.get(
-            `${API_BASE_URL}/api/payments/${paymentId}/status`,
-            {
-              headers: { Authorization: `Bearer ${token}` }
-            }
+        // Fetch updated balance
+        try {
+          const balanceResponse = await axios.get(
+            `${API_BASE_URL}/api/balance`,
+            { headers: { Authorization: `Bearer ${token}` } }
           );
+          setNewBalance(balanceResponse.data.balance);
+        } catch (e) {
+          console.error('Balance fetch error:', e);
+        }
+        
+        // Clear localStorage
+        localStorage.removeItem('pending_payment_id');
+        localStorage.removeItem('pending_payment_amount');
+        return;
+      }
+
+      if (urlStatus === 'failed' || urlStatus === 'error') {
+        setPaymentStatus('failed');
+        return;
+      }
+
+      // If no URL status, check via API
+      if (paymentId) {
+        const response = await axios.get(
+          `${API_BASE_URL}/api/payments/${paymentId}/status`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        
+        const status = response.data.status;
+        setPaymentDetails({
+          ...response.data,
+          amount: pendingAmount || response.data.amount
+        });
+
+        if (status === 'completed') {
+          setPaymentStatus('completed');
           
-          setPaymentDetails(response.data);
-          setPaymentStatus(response.data.status);
+          // Fetch updated balance
+          try {
+            const balanceResponse = await axios.get(
+              `${API_BASE_URL}/api/balance`,
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+            setNewBalance(balanceResponse.data.balance);
+          } catch (e) {
+            console.error('Balance fetch error:', e);
+          }
           
-          // Clear localStorage
+          localStorage.removeItem('pending_payment_id');
+          localStorage.removeItem('pending_payment_amount');
+        } else if (status === 'failed') {
+          setPaymentStatus('failed');
           localStorage.removeItem('pending_payment_id');
           localStorage.removeItem('pending_payment_amount');
         } else {
-          setPaymentStatus('unknown');
+          // Still pending - increment attempts
+          setCheckAttempts(prev => prev + 1);
+          setPaymentStatus('pending');
         }
       } else {
-        // Payment info from Epoint callback
-        setPaymentStatus(status === 'success' ? 'completed' : 'failed');
-        setPaymentDetails({
-          order_id: orderId,
-          status: status
-        });
+        setPaymentStatus('unknown');
       }
       
     } catch (error) {
-      console.error('Payment result check error:', error);
+      console.error('Payment status check error:', error);
       setPaymentStatus('error');
     } finally {
       setLoading(false);
+      setChecking(false);
     }
-  };
+  }, [token, searchParams, API_BASE_URL]);
+
+  useEffect(() => {
+    checkPaymentStatus();
+  }, []);
+
+  // Auto-retry for pending payments (up to 5 times, every 3 seconds)
+  useEffect(() => {
+    if (paymentStatus === 'pending' && checkAttempts < 5) {
+      const timer = setTimeout(() => {
+        checkPaymentStatus();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [paymentStatus, checkAttempts, checkPaymentStatus]);
 
   if (loading) {
     return <LoadingSpinner text="Ödəniş statusu yoxlanılır..." />;
@@ -107,6 +172,26 @@ const PaymentResult = () => {
           </>
         );
       
+      case 'pending':
+        return (
+          <>
+            <div className="mb-6 flex justify-center">
+              <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
+                <RefreshCw className="h-12 w-12 text-blue-600 animate-spin" />
+              </div>
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-3">
+              Ödəniş Emal Olunur...
+            </h1>
+            <p className="text-gray-600 mb-4">
+              Ödənişiniz emal olunur. Zəhmət olmasa gözləyin.
+            </p>
+            <p className="text-sm text-gray-500 mb-8">
+              Cəhd: {checkAttempts}/5
+            </p>
+          </>
+        );
+      
       default:
         return (
           <>
@@ -118,8 +203,11 @@ const PaymentResult = () => {
             <h1 className="text-3xl font-bold text-gray-900 mb-3">
               Ödəniş Statusu Məlum Deyil
             </h1>
-            <p className="text-gray-600 mb-8">
-              Ödəniş statusunu müəyyən edə bilmədik. Dashboard-dan balansınızı yoxlaya bilərsiniz.
+            <p className="text-gray-600 mb-4">
+              Ödəniş statusunu müəyyən edə bilmədik.
+            </p>
+            <p className="text-sm text-gray-500 mb-8">
+              Əgər kartınızdan pul çıxıbsa, bir neçə dəqiqə gözləyin və ya dəstək ilə əlaqə saxlayın.
             </p>
           </>
         );
@@ -136,7 +224,7 @@ const PaymentResult = () => {
             {renderContent()}
 
             {/* Payment Details */}
-            {paymentDetails && paymentStatus === 'completed' && (
+            {paymentDetails && (paymentStatus === 'completed' || paymentStatus === 'pending') && (
               <div className="bg-gray-50 rounded-lg p-6 mb-8 text-left">
                 <h3 className="font-semibold text-gray-900 mb-4">Ödəniş Detalları</h3>
                 <div className="space-y-3">
@@ -148,21 +236,29 @@ const PaymentResult = () => {
                       </span>
                     </div>
                   )}
+                  {newBalance !== null && paymentStatus === 'completed' && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Yeni Balans:</span>
+                      <span className="font-semibold text-green-600">
+                        {parseFloat(newBalance).toFixed(2)} AZN
+                      </span>
+                    </div>
+                  )}
                   <div className="flex justify-between">
                     <span className="text-gray-600">Status:</span>
-                    <span className="font-semibold text-green-600">Tamamlandı</span>
+                    <span className={`font-semibold ${
+                      paymentStatus === 'completed' ? 'text-green-600' : 
+                      paymentStatus === 'pending' ? 'text-blue-600' : 'text-orange-600'
+                    }`}>
+                      {paymentStatus === 'completed' ? 'Tamamlandı' : 
+                       paymentStatus === 'pending' ? 'Emal olunur...' : 'Gözlənilir'}
+                    </span>
                   </div>
-                  {paymentDetails.created_at && (
+                  {paymentDetails.order_id && (
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Tarix:</span>
-                      <span className="font-semibold text-gray-900">
-                        {new Date(paymentDetails.created_at).toLocaleDateString('az-AZ', {
-                          day: 'numeric',
-                          month: 'long',
-                          year: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
+                      <span className="text-gray-600">Sifariş ID:</span>
+                      <span className="font-mono text-sm text-gray-900">
+                        {paymentDetails.order_id}
                       </span>
                     </div>
                   )}
@@ -181,7 +277,7 @@ const PaymentResult = () => {
                 Dashboard-a qayıt
               </Button>
               
-              {paymentStatus === 'failed' && (
+              {(paymentStatus === 'failed' || paymentStatus === 'unknown' || paymentStatus === 'error') && (
                 <Button
                   onClick={() => navigate('/add-balance')}
                   size="lg"
@@ -192,7 +288,32 @@ const PaymentResult = () => {
                   Yenidən cəhd et
                 </Button>
               )}
+
+              {(paymentStatus === 'unknown' || paymentStatus === 'pending') && (
+                <Button
+                  onClick={() => checkPaymentStatus(true)}
+                  size="lg"
+                  variant="outline"
+                  className="border-2"
+                  disabled={checking}
+                >
+                  <RefreshCw className={`mr-2 h-4 w-4 ${checking ? 'animate-spin' : ''}`} />
+                  {checking ? 'Yoxlanılır...' : 'Statusu yoxla'}
+                </Button>
+              )}
             </div>
+
+            {/* Help text for unknown status */}
+            {(paymentStatus === 'unknown' || paymentStatus === 'error') && (
+              <div className="mt-8 p-4 bg-blue-50 rounded-lg text-left">
+                <h4 className="font-semibold text-blue-800 mb-2">Kömək</h4>
+                <ul className="text-sm text-blue-700 space-y-1">
+                  <li>• Kartınızdan pul çıxıbsa, balansınız bir neçə dəqiqə ərzində yenilənəcək</li>
+                  <li>• Dashboard-da balansınızı yoxlaya bilərsiniz</li>
+                  <li>• Problem davam edərsə, dəstək ilə əlaqə saxlayın</li>
+                </ul>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
