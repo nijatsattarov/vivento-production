@@ -517,30 +517,30 @@ const HomePage = () => {
                 )}
               </div>
               <p className="text-gray-400">
-                Rəqəmsal dəvətnamə platforması
+                {t('footer.description')}
               </p>
             </div>
             <div className="space-y-4">
-              <h4 className="font-semibold">Məhsul</h4>
+              <h4 className="font-semibold">{t('footer.product')}</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><Link to="/" className="hover:text-white transition-colors">Xüsusiyyətlər</Link></li>
-                <li><Link to="/" className="hover:text-white transition-colors">Şablonlar</Link></li>
-                <li><Link to="/" className="hover:text-white transition-colors">Qiymətlər</Link></li>
+                <li><Link to="/" className="hover:text-white transition-colors">{t('footer.features')}</Link></li>
+                <li><Link to="/" className="hover:text-white transition-colors">{t('common.templates')}</Link></li>
+                <li><Link to="/" className="hover:text-white transition-colors">{t('footer.pricing')}</Link></li>
               </ul>
             </div>
             <div className="space-y-4">
-              <h4 className="font-semibold">Şirkət</h4>
+              <h4 className="font-semibold">{t('footer.company')}</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><Link to="/about" className="hover:text-white transition-colors">Haqqımızda</Link></li>
-                <li><Link to="/contact" className="hover:text-white transition-colors">Əlaqə</Link></li>
-                <li><Link to="/support" className="hover:text-white transition-colors">Dəstək</Link></li>
+                <li><Link to="/about" className="hover:text-white transition-colors">{t('common.about')}</Link></li>
+                <li><Link to="/contact" className="hover:text-white transition-colors">{t('footer.contact')}</Link></li>
+                <li><Link to="/support" className="hover:text-white transition-colors">{t('footer.support')}</Link></li>
               </ul>
             </div>
             <div className="space-y-4">
-              <h4 className="font-semibold">Hüquqi</h4>
+              <h4 className="font-semibold">{t('footer.legal')}</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><Link to="/privacy" className="hover:text-white transition-colors">Məxfilik</Link></li>
-                <li><Link to="/terms" className="hover:text-white transition-colors">Şərtlər</Link></li>
+                <li><Link to="/privacy" className="hover:text-white transition-colors">{t('footer.privacy')}</Link></li>
+                <li><Link to="/terms" className="hover:text-white transition-colors">{t('footer.terms')}</Link></li>
               </ul>
             </div>
           </div>
