@@ -2020,13 +2020,23 @@ async def delete_slide(slide_id: str, current_user: User = Depends(get_current_u
 # ============================================
 
 @api_router.get("/pages/{slug}")
-async def get_page_by_slug(slug: str):
-    """Get a page by slug (public endpoint)"""
+async def get_page_by_slug(slug: str, lang: str = "az"):
+    """Get a page by slug (public endpoint) with language support"""
     try:
         page = await db.pages.find_one({"slug": slug, "published": True}, {"_id": 0})
         
         if not page:
             raise HTTPException(status_code=404, detail="Səhifə tapılmadı")
+        
+        # Return localized content based on language
+        if lang == "en" and page.get("title_en"):
+            page["title"] = page.get("title_en") or page["title"]
+            page["content"] = page.get("content_en") or page["content"]
+            page["meta_description"] = page.get("meta_description_en") or page.get("meta_description")
+        elif lang == "ru" and page.get("title_ru"):
+            page["title"] = page.get("title_ru") or page["title"]
+            page["content"] = page.get("content_ru") or page["content"]
+            page["meta_description"] = page.get("meta_description_ru") or page.get("meta_description")
         
         return page
     except HTTPException:
