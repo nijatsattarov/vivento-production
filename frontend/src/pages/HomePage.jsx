@@ -257,10 +257,10 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
-              Gözəl <span className="gradient-text">şablonlar</span>
+              {t('home.templates.title')}
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Hər növ tədbir üçün peşəkar dizayn edilmiş şablonlardan seçin
+              {t('home.templates.subtitle')}
             </p>
           </div>
 
