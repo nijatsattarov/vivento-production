@@ -343,10 +343,13 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
-              Sadə və <span className="gradient-text">şəffaf qiymətlər</span>
+              {t('home.pricing.title').split(i18n.language === 'az' ? 'şəffaf qiymətlər' : i18n.language === 'en' ? 'transparent pricing' : 'прозрачное ценообразование')[0]}
+              <span className="gradient-text">
+                {i18n.language === 'az' ? 'şəffaf qiymətlər' : i18n.language === 'en' ? 'transparent pricing' : 'прозрачное ценообразование'}
+              </span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Ehtiyaclarınıza uyğun planı seçin
+              {t('home.pricing.subtitle')}
             </p>
           </div>
 
@@ -356,7 +359,7 @@ const HomePage = () => {
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                     <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                      Ən populyar
+                      {t('home.pricing.mostPopular')}
                     </span>
                   </div>
                 )}
@@ -365,7 +368,7 @@ const HomePage = () => {
                     <h3 className="text-2xl font-bold text-gray-900">{plan.name}</h3>
                     <div className="space-y-1">
                       <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
-                      <span className="text-gray-600">₼ / ay</span>
+                      <span className="text-gray-600">₼ {t('home.pricing.perMonth')}</span>
                     </div>
                   </div>
                   
@@ -386,7 +389,7 @@ const HomePage = () => {
                     onClick={() => navigate('/register')}
                     data-testid={`pricing-plan-${plan.name.toLowerCase()}`}
                   >
-                    Seç
+                    {t('home.pricing.select')}
                   </Button>
                 </CardContent>
               </Card>
