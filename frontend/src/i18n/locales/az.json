@@ -1,0 +1,177 @@
+{
+  "common": {
+    "home": "Ana Səhifə",
+    "templates": "Şablonlar",
+    "pricing": "Qiymətlər",
+    "about": "Haqqımızda",
+    "contact": "Əlaqə",
+    "login": "Daxil ol",
+    "register": "Qeydiyyat",
+    "logout": "Çıxış",
+    "dashboard": "İdarə Paneli",
+    "profile": "Profil",
+    "settings": "Ayarlar",
+    "save": "Yadda saxla",
+    "cancel": "Ləğv et",
+    "delete": "Sil",
+    "edit": "Redaktə et",
+    "create": "Yarat",
+    "search": "Axtar",
+    "loading": "Yüklənir...",
+    "error": "Xəta",
+    "success": "Uğurlu",
+    "confirm": "Təsdiqlə",
+    "back": "Geri",
+    "next": "Növbəti",
+    "previous": "Əvvəlki",
+    "close": "Bağla",
+    "yes": "Bəli",
+    "no": "Xeyr",
+    "language": "Dil"
+  },
+  "navbar": {
+    "createEvent": "Tədbir yarat",
+    "myEvents": "Tədbirlərim",
+    "addBalance": "Balans əlavə et",
+    "adminPanel": "Admin Panel"
+  },
+  "home": {
+    "hero": {
+      "title": "Rəqəmsal Dəvətnamələr",
+      "subtitle": "Toy, nişan, doğum günü və digər tədbirlər üçün gözəl rəqəmsal dəvətnamələr yaradın",
+      "cta": "İndi Başla",
+      "viewTemplates": "Şablonlara Bax"
+    },
+    "features": {
+      "title": "Niyə Vivento?",
+      "feature1": {
+        "title": "Asan İstifadə",
+        "description": "Bir neçə dəqiqədə gözəl dəvətnamələr yaradın"
+      },
+      "feature2": {
+        "title": "Premium Şablonlar",
+        "description": "Professional dizaynerlər tərəfindən hazırlanmış şablonlar"
+      },
+      "feature3": {
+        "title": "Ani Paylaşım",
+        "description": "WhatsApp, SMS və digər platformalarda asanlıqla paylaşın"
+      }
+    },
+    "howItWorks": {
+      "title": "Necə İşləyir?",
+      "step1": {
+        "title": "Şablon Seçin",
+        "description": "Yüzlərlə şablon arasından seçim edin"
+      },
+      "step2": {
+        "title": "Fərdiləşdirin",
+        "description": "Mətn, tarix və şəkilləri əlavə edin"
+      },
+      "step3": {
+        "title": "Paylaşın",
+        "description": "Qonaqlarınıza göndərin"
+      }
+    }
+  },
+  "auth": {
+    "loginTitle": "Daxil Ol",
+    "registerTitle": "Qeydiyyat",
+    "email": "E-poçt",
+    "password": "Şifrə",
+    "confirmPassword": "Şifrəni təsdiqlə",
+    "fullName": "Ad Soyad",
+    "phone": "Telefon",
+    "forgotPassword": "Şifrəni unutdunuz?",
+    "noAccount": "Hesabınız yoxdur?",
+    "hasAccount": "Hesabınız var?",
+    "loginButton": "Daxil ol",
+    "registerButton": "Qeydiyyatdan keç",
+    "orContinueWith": "və ya davam edin",
+    "googleLogin": "Google ilə daxil ol"
+  },
+  "dashboard": {
+    "welcome": "Xoş gəlmisiniz",
+    "balance": "Balans",
+    "freeInvitations": "Pulsuz dəvətnamə",
+    "totalEvents": "Ümumi Tədbirlər",
+    "totalGuests": "Ümumi Qonaqlar",
+    "confirmedGuests": "Təsdiqlənmiş Qonaqlar",
+    "recentEvents": "Son Tədbirlər",
+    "noEvents": "Hələ heç bir tədbir yaratmamısınız",
+    "createFirstEvent": "İlk Tədbiri Yarat"
+  },
+  "events": {
+    "createEvent": "Tədbir Yarat",
+    "editEvent": "Tədbiri Redaktə Et",
+    "eventName": "Tədbir Adı",
+    "eventType": "Tədbir Növü",
+    "eventDate": "Tarix",
+    "eventTime": "Saat",
+    "eventLocation": "Məkan",
+    "eventDescription": "Təsvir",
+    "selectTemplate": "Şablon Seç",
+    "guestList": "Qonaq Siyahısı",
+    "addGuest": "Qonaq Əlavə Et",
+    "sendInvitations": "Dəvətnamələri Göndər",
+    "types": {
+      "wedding": "Toy",
+      "engagement": "Nişan",
+      "birthday": "Doğum Günü",
+      "babyShower": "Baby Shower",
+      "corporate": "Korporativ",
+      "other": "Digər"
+    }
+  },
+  "templates": {
+    "title": "Şablonlar",
+    "allTemplates": "Bütün Şablonlar",
+    "premium": "Premium",
+    "free": "Pulsuz",
+    "preview": "Önizləmə",
+    "useTemplate": "Şablonu İstifadə Et",
+    "category": "Kateqoriya",
+    "filterBy": "Filtr"
+  },
+  "payment": {
+    "addBalance": "Balans Əlavə Et",
+    "selectAmount": "Məbləğ Seçin",
+    "customAmount": "Xüsusi Məbləğ",
+    "payNow": "İndi Ödə",
+    "paymentSuccess": "Ödəniş Uğurla Tamamlandı!",
+    "paymentFailed": "Ödəniş Uğursuz Oldu",
+    "redirecting": "saniyə sonra Dashboard-a yönləndiriləcəksiniz...",
+    "addedAmount": "Əlavə edilən məbləğ",
+    "newBalance": "Yeni balans",
+    "status": "Status",
+    "successful": "Uğurlu",
+    "goToDashboard": "Dashboard-a keç",
+    "addMore": "Daha çox əlavə et"
+  },
+  "footer": {
+    "description": "Rəqəmsal dəvətnamə platforması",
+    "quickLinks": "Sürətli Keçidlər",
+    "legal": "Hüquqi",
+    "privacy": "Məxfilik Siyasəti",
+    "terms": "İstifadə Şərtləri",
+    "followUs": "Bizi İzləyin",
+    "allRightsReserved": "Bütün hüquqlar qorunur"
+  },
+  "admin": {
+    "dashboard": "Admin Panel",
+    "users": "İstifadəçilər",
+    "templates": "Şablonlar",
+    "events": "Tədbirlər",
+    "payments": "Ödənişlər",
+    "settings": "Ayarlar",
+    "pages": "Səhifələr",
+    "blog": "Bloq"
+  },
+  "errors": {
+    "required": "Bu sahə məcburidir",
+    "invalidEmail": "Düzgün e-poçt daxil edin",
+    "passwordMismatch": "Şifrələr uyğun gəlmir",
+    "minLength": "Minimum {{min}} simvol olmalıdır",
+    "somethingWentWrong": "Xəta baş verdi",
+    "tryAgain": "Yenidən cəhd edin"
+  }
+}
