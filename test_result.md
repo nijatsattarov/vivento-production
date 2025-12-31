@@ -78,13 +78,13 @@ if "title_ru" in body:
 - **Fallback Logic**: ✅ Proper fallback to default language when translation missing
 
 #### **7. Production Readiness** ✅ **READY FOR USE**
-- **Environment**: Production URL `https://card-preview-repair.preview.emergentagent.com`
+- **Environment**: Production URL `https://vivento-invites.preview.emergentagent.com`
 - **Authentication**: ✅ Admin authentication working correctly
 - **Database Operations**: ✅ MongoDB multi-language field storage working
 - **API Endpoints**: ✅ All multi-language endpoints functional
 - **Error Handling**: ✅ Proper HTTP status codes and error messages
 
-**Test Environment**: Production URL `https://card-preview-repair.preview.emergentagent.com`
+**Test Environment**: Production URL `https://vivento-invites.preview.emergentagent.com`
 **Test Coverage**: 14 comprehensive tests covering all multi-language functionality
 **Performance**: All API responses under 10 seconds
 **Data Integrity**: All CRUD operations verified with proper multi-language validation
@@ -389,7 +389,7 @@ Response: {
 - **File Upload System**: Absolute URL generation working ✅
 - **RSVP System**: Guest responses properly stored ✅
 
-**Test Environment**: Production URL `https://card-preview-repair.preview.emergentagent.com`
+**Test Environment**: Production URL `https://vivento-invites.preview.emergentagent.com`
 **Test Coverage**: 47 comprehensive test cases covering all major functionality
 **Performance**: All API responses under 10 seconds timeout
 **Data Integrity**: All CRUD operations verified with proper validation
@@ -466,7 +466,7 @@ at ReactQuill.componentDidMount (bundle.js:79081:10)
 - ✅ All other frontend functionality working
 
 #### **6. Test Environment Details**
-- **Frontend URL**: `https://card-preview-repair.preview.emergentagent.com`
+- **Frontend URL**: `https://vivento-invites.preview.emergentagent.com`
 - **React Version**: 19.0.0 (from package.json)
 - **ReactQuill Version**: 2.0.0 (from package.json)
 - **Browser**: Chrome (automated testing)
@@ -544,7 +544,7 @@ at ReactQuill.componentDidMount (bundle.js:79081:10)
 - **Cloudinary Integration**: Image uploads and serving working correctly
 - **Database Operations**: MongoDB queries executing successfully
 
-**Test Environment**: Production URL `https://card-preview-repair.preview.emergentagent.com`
+**Test Environment**: Production URL `https://vivento-invites.preview.emergentagent.com`
 **Test Coverage**: 6 specific tests covering admin pages editor and thumbnail display backend functionality
 **Performance**: All API responses under 10 seconds
 **Data Integrity**: All CRUD operations verified with proper validation
@@ -717,7 +717,7 @@ at ReactQuill.componentDidMount (bundle.js:79081:10)
 - **JavaScript Warnings**: jQuery carousel plugin missing (cosmetic issue)
 - **No Critical Frontend Errors**: All core functionality working correctly
 
-**Test Environment**: Production URL `https://card-preview-repair.preview.emergentagent.com`
+**Test Environment**: Production URL `https://vivento-invites.preview.emergentagent.com`
 **Test Coverage**: Complete end-to-end payment flow from login to Epoint redirect
 **Performance**: All operations completed within acceptable timeframes
 **Authentication**: Admin login and session management working correctly
@@ -730,7 +730,7 @@ at ReactQuill.componentDidMount (bundle.js:79081:10)
 ⚠️ **Epoint merchant configuration needs attention**
 
 **Critical Action Required**:
-1. **HIGH PRIORITY**: Contact Epoint.az to register current domain `https://card-preview-repair.preview.emergentagent.com` in merchant account
+1. **HIGH PRIORITY**: Contact Epoint.az to register current domain `https://vivento-invites.preview.emergentagent.com` in merchant account
 2. **MEDIUM PRIORITY**: Verify Epoint credentials (EPOINT_PUBLIC_KEY: i000201147) are active and valid
 3. **LOW PRIORITY**: Add error handling for Epoint configuration issues
 
@@ -817,7 +817,7 @@ All pages contain proper HTML structure:
 - **Public Access**: ✅ Public pages accessible without authentication
 - **Setup Endpoint**: ✅ Setup pages endpoint works without authentication (as designed)
 
-**Test Environment**: Production URL `https://card-preview-repair.preview.emergentagent.com`
+**Test Environment**: Production URL `https://vivento-invites.preview.emergentagent.com`
 **Test Coverage**: 11 comprehensive tests covering all static pages functionality
 **Performance**: All API responses under 10 seconds
 **Data Integrity**: All CRUD operations verified with proper validation

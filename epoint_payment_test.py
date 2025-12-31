@@ -13,7 +13,7 @@ import time
 
 class EpointPaymentTester:
     def __init__(self):
-        self.base_url = "https://card-preview-repair.preview.emergentagent.com"
+        self.base_url = "https://vivento-invites.preview.emergentagent.com"
         self.admin_email = "admin@vivento.az"
         self.admin_password = "Vivento123!"
         self.epoint_public_key = "i000201147"

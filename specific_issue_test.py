@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 import time
 
 class ViventoSpecificIssueTester:
-    def __init__(self, base_url="https://card-preview-repair.preview.emergentagent.com"):
+    def __init__(self, base_url="https://vivento-invites.preview.emergentagent.com"):
         self.base_url = base_url
         self.admin_token = None
         self.tests_run = 0

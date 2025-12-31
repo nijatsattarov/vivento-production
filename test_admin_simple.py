@@ -5,7 +5,7 @@ import time
 
 def test_admin_registration():
     """Test admin user registration with different passwords"""
-    base_url = "https://card-preview-repair.preview.emergentagent.com"
+    base_url = "https://vivento-invites.preview.emergentagent.com"
     
     # Try different admin credentials
     admin_credentials = [
