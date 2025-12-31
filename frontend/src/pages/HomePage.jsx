@@ -400,10 +400,10 @@ const HomePage = () => {
           <div className="max-w-7xl mx-auto">
             <div className="text-center space-y-4 mb-16">
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
-                Bloqdan <span className="gradient-text">son yazılar</span>
+                {t('home.blog.title')}
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Tövsiyələr, fikirlər və daha çox məlumat
+                {t('home.blog.subtitle')}
               </p>
             </div>
 
