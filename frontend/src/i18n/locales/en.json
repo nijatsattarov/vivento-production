@@ -27,13 +27,17 @@
     "close": "Close",
     "yes": "Yes",
     "no": "No",
-    "language": "Language"
+    "language": "Language",
+    "viewAll": "View All",
+    "learnMore": "Learn More",
+    "getStarted": "Get Started"
   },
   "navbar": {
     "createEvent": "Create Event",
     "myEvents": "My Events",
     "addBalance": "Add Balance",
-    "adminPanel": "Admin Panel"
+    "adminPanel": "Admin Panel",
+    "favorites": "Favorites"
   },
   "home": {
     "hero": {
@@ -45,16 +49,28 @@
     "features": {
       "title": "Why Vivento?",
       "feature1": {
-        "title": "Easy to Use",
-        "description": "Create beautiful invitations in minutes"
+        "title": "Canva-Style Editor",
+        "description": "Design your invitations easily with drag & drop"
       },
       "feature2": {
-        "title": "Premium Templates",
-        "description": "Templates designed by professional designers"
+        "title": "Guest Management",
+        "description": "Add guests and track RSVP responses"
       },
       "feature3": {
-        "title": "Instant Sharing",
-        "description": "Easily share on WhatsApp, SMS and other platforms"
+        "title": "Easy Sharing",
+        "description": "Share with one click via WhatsApp and email"
+      },
+      "feature4": {
+        "title": "Mobile Friendly",
+        "description": "Responsive design that looks perfect on all devices"
+      },
+      "feature5": {
+        "title": "QR Code",
+        "description": "Create unique QR code for each invitation"
+      },
+      "feature6": {
+        "title": "Real-time RSVP",
+        "description": "Get instant responses from your guests"
       }
     },
     "howItWorks": {
@@ -71,11 +87,26 @@
         "title": "Share",
         "description": "Send to your guests"
       }
+    },
+    "templates": {
+      "title": "Popular Templates",
+      "subtitle": "Templates designed by our professional designers"
+    },
+    "blog": {
+      "title": "Latest Blog Posts",
+      "subtitle": "Helpful articles about wedding planning and invitation preparation"
+    },
+    "cta": {
+      "title": "Ready to create your first invitation?",
+      "subtitle": "Register now and use free templates",
+      "button": "Start Free"
     }
   },
   "auth": {
-    "loginTitle": "Login",
+    "loginTitle": "Welcome",
+    "loginSubtitle": "Sign in to your account",
     "registerTitle": "Register",
+    "registerSubtitle": "Create a new account",
     "email": "Email",
     "password": "Password",
     "confirmPassword": "Confirm Password",
@@ -84,10 +115,11 @@
     "forgotPassword": "Forgot Password?",
     "noAccount": "Don't have an account?",
     "hasAccount": "Already have an account?",
-    "loginButton": "Login",
+    "loginButton": "Sign In",
     "registerButton": "Register",
-    "orContinueWith": "or continue with",
-    "googleLogin": "Login with Google"
+    "orContinueWith": "or",
+    "googleLogin": "Sign in with Google",
+    "facebookLogin": "Sign in with Facebook"
   },
   "dashboard": {
     "welcome": "Welcome",
@@ -98,7 +130,8 @@
     "confirmedGuests": "Confirmed Guests",
     "recentEvents": "Recent Events",
     "noEvents": "You haven't created any events yet",
-    "createFirstEvent": "Create First Event"
+    "createFirstEvent": "Create First Event",
+    "addBalance": "Add Balance"
   },
   "events": {
     "createEvent": "Create Event",
@@ -130,7 +163,15 @@
     "preview": "Preview",
     "useTemplate": "Use Template",
     "category": "Category",
-    "filterBy": "Filter"
+    "filterBy": "Filter",
+    "categories": {
+      "all": "All",
+      "wedding": "Wedding",
+      "engagement": "Engagement",
+      "birthday": "Birthday",
+      "babyShower": "Baby Shower",
+      "corporate": "Corporate"
+    }
   },
   "payment": {
     "addBalance": "Add Balance",
@@ -145,7 +186,9 @@
     "status": "Status",
     "successful": "Successful",
     "goToDashboard": "Go to Dashboard",
-    "addMore": "Add More"
+    "addMore": "Add More",
+    "perGuest": "per guest",
+    "freeGuests": "first 30 guests free"
   },
   "footer": {
     "description": "Digital invitation platform",
@@ -154,7 +197,9 @@
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
     "followUs": "Follow Us",
-    "allRightsReserved": "All rights reserved"
+    "allRightsReserved": "All rights reserved",
+    "contact": "Contact",
+    "support": "Support"
   },
   "admin": {
     "dashboard": "Admin Panel",
@@ -164,7 +209,8 @@
     "payments": "Payments",
     "settings": "Settings",
     "pages": "Pages",
-    "blog": "Blog"
+    "blog": "Blog",
+    "slider": "Slider"
   },
   "errors": {
     "required": "This field is required",
