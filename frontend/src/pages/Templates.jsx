@@ -28,55 +28,158 @@ const Templates = () => {
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
-  // Category structure for display
-  const categoryStructure = {
-    'toy': { name: 'Toy', icon: '💍', color: 'from-pink-400 to-red-400',
-      subcategories: {
-        'toy-devetname': { name: 'Dəvətnamələr' },
-        'nisan': { name: 'Nişan' }
+  // Localized category structure for display
+  const getLocalizedCategoryStructure = () => {
+    const structures = {
+      az: {
+        'toy': { name: 'Toy', icon: '💍', color: 'from-pink-400 to-red-400',
+          subcategories: {
+            'toy-devetname': { name: 'Dəvətnamələr' },
+            'nisan': { name: 'Nişan' }
+          }
+        },
+        'dogum-gunu': { name: 'Doğum günü', icon: '🎂', color: 'from-yellow-400 to-orange-400',
+          subcategories: {
+            'ad-gunu-devetname': { name: 'Ad günü dəvətnaməsi' },
+            'ad-gunu-sam': { name: 'Ad günü şam yeyməyi' },
+            'ad-gunu-kart': { name: 'Ad günü kartları' }
+          }
+        },
+        'usaq': { name: 'Uşaq', icon: '👶', color: 'from-blue-400 to-cyan-400',
+          subcategories: {
+            'korpe': { name: 'Körpə' },
+            'cinsiyyet-partisi': { name: 'Cinsiyyət partisi' },
+            'usaq-ad-gunu': { name: 'Ad günü' }
+          }
+        },
+        'biznes': { name: 'Biznes', icon: '🏢', color: 'from-slate-400 to-gray-500',
+          subcategories: {
+            'forum': { name: 'Forum' },
+            'korporativ': { name: 'Korporativ tədbir' },
+            'vip-event': { name: 'VIP Event' }
+          }
+        },
+        'tebrik': { name: 'Təbrik postları-flayer', icon: '🎊', color: 'from-purple-400 to-pink-400',
+          subcategories: {
+            'tebrik-umumi': { name: 'Ümumi təbriklər' }
+          }
+        },
+        'bayramlar': { name: 'Bayramlar', icon: '🎉', color: 'from-red-400 to-orange-400',
+          subcategories: {
+            'novruz': { name: 'Novruz bayramı' },
+            'qurban': { name: 'Qurban bayramı' },
+            'yeni-il': { name: 'Yeni il' }
+          }
+        },
+        'diger': { name: 'Digər', icon: '✨', color: 'from-indigo-400 to-purple-400',
+          subcategories: {
+            'ad-gunu': { name: 'Ad günü' },
+            'tesekkur': { name: 'Təşəkkür' },
+            'yubiley': { name: 'Yubiley' }
+          }
+        }
+      },
+      en: {
+        'toy': { name: 'Wedding', icon: '💍', color: 'from-pink-400 to-red-400',
+          subcategories: {
+            'toy-devetname': { name: 'Invitations' },
+            'nisan': { name: 'Engagement' }
+          }
+        },
+        'dogum-gunu': { name: 'Birthday', icon: '🎂', color: 'from-yellow-400 to-orange-400',
+          subcategories: {
+            'ad-gunu-devetname': { name: 'Birthday Invitations' },
+            'ad-gunu-sam': { name: 'Birthday Dinner' },
+            'ad-gunu-kart': { name: 'Birthday Cards' }
+          }
+        },
+        'usaq': { name: 'Kids', icon: '👶', color: 'from-blue-400 to-cyan-400',
+          subcategories: {
+            'korpe': { name: 'Baby' },
+            'cinsiyyet-partisi': { name: 'Gender Reveal' },
+            'usaq-ad-gunu': { name: 'Kids Birthday' }
+          }
+        },
+        'biznes': { name: 'Business', icon: '🏢', color: 'from-slate-400 to-gray-500',
+          subcategories: {
+            'forum': { name: 'Forum' },
+            'korporativ': { name: 'Corporate Event' },
+            'vip-event': { name: 'VIP Event' }
+          }
+        },
+        'tebrik': { name: 'Congratulations Posts', icon: '🎊', color: 'from-purple-400 to-pink-400',
+          subcategories: {
+            'tebrik-umumi': { name: 'General Congratulations' }
+          }
+        },
+        'bayramlar': { name: 'Holidays', icon: '🎉', color: 'from-red-400 to-orange-400',
+          subcategories: {
+            'novruz': { name: 'Nowruz Holiday' },
+            'qurban': { name: 'Eid al-Adha' },
+            'yeni-il': { name: 'New Year' }
+          }
+        },
+        'diger': { name: 'Other', icon: '✨', color: 'from-indigo-400 to-purple-400',
+          subcategories: {
+            'ad-gunu': { name: 'Name Day' },
+            'tesekkur': { name: 'Thank You' },
+            'yubiley': { name: 'Anniversary' }
+          }
+        }
+      },
+      ru: {
+        'toy': { name: 'Свадьба', icon: '💍', color: 'from-pink-400 to-red-400',
+          subcategories: {
+            'toy-devetname': { name: 'Приглашения' },
+            'nisan': { name: 'Помолвка' }
+          }
+        },
+        'dogum-gunu': { name: 'День Рождения', icon: '🎂', color: 'from-yellow-400 to-orange-400',
+          subcategories: {
+            'ad-gunu-devetname': { name: 'Приглашения на День Рождения' },
+            'ad-gunu-sam': { name: 'Ужин в День Рождения' },
+            'ad-gunu-kart': { name: 'Открытки на День Рождения' }
+          }
+        },
+        'usaq': { name: 'Детские', icon: '👶', color: 'from-blue-400 to-cyan-400',
+          subcategories: {
+            'korpe': { name: 'Малыш' },
+            'cinsiyyet-partisi': { name: 'Вечеринка-сюрприз' },
+            'usaq-ad-gunu': { name: 'Детский День Рождения' }
+          }
+        },
+        'biznes': { name: 'Бизнес', icon: '🏢', color: 'from-slate-400 to-gray-500',
+          subcategories: {
+            'forum': { name: 'Форум' },
+            'korporativ': { name: 'Корпоративное Мероприятие' },
+            'vip-event': { name: 'VIP Мероприятие' }
+          }
+        },
+        'tebrik': { name: 'Поздравительные Посты', icon: '🎊', color: 'from-purple-400 to-pink-400',
+          subcategories: {
+            'tebrik-umumi': { name: 'Общие Поздравления' }
+          }
+        },
+        'bayramlar': { name: 'Праздники', icon: '🎉', color: 'from-red-400 to-orange-400',
+          subcategories: {
+            'novruz': { name: 'Праздник Новруз' },
+            'qurban': { name: 'Курбан-байрам' },
+            'yeni-il': { name: 'Новый Год' }
+          }
+        },
+        'diger': { name: 'Другое', icon: '✨', color: 'from-indigo-400 to-purple-400',
+          subcategories: {
+            'ad-gunu': { name: 'Именины' },
+            'tesekkur': { name: 'Благодарность' },
+            'yubiley': { name: 'Юбилей' }
+          }
+        }
       }
-    },
-    'dogum-gunu': { name: 'Doğum günü', icon: '🎂', color: 'from-yellow-400 to-orange-400',
-      subcategories: {
-        'ad-gunu-devetname': { name: 'Ad günü dəvətnaməsi' },
-        'ad-gunu-sam': { name: 'Ad günü şam yeyməyi' },
-        'ad-gunu-kart': { name: 'Ad günü kartları' }
-      }
-    },
-    'usaq': { name: 'Uşaq', icon: '👶', color: 'from-blue-400 to-cyan-400',
-      subcategories: {
-        'korpe': { name: 'Körpə' },
-        'cinsiyyet-partisi': { name: 'Cinsiyyət partisi' },
-        'usaq-ad-gunu': { name: 'Ad günü' }
-      }
-    },
-    'biznes': { name: 'Biznes', icon: '🏢', color: 'from-slate-400 to-gray-500',
-      subcategories: {
-        'forum': { name: 'Forum' },
-        'korporativ': { name: 'Korporativ tədbir' },
-        'vip-event': { name: 'VIP Event' }
-      }
-    },
-    'tebrik': { name: 'Təbrik postları-flayer', icon: '🎊', color: 'from-purple-400 to-pink-400',
-      subcategories: {
-        'tebrik-umumi': { name: 'Ümumi təbriklər' }
-      }
-    },
-    'bayramlar': { name: 'Bayramlar', icon: '🎉', color: 'from-red-400 to-orange-400',
-      subcategories: {
-        'novruz': { name: 'Novruz bayramı' },
-        'qurban': { name: 'Qurban bayramı' },
-        'yeni-il': { name: 'Yeni il' }
-      }
-    },
-    'diger': { name: 'Digər', icon: '✨', color: 'from-indigo-400 to-purple-400',
-      subcategories: {
-        'ad-gunu': { name: 'Ad günü' },
-        'tesekkur': { name: 'Təşəkkür' },
-        'yubiley': { name: 'Yubiley' }
-      }
-    }
+    };
+    return structures[i18n.language] || structures.az;
   };
+
+  const categoryStructure = getLocalizedCategoryStructure();
 
   useEffect(() => {
     fetchTemplates();
