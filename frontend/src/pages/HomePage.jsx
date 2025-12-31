@@ -209,32 +209,34 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
-              <span className="gradient-text">Kateqoriyalar</span>
+              <span className="gradient-text">{t('categories.title')}</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Tədbirinizin növünə uyğun dəvətnamələr seçin
+              {t('categories.subtitle')}
             </p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
             {[
-              { name: 'Toy', slug: 'toy', icon: '💍', color: 'from-pink-400 to-red-400', count: '15+' },
-              { name: 'Nişan', slug: 'nişan', icon: '💖', color: 'from-purple-400 to-pink-400', count: '8+' },
-              { name: 'Ad günü', slug: 'doğum_günü', icon: '🎂', color: 'from-yellow-400 to-orange-400', count: '12+' },
-              { name: 'Korporativ', slug: 'korporativ', icon: '🏢', color: 'from-blue-400 to-indigo-400', count: '6+' }
+              { id: 'toy', slug: 'toy', icon: '💍', color: 'from-pink-400 to-red-400', count: '15+' },
+              { id: 'toy', slug: 'nişan', icon: '💖', color: 'from-purple-400 to-pink-400', count: '8+', subKey: 'nisan' },
+              { id: 'dogum-gunu', slug: 'doğum_günü', icon: '🎂', color: 'from-yellow-400 to-orange-400', count: '12+' },
+              { id: 'biznes', slug: 'korporativ', icon: '🏢', color: 'from-blue-400 to-indigo-400', count: '6+' }
             ].map((category, index) => (
               <Card 
                 key={index} 
                 className="card-hover cursor-pointer group" 
-                data-testid={`category-${category.name.toLowerCase()}`}
+                data-testid={`category-${category.slug.toLowerCase()}`}
                 onClick={() => navigate(`/templates/${category.slug}`)}
               >
                 <CardContent className="p-8 text-center">
                   <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-r ${category.color} flex items-center justify-center text-2xl group-hover:scale-110 transition-transform`}>
                     {category.icon}
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1">{category.name}</h3>
-                  <p className="text-sm text-gray-600">{category.count} şablon</p>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                    {category.subKey ? t(`categories.${category.id}.subcategories.${category.subKey}`) : t(`categories.${category.id}.name`)}
+                  </h3>
+                  <p className="text-sm text-gray-600">{category.count} {t('categories.templatesCount')}</p>
                 </CardContent>
               </Card>
             ))}
@@ -246,7 +248,7 @@ const HomePage = () => {
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
               data-testid="explore-templates-button"
             >
-              Bütün şablonları kəşf edin
+              {t('categories.exploreAll')}
             </Button>
           </div>
         </div>
