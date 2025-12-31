@@ -200,10 +200,10 @@ const Dashboard = () => {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
             <div>
               <h1 className="text-3xl font-bold text-gray-900" data-testid="dashboard-welcome">
-                Xoş gəlmisiniz, {user?.name}! 👋
+                {t('dashboard.welcome')}, {user?.name}! 👋
               </h1>
               <p className="text-gray-600 mt-2">
-                Tədbirlərinizi idarə edin və qonaqlarınızla əlaqə saxlayın
+                {t('dashboard.recentEvents')}
               </p>
             </div>
             <Button 
@@ -212,7 +212,7 @@ const Dashboard = () => {
               data-testid="create-event-button"
             >
               <Plus className="mr-2 h-4 w-4" />
-              Yeni tədbir yarat
+              {t('events.createEvent')}
             </Button>
           </div>
         </div>
@@ -222,12 +222,12 @@ const Dashboard = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-green-100 text-sm font-medium">Balans</p>
+                <p className="text-green-100 text-sm font-medium">{t('dashboard.balance')}</p>
                 <p className="text-3xl font-bold text-white mt-1">
                   {balance.balance.toFixed(2)} {balance.currency}
                 </p>
                 <p className="text-green-100 text-sm mt-2">
-                  Pulsuz dəvətnamə: {balance.free_invitations_remaining}/30
+                  {t('dashboard.freeInvitations')}: {balance.free_invitations_remaining}/30
                 </p>
               </div>
               <div className="text-right">
@@ -237,7 +237,7 @@ const Dashboard = () => {
                   className="bg-white/20 text-white hover:bg-white/30 border-white/30"
                 >
                   <Plus className="mr-2 h-4 w-4" />
-                  Balans əlavə et
+                  {t('dashboard.addBalance')}
                 </Button>
               </div>
             </div>
@@ -250,7 +250,7 @@ const Dashboard = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 font-medium">Ümumi tədbir</p>
+                  <p className="text-sm text-gray-600 font-medium">{t('dashboard.totalEvents')}</p>
                   <p className="text-3xl font-bold text-gray-900 mt-1">{stats.totalEvents}</p>
                 </div>
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -264,7 +264,7 @@ const Dashboard = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 font-medium">Ümumi qonaq</p>
+                  <p className="text-sm text-gray-600 font-medium">{t('dashboard.totalGuests')}</p>
                   <p className="text-3xl font-bold text-gray-900 mt-1">{stats.totalGuests}</p>
                 </div>
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
