@@ -414,14 +414,14 @@ const Navbar = () => {
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => navigate('/admin/pages')} data-testid="menu-admin-pages">
                         <User className="mr-2 h-4 w-4" />
-                        Səhifələr
+                        {t('admin.pages')}
                       </DropdownMenuItem>
                     </>
                   )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout} data-testid="menu-logout">
                     <LogOut className="mr-2 h-4 w-4" />
-                    Çıxış
+                    {t('common.logout')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -446,7 +446,7 @@ const Navbar = () => {
       <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
-            <DialogTitle>Şablon Axtar</DialogTitle>
+            <DialogTitle>{t('common.search')}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             {/* Search Input */}
