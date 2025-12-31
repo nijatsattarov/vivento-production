@@ -177,7 +177,7 @@ const AddBalance = () => {
             className="mb-4"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Dashboard-a qayıt
+            {t('payment.goToDashboard')}
           </Button>
           
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
