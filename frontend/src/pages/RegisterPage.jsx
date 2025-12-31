@@ -78,8 +78,7 @@ const RegisterPage = () => {
     });
     
     if (result.success) {
-      toast.success('Qeydiyyat tamamlandı! Xoş gəlmisiniz!');
-      // Redirect to dashboard after successful registration
+      toast.success(t('common.success'));
       setTimeout(() => {
         navigate('/dashboard');
       }, 1000);
@@ -100,7 +99,7 @@ const RegisterPage = () => {
           data-testid="back-home-link"
         >
           <ArrowLeft className="h-4 w-4" />
-          <span>Ana səhifəyə qayıt</span>
+          <span>{t('common.home')}</span>
         </Link>
 
         {/* Register Card */}
@@ -110,8 +109,8 @@ const RegisterPage = () => {
               <span className="text-white font-bold text-2xl">V</span>
             </div>
             <div className="space-y-2">
-              <CardTitle className="text-2xl font-bold text-gray-900">Hesab yaradın</CardTitle>
-              <p className="text-gray-600">Vivento-ya qoşulun və gözəl dəvətnamələr yaradın</p>
+              <CardTitle className="text-2xl font-bold text-gray-900">{t('auth.registerTitle')}</CardTitle>
+              <p className="text-gray-600">{t('auth.registerSubtitle')}</p>
             </div>
           </CardHeader>
           
@@ -125,7 +124,7 @@ const RegisterPage = () => {
             <div className="relative">
               <Separator />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="bg-white px-3 text-sm text-gray-500">və ya</span>
+                <span className="bg-white px-3 text-sm text-gray-500">{t('auth.orContinueWith')}</span>
               </div>
             </div>
 
@@ -133,7 +132,7 @@ const RegisterPage = () => {
             <form onSubmit={handleSubmit} className="space-y-5" data-testid="register-form">
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-sm font-medium text-gray-700">
-                  Tam adınız
+                  {t('auth.fullName')}
                 </Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
