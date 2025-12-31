@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -24,6 +25,7 @@ import { toast } from 'sonner';
 const AddBalance = () => {
   const { user, token } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [balance, setBalance] = useState(0);
   const [amount, setAmount] = useState('');
   const [selectedMethod, setSelectedMethod] = useState('card');
@@ -37,7 +39,7 @@ const AddBalance = () => {
   const paymentMethods = [
     {
       id: 'card',
-      name: 'Bank Kartı',
+      name: t('payment.payNow'),
       icon: <CreditCard className="h-5 w-5" />,
       description: 'Visa, MasterCard'
     },
