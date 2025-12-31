@@ -181,10 +181,10 @@ const AddBalance = () => {
           </Button>
           
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Balans Əlavə Et
+            {t('payment.addBalance')}
           </h1>
           <p className="text-gray-600">
-            Hesabınıza balans əlavə edərək dəvətnamələr göndərin
+            {t('payment.freeGuests')}
           </p>
         </div>
 
@@ -196,7 +196,7 @@ const AddBalance = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Wallet className="mr-2 h-5 w-5 text-green-500" />
-                  Cari Balans
+                  {t('dashboard.balance')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -209,13 +209,13 @@ const AddBalance = () => {
             {/* Amount Selection */}
             <Card>
               <CardHeader>
-                <CardTitle>Məbləğ Seçin</CardTitle>
+                <CardTitle>{t('payment.selectAmount')}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* Quick Amounts */}
                 <div>
                   <Label className="text-sm font-medium text-gray-700">
-                    Hazır məbləğlər
+                    {t('payment.selectAmount')}
                   </Label>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
                     {quickAmounts.map((quickAmount) => (
