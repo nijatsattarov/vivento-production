@@ -241,9 +241,9 @@ const Templates = () => {
         <Navbar />
         <div className="max-w-7xl mx-auto px-4 py-12">
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900">Kateqoriya tapılmadı</h1>
+            <h1 className="text-2xl font-bold text-gray-900">{t('categoryNotFound', 'Kateqoriya tapılmadı')}</h1>
             <Button onClick={() => navigate('/')} className="mt-4">
-              Ana səhifəyə qayıt
+              {t('backToHome', 'Ana səhifəyə qayıt')}
             </Button>
           </div>
         </div>
