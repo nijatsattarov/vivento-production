@@ -2260,30 +2260,55 @@ async def test_payment_endpoint(data: dict = Body(...)):
 
 @api_router.post("/payments/confirm-success")
 async def confirm_payment_success(
-    payment_id: str = Body(..., embed=True),
+    request: Request,
     current_user: User = Depends(get_current_user)
 ):
     """
     Confirm successful payment and add balance.
     Called when user is redirected to success page.
+    Accepts payment_id or order_id
     """
     try:
-        logger.info(f"Confirming payment success: {payment_id} for user {current_user.id}")
+        body = await request.json()
+        payment_id = body.get("payment_id")
+        order_id = body.get("order_id")
         
-        # Find the payment
-        payment = await db.payments.find_one({
-            "id": payment_id,
-            "user_id": current_user.id
-        }, {"_id": 0})
+        logger.info(f"Confirming payment - payment_id: {payment_id}, order_id: {order_id}, user: {current_user.id}")
+        
+        # Find the payment by payment_id or order_id
+        payment = None
+        if payment_id:
+            payment = await db.payments.find_one({
+                "id": payment_id,
+                "user_id": current_user.id
+            }, {"_id": 0})
+        
+        if not payment and order_id:
+            payment = await db.payments.find_one({
+                "order_id": order_id,
+                "user_id": current_user.id
+            }, {"_id": 0})
+        
+        # If still no payment, try to find the most recent pending payment for this user
+        if not payment:
+            payment = await db.payments.find_one(
+                {
+                    "user_id": current_user.id,
+                    "status": "pending"
+                },
+                {"_id": 0},
+                sort=[("created_at", -1)]
+            )
+            if payment:
+                logger.info(f"Found most recent pending payment: {payment.get('id')}")
         
         if not payment:
-            logger.warning(f"Payment not found: {payment_id}")
+            logger.warning(f"Payment not found for user {current_user.id}")
             raise HTTPException(status_code=404, detail="Ödəniş tapılmadı")
         
         # Check if already completed
         if payment.get("status") == "completed":
-            logger.info(f"Payment already completed: {payment_id}")
-            # Return current balance
+            logger.info(f"Payment already completed: {payment.get('id')}")
             user = await db.users.find_one({"id": current_user.id}, {"_id": 0})
             return {
                 "success": True,
@@ -2294,7 +2319,7 @@ async def confirm_payment_success(
         
         # Mark payment as completed
         await db.payments.update_one(
-            {"id": payment_id},
+            {"id": payment["id"]},
             {
                 "$set": {
                     "status": "completed",
@@ -2326,7 +2351,7 @@ async def confirm_payment_success(
             transaction_type="payment",
             description=f"Balans artırma: {payment['amount']} AZN",
             payment_method="epoint",
-            payment_id=payment_id,
+            payment_id=payment["id"],
             status="completed"
         )
         await db.balance_transactions.insert_one(transaction.model_dump())
