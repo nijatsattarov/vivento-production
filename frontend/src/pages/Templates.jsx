@@ -275,7 +275,7 @@ const Templates = () => {
               {categoryDisplayInfo.name}
             </h1>
             <p className="text-xl text-gray-600">
-              {templates.length} şablon tapıldı
+              {templates.length} {t('templatesFound', 'şablon tapıldı')}
             </p>
           </div>
         </div>
