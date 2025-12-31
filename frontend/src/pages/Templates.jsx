@@ -21,6 +21,7 @@ import { toast } from 'sonner';
 const Templates = () => {
   const { parent, sub } = useParams();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const [templates, setTemplates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [categoryDisplayInfo, setCategoryDisplayInfo] = useState(null);
