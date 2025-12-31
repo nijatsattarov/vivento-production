@@ -88,15 +88,19 @@ const HeroSlider = () => {
         <div className="relative h-full max-w-7xl mx-auto px-4 flex items-center">
           <div className="max-w-3xl space-y-8 animate-fade-in">
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 leading-tight">
-              Rəqəmsal dəvətnamə yaratmaq heç vaxt bu qədər{' '}
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
-                asan olmayıb
-              </span>
+              {t('home.hero.defaultTitle').split('asan olmayıb').map((part, i) => 
+                i === 0 ? part : (
+                  <span key={i}>
+                    <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+                      {i18n.language === 'az' ? 'asan olmayıb' : i18n.language === 'en' ? 'this easy' : 'так просто'}
+                    </span>
+                    {part}
+                  </span>
+                )
+              )}
             </h1>
             <p className="text-xl sm:text-2xl text-gray-700 leading-relaxed">
-              Vivento ilə toy, nişan, doğum günü və digər tədbirləriniz üçün gözəl
-              dəvətnamələr yaradın. Qonaqlarınızı dəvət edin və RSVP cavablarını real vaxtda
-              izləyin.
+              {t('home.hero.defaultSubtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
@@ -104,7 +108,7 @@ const HeroSlider = () => {
                 size="lg"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
               >
-                Pulsuz başla
+                {t('home.hero.startFree')}
               </Button>
               <Button
                 onClick={() => navigate('/login')}
@@ -112,7 +116,7 @@ const HeroSlider = () => {
                 variant="outline"
                 className="border-2 border-gray-300 hover:border-blue-600 px-8 py-4 text-lg rounded-xl"
               >
-                Giriş et
+                {t('home.hero.signIn')}
               </Button>
             </div>
           </div>
