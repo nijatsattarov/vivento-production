@@ -464,11 +464,10 @@ const HomePage = () => {
       <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-purple-600">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <h2 className="text-3xl sm:text-4xl font-bold text-white">
-            Növbəti tədbirinizi bugün planlaşdırın
+            {t('home.cta.title')}
           </h2>
           <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-            Milyonlarla insan Vivento ilə özlərinin ən vacib anlarını qeyd edir. 
-            Siz də bizə qoşulun və mükəmməl dəvətnamələr yaradın.
+            {t('home.cta.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
@@ -477,7 +476,7 @@ const HomePage = () => {
               className="bg-white text-blue-600 hover:bg-gray-50 px-8 py-4 text-lg btn-hover"
               data-testid="cta-register-button"
             >
-              İndi başla <ArrowRight className="ml-2 h-5 w-5" />
+              {t('home.cta.button')} <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </div>
         </div>
