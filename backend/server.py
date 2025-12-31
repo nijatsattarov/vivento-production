@@ -2079,6 +2079,7 @@ async def update_page_admin(
         # Prepare update data
         update_data = {}
         
+        # Basic fields
         if "title" in body:
             update_data["title"] = body["title"]
         if "content" in body:
@@ -2087,6 +2088,20 @@ async def update_page_admin(
             update_data["meta_description"] = body["meta_description"]
         if "published" in body:
             update_data["published"] = body["published"]
+        
+        # Multi-language fields
+        if "title_en" in body:
+            update_data["title_en"] = body["title_en"]
+        if "title_ru" in body:
+            update_data["title_ru"] = body["title_ru"]
+        if "content_en" in body:
+            update_data["content_en"] = body["content_en"]
+        if "content_ru" in body:
+            update_data["content_ru"] = body["content_ru"]
+        if "meta_description_en" in body:
+            update_data["meta_description_en"] = body["meta_description_en"]
+        if "meta_description_ru" in body:
+            update_data["meta_description_ru"] = body["meta_description_ru"]
         
         # Always update timestamp
         update_data["updated_at"] = datetime.now(timezone.utc)
