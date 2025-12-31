@@ -326,7 +326,7 @@ const Templates = () => {
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <Button variant="secondary" size="sm">
                         <Eye className="mr-2 h-4 w-4" />
-                        Bax və Seç
+                        {t('viewAndSelect', 'Bax və Seç')}
                       </Button>
                     </div>
                   </div>
