@@ -188,10 +188,19 @@ class CMSPage(BaseModel):
 
 class BlogPost(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    title: str
+    # Multi-language title
+    title: str  # Default (AZ)
+    title_en: Optional[str] = None
+    title_ru: Optional[str] = None
     slug: str
-    excerpt: str
-    content: str
+    # Multi-language excerpt
+    excerpt: str  # Default (AZ)
+    excerpt_en: Optional[str] = None
+    excerpt_ru: Optional[str] = None
+    # Multi-language content
+    content: str  # Default (AZ)
+    content_en: Optional[str] = None
+    content_ru: Optional[str] = None
     author: str
     author_id: str
     thumbnail: Optional[str] = None
@@ -206,9 +215,15 @@ class BlogPost(BaseModel):
 # Blog Request Models
 class CreateBlogRequest(BaseModel):
     title: str
+    title_en: Optional[str] = None
+    title_ru: Optional[str] = None
     slug: str
     excerpt: str
+    excerpt_en: Optional[str] = None
+    excerpt_ru: Optional[str] = None
     content: str
+    content_en: Optional[str] = None
+    content_ru: Optional[str] = None
     thumbnail: Optional[str] = None
     category: Optional[str] = None
     tags: List[str] = []
@@ -216,9 +231,15 @@ class CreateBlogRequest(BaseModel):
 
 class UpdateBlogRequest(BaseModel):
     title: Optional[str] = None
+    title_en: Optional[str] = None
+    title_ru: Optional[str] = None
     slug: Optional[str] = None
     excerpt: Optional[str] = None
+    excerpt_en: Optional[str] = None
+    excerpt_ru: Optional[str] = None
     content: Optional[str] = None
+    content_en: Optional[str] = None
+    content_ru: Optional[str] = None
     thumbnail: Optional[str] = None
     category: Optional[str] = None
     tags: Optional[List[str]] = None
@@ -229,17 +250,31 @@ class UpdateBlogRequest(BaseModel):
 class Page(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     slug: str  # privacy, terms, contact
-    title: str
-    content: str
+    # Multi-language title
+    title: str  # Default (AZ)
+    title_en: Optional[str] = None
+    title_ru: Optional[str] = None
+    # Multi-language content
+    content: str  # Default (AZ)
+    content_en: Optional[str] = None
+    content_ru: Optional[str] = None
     meta_description: Optional[str] = None
+    meta_description_en: Optional[str] = None
+    meta_description_ru: Optional[str] = None
     published: bool = True
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class UpdatePageRequest(BaseModel):
     title: Optional[str] = None
+    title_en: Optional[str] = None
+    title_ru: Optional[str] = None
     content: Optional[str] = None
+    content_en: Optional[str] = None
+    content_ru: Optional[str] = None
     meta_description: Optional[str] = None
+    meta_description_en: Optional[str] = None
+    meta_description_ru: Optional[str] = None
     published: Optional[bool] = None
 
 # Font Model
