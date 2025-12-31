@@ -27,13 +27,17 @@
     "close": "Bağla",
     "yes": "Bəli",
     "no": "Xeyr",
-    "language": "Dil"
+    "language": "Dil",
+    "viewAll": "Hamısına bax",
+    "learnMore": "Ətraflı",
+    "getStarted": "Başla"
   },
   "navbar": {
     "createEvent": "Tədbir yarat",
     "myEvents": "Tədbirlərim",
     "addBalance": "Balans əlavə et",
-    "adminPanel": "Admin Panel"
+    "adminPanel": "Admin Panel",
+    "favorites": "Seçilmişlər"
   },
   "home": {
     "hero": {
@@ -45,16 +49,28 @@
     "features": {
       "title": "Niyə Vivento?",
       "feature1": {
-        "title": "Asan İstifadə",
-        "description": "Bir neçə dəqiqədə gözəl dəvətnamələr yaradın"
+        "title": "Canva Tipli Editor",
+        "description": "Drag & drop ilə dəvətnamələrinizi asanlıqla dizayn edin"
       },
       "feature2": {
-        "title": "Premium Şablonlar",
-        "description": "Professional dizaynerlər tərəfindən hazırlanmış şablonlar"
+        "title": "Qonaq İdarəetməsi",
+        "description": "Qonaqlarınızı əlavə edin, RSVP cavablarını izləyin"
       },
       "feature3": {
-        "title": "Ani Paylaşım",
-        "description": "WhatsApp, SMS və digər platformalarda asanlıqla paylaşın"
+        "title": "Asan Paylaşım",
+        "description": "WhatsApp və email ilə bir kliklə paylaşın"
+      },
+      "feature4": {
+        "title": "Mobil Uyğun",
+        "description": "Bütün cihazlarda mükəmməl görünən responsive dizayn"
+      },
+      "feature5": {
+        "title": "QR Kod",
+        "description": "Hər dəvətnamə üçün unikal QR kod yaradın"
+      },
+      "feature6": {
+        "title": "Real-vaxt RSVP",
+        "description": "Qonaqlarınızdan dərhal cavab alın"
       }
     },
     "howItWorks": {
@@ -71,11 +87,26 @@
         "title": "Paylaşın",
         "description": "Qonaqlarınıza göndərin"
       }
+    },
+    "templates": {
+      "title": "Populyar Şablonlar",
+      "subtitle": "Peşəkar dizaynerlərimiz tərəfindən hazırlanmış şablonlar"
+    },
+    "blog": {
+      "title": "Son Bloq Yazıları",
+      "subtitle": "Toy planlaması və dəvətnamə hazırlığı haqqında faydalı məqalələr"
+    },
+    "cta": {
+      "title": "İlk dəvətnamənizi yaratmağa hazırsınız?",
+      "subtitle": "İndi qeydiyyatdan keçin və pulsuz şablonlardan istifadə edin",
+      "button": "Pulsuz Başla"
     }
   },
   "auth": {
-    "loginTitle": "Daxil Ol",
+    "loginTitle": "Xoş gəlmisiniz",
+    "loginSubtitle": "Hesabınıza giriş edin",
     "registerTitle": "Qeydiyyat",
+    "registerSubtitle": "Yeni hesab yaradın",
     "email": "E-poçt",
     "password": "Şifrə",
     "confirmPassword": "Şifrəni təsdiqlə",
@@ -86,8 +117,9 @@
     "hasAccount": "Hesabınız var?",
     "loginButton": "Daxil ol",
     "registerButton": "Qeydiyyatdan keç",
-    "orContinueWith": "və ya davam edin",
-    "googleLogin": "Google ilə daxil ol"
+    "orContinueWith": "və ya",
+    "googleLogin": "Google ilə daxil ol",
+    "facebookLogin": "Facebook ilə giriş"
   },
   "dashboard": {
     "welcome": "Xoş gəlmisiniz",
@@ -98,7 +130,8 @@
     "confirmedGuests": "Təsdiqlənmiş Qonaqlar",
     "recentEvents": "Son Tədbirlər",
     "noEvents": "Hələ heç bir tədbir yaratmamısınız",
-    "createFirstEvent": "İlk Tədbiri Yarat"
+    "createFirstEvent": "İlk Tədbiri Yarat",
+    "addBalance": "Balans əlavə et"
   },
   "events": {
     "createEvent": "Tədbir Yarat",
@@ -130,7 +163,15 @@
     "preview": "Önizləmə",
     "useTemplate": "Şablonu İstifadə Et",
     "category": "Kateqoriya",
-    "filterBy": "Filtr"
+    "filterBy": "Filtr",
+    "categories": {
+      "all": "Hamısı",
+      "wedding": "Toy",
+      "engagement": "Nişan",
+      "birthday": "Doğum Günü",
+      "babyShower": "Baby Shower",
+      "corporate": "Korporativ"
+    }
   },
   "payment": {
     "addBalance": "Balans Əlavə Et",
@@ -145,7 +186,9 @@
     "status": "Status",
     "successful": "Uğurlu",
     "goToDashboard": "Dashboard-a keç",
-    "addMore": "Daha çox əlavə et"
+    "addMore": "Daha çox əlavə et",
+    "perGuest": "hər qonaq üçün",
+    "freeGuests": "ilk 30 qonaq pulsuz"
   },
   "footer": {
     "description": "Rəqəmsal dəvətnamə platforması",
@@ -154,7 +197,9 @@
     "privacy": "Məxfilik Siyasəti",
     "terms": "İstifadə Şərtləri",
     "followUs": "Bizi İzləyin",
-    "allRightsReserved": "Bütün hüquqlar qorunur"
+    "allRightsReserved": "Bütün hüquqlar qorunur",
+    "contact": "Əlaqə",
+    "support": "Dəstək"
   },
   "admin": {
     "dashboard": "Admin Panel",
@@ -164,7 +209,8 @@
     "payments": "Ödənişlər",
     "settings": "Ayarlar",
     "pages": "Səhifələr",
-    "blog": "Bloq"
+    "blog": "Bloq",
+    "slider": "Slider"
   },
   "errors": {
     "required": "Bu sahə məcburidir",
