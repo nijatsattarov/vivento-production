@@ -67,77 +67,27 @@ const Navbar = () => {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // Categories structure
-  const categories = [
-    {
-      id: 'toy',
-      name: 'Toy',
-      subcategories: [
-        { id: 'toy-devetname', name: 'Dəvətnamələr' },
-        { id: 'nisan', name: 'Nişan' }
-      ]
-    },
-    {
-      id: 'dogum-gunu',
-      name: 'Doğum günü',
-      subcategories: [
-        { id: 'ad-gunu-devetname', name: 'Ad günü dəvətnaməsi' },
-        { id: 'ad-gunu-sam', name: 'Ad günü şam yeyməyi' },
-        { id: 'ad-gunu-kart', name: 'Ad günü kartları' }
-      ]
-    },
-    {
-      id: 'usaq',
-      name: 'Uşaq',
-      subcategories: [
-        { id: 'korpe', name: 'Körpə' },
-        { id: 'cinsiyyet-partisi', name: 'Cinsiyyət partisi' },
-        { id: 'usaq-ad-gunu', name: 'Ad günü' }
-      ]
-    },
-    {
-      id: 'biznes',
-      name: 'Biznes',
-      subcategories: [
-        { id: 'forum', name: 'Forum' },
-        { id: 'korporativ', name: 'Korporativ tədbir' },
-        { id: 'vip-event', name: 'VIP Event' },
-        { id: 'networking', name: 'Networking' },
-        { id: 'launch-party', name: 'Launch Party' },
-        { id: 'breakfast', name: 'Breakfast' },
-        { id: 'biznes-idlonumu', name: 'Biznes görüşü' },
-        { id: 'sam-yemeyi', name: 'Şam yeməyi' },
-        { id: 'mukafatlandirma', name: 'Mükafatlandırma' }
-      ]
-    },
-    {
-      id: 'tebrik',
-      name: 'Təbrik postları-flayer',
-      subcategories: []
-    },
-    {
-      id: 'bayramlar',
-      name: 'Bayramlar',
-      subcategories: [
-        { id: 'novruz', name: 'Novruz bayramı' },
-        { id: 'qurban', name: 'Qurban bayramı' },
-        { id: 'yeni-il', name: 'Yeni il' },
-        { id: 'ramazan', name: 'Ramazan bayramı' },
-        { id: '8-mart', name: '8 Mart' }
-      ]
-    },
-    {
-      id: 'diger',
-      name: 'Digər',
-      subcategories: [
-        { id: 'ad-gunu', name: 'Ad günü' },
-        { id: 'tesekkur', name: 'Təşəkkür' },
-        { id: 'yubiley', name: 'Yubiley' },
-        { id: 'tebrik', name: 'Təbrik' },
-        { id: 'teqaud', name: 'Təqaüd' }
-      ]
-    }
-  ];
+  // Categories structure - using translations
+  const categoryIds = ['toy', 'dogum-gunu', 'usaq', 'biznes', 'tebrik', 'bayramlar', 'diger'];
+  
+  const subcategoryMap = {
+    'toy': ['toy-devetname', 'nisan'],
+    'dogum-gunu': ['ad-gunu-devetname', 'ad-gunu-sam', 'ad-gunu-kart'],
+    'usaq': ['korpe', 'cinsiyyet-partisi', 'usaq-ad-gunu'],
+    'biznes': ['forum', 'korporativ', 'vip-event', 'networking', 'launch-party', 'breakfast', 'biznes-idlonumu', 'sam-yemeyi', 'mukafatlandirma'],
+    'tebrik': [],
+    'bayramlar': ['novruz', 'qurban', 'yeni-il', 'ramazan', '8-mart'],
+    'diger': ['ad-gunu', 'tesekkur', 'yubiley', 'tebrik', 'teqaud']
+  };
+
+  const categories = categoryIds.map(id => ({
+    id,
+    name: t(`categories.${id}.name`),
+    subcategories: subcategoryMap[id].map(subId => ({
+      id: subId,
+      name: t(`categories.${id}.subcategories.${subId}`)
+    }))
+  }));
 
   // Safe settings with defaults
   const safeSettings = settings || {
