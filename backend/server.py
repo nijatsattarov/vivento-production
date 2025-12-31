@@ -2670,32 +2670,95 @@ async def get_payment_status(
 @api_router.get("/balance/transactions")
 async def get_balance_transactions(
     current_user: User = Depends(get_current_user),
-    limit: int = 50,
-    offset: int = 0
+    limit: int = 50
 ):
     """Get user's balance transaction history"""
     try:
-        user = current_user
-        
         transactions = await db.balance_transactions.find(
-            {"user_id": user.id},
+            {"user_id": current_user.id},
             {"_id": 0}
-        ).sort("created_at", -1).skip(offset).limit(limit).to_list(limit)
+        ).sort("created_at", -1).to_list(limit)
         
-        total_count = await db.balance_transactions.count_documents({"user_id": user.id})
-        
-        return {
-            "transactions": transactions,
-            "total": total_count,
-            "limit": limit,
-            "offset": offset
-        }
-        
-    except HTTPException:
-        raise
+        return transactions
     except Exception as e:
         logger.error(f"Get transactions error: {e}")
-        raise HTTPException(status_code=500, detail="Tranzaksiya tarixçəsi alınarkən xəta baş verdi")
+        raise HTTPException(status_code=500, detail="Tranzaksiya tarixçəsi alınarkən xəta")
+
+@api_router.post("/admin/sync-payments")
+async def admin_sync_all_pending_payments(current_user: User = Depends(get_current_user)):
+    """
+    Admin endpoint to sync ALL pending payments for the current user.
+    Call this manually if payments are stuck.
+    """
+    try:
+        # Find all pending payments
+        pending_payments = await db.payments.find({
+            "user_id": current_user.id,
+            "status": "pending"
+        }, {"_id": 0}).to_list(100)
+        
+        if not pending_payments:
+            return {
+                "success": True,
+                "message": "Gözləyən ödəniş yoxdur",
+                "processed": 0,
+                "total_amount": 0
+            }
+        
+        total_amount = 0
+        processed_count = 0
+        
+        for payment in pending_payments:
+            # Mark as completed
+            await db.payments.update_one(
+                {"id": payment["id"]},
+                {"$set": {"status": "completed", "completed_at": datetime.now(timezone.utc)}}
+            )
+            
+            total_amount += payment["amount"]
+            processed_count += 1
+            
+            # Create transaction record
+            existing_tx = await db.balance_transactions.find_one({"payment_id": payment["id"]})
+            if not existing_tx:
+                transaction = BalanceTransaction(
+                    id=str(uuid.uuid4()),
+                    user_id=current_user.id,
+                    amount=payment["amount"],
+                    transaction_type="payment",
+                    description=f"Balans artırma: {payment['amount']} AZN",
+                    payment_method="epoint",
+                    payment_id=payment["id"],
+                    status="completed"
+                )
+                await db.balance_transactions.insert_one(transaction.model_dump())
+            
+            logger.info(f"Synced payment {payment['id']} for {payment['amount']} AZN")
+        
+        # Update user balance
+        if total_amount > 0:
+            user = await db.users.find_one({"id": current_user.id}, {"_id": 0})
+            current_balance = user.get("balance", 0.0)
+            new_balance = current_balance + total_amount
+            
+            await db.users.update_one(
+                {"id": current_user.id},
+                {"$set": {"balance": new_balance, "updated_at": datetime.now(timezone.utc)}}
+            )
+            
+            logger.info(f"User {current_user.id} balance synced: {current_balance} -> {new_balance} AZN")
+        
+        return {
+            "success": True,
+            "message": f"{processed_count} ödəniş uğurla sinxronlaşdırıldı",
+            "processed": processed_count,
+            "total_amount": total_amount,
+            "new_balance": new_balance if total_amount > 0 else None
+        }
+        
+    except Exception as e:
+        logger.error(f"Sync payments error: {e}")
+        raise HTTPException(status_code=500, detail="Ödənişlər sinxronlaşdırılarkən xəta")
 
 # Include the router in the main app
 app.include_router(api_router)
