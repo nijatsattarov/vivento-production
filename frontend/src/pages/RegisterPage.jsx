@@ -140,7 +140,7 @@ const RegisterPage = () => {
                     id="name"
                     name="name"
                     type="text"
-                    placeholder="Adınız və soyadınız"
+                    placeholder={t('auth.fullName')}
                     value={formData.name}
                     onChange={handleInputChange}
                     className="pl-10 h-12 border-gray-200 focus:border-blue-500 custom-input"
@@ -152,7 +152,7 @@ const RegisterPage = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                  Email ünvanı
+                  {t('auth.email')}
                 </Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -160,7 +160,7 @@ const RegisterPage = () => {
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="email@misla.com"
+                    placeholder="email@example.com"
                     value={formData.email}
                     onChange={handleInputChange}
                     className="pl-10 h-12 border-gray-200 focus:border-blue-500 custom-input"
@@ -172,7 +172,7 @@ const RegisterPage = () => {
               
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-sm font-medium text-gray-700">
-                  Parol
+                  {t('auth.password')}
                 </Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -180,7 +180,7 @@ const RegisterPage = () => {
                     id="password"
                     name="password"
                     type="password"
-                    placeholder="Ən az 6 simvol"
+                    placeholder="******"
                     value={formData.password}
                     onChange={handleInputChange}
                     className="pl-10 h-12 border-gray-200 focus:border-blue-500 custom-input"
@@ -192,7 +192,7 @@ const RegisterPage = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
-                  Parol təkrarı
+                  {t('auth.confirmPassword')}
                 </Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -200,7 +200,7 @@ const RegisterPage = () => {
                     id="confirmPassword"
                     name="confirmPassword"
                     type="password"
-                    placeholder="Parolu təkrar edin"
+                    placeholder="******"
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
                     className="pl-10 h-12 border-gray-200 focus:border-blue-500 custom-input"
@@ -211,13 +211,13 @@ const RegisterPage = () => {
               </div>
 
               <div className="text-xs text-gray-600 leading-relaxed">
-                Qeydiyyatdan keçməklə{' '}
+                {t('auth.registerButton')}{' '}
                 <Link to="/terms" className="text-blue-600 hover:underline">
-                  İstifadə Şərtləri
+                  {t('footer.terms')}
                 </Link>
-                {' '}və{' '}
+                {' '}&{' '}
                 <Link to="/privacy" className="text-blue-600 hover:underline">
-                  Məxfilik Siyasəti
+                  {t('footer.privacy')}
                 </Link>
                 ni qəbul etmiş olursunuz.
               </div>
