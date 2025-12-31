@@ -179,8 +179,6 @@ const Templates = () => {
     return structures[i18n.language] || structures.az;
   };
 
-  const categoryStructure = getLocalizedCategoryStructure();
-
   useEffect(() => {
     const categoryStructure = getLocalizedCategoryStructure();
     
