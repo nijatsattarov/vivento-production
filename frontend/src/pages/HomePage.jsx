@@ -453,7 +453,7 @@ const HomePage = () => {
                 size="lg"
                 className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50"
               >
-                Bütün yazılara bax
+                {t('home.blog.viewAll')}
               </Button>
             </div>
           </div>
