@@ -179,13 +179,13 @@ const LoginPage = () => {
             {/* Register Link */}
             <div className="text-center pt-6 border-t border-gray-200">
               <p className="text-gray-600">
-                Hesabınız yoxdur?{' '}
+                {t('auth.noAccount')}{' '}
                 <Link 
                   to="/register" 
                   className="font-medium text-blue-600 hover:text-blue-800 transition-colors"
                   data-testid="register-link"
                 >
-                  Qeydiyyatdan keç
+                  {t('auth.registerButton')}
                 </Link>
               </p>
             </div>
