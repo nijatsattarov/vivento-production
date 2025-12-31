@@ -431,8 +431,8 @@ const Navbar = () => {
                 </div>
               ) : searchQuery && searchResults.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
-                  <p>Heç bir nəticə tapılmadı</p>
-                  <p className="text-sm mt-2">Başqa açar söz istifadə edin</p>
+                  <p>{t('navbar.noResults')}</p>
+                  <p className="text-sm mt-2">{t('navbar.searchHint')}</p>
                 </div>
               ) : searchResults.length > 0 ? (
                 <div className="space-y-2">
