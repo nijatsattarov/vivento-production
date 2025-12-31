@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -14,6 +15,7 @@ import { toast } from 'sonner';
 const RegisterPage = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -32,22 +34,22 @@ const RegisterPage = () => {
 
   const validateForm = () => {
     if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-      toast.error('Bütün sahələri doldurmuaq lazımdır');
+      toast.error(t('errors.required'));
       return false;
     }
 
     if (formData.name.length < 2) {
-      toast.error('Ad ən az 2 hərf olmalıdır');
+      toast.error(t('errors.minLength', { min: 2 }));
       return false;
     }
 
     if (formData.password.length < 6) {
-      toast.error('Parol ən az 6 simvol olmalıdır');
+      toast.error(t('errors.minLength', { min: 6 }));
       return false;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      toast.error('Parollar uyğun gəlmir');
+      toast.error(t('errors.passwordMismatch'));
       return false;
     }
 
