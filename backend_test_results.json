@@ -1,91 +1,11 @@
 {
-  "total_tests": 47,
-  "passed_tests": 47,
-  "failed_tests": 0,
-  "success_rate": "100.0%",
+  "total_tests": 9,
+  "passed_tests": 8,
+  "failed_tests": 1,
+  "success_rate": "88.9%",
   "test_details": [
     {
       "test": "Root API",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "CMS Page - About",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "CMS Page - Contact",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "CMS Page - Support",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "CMS Page - Privacy",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "CMS Page - Terms",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "CMS Page - Invalid Type",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Auth Session Check (No Auth)",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Auth Logout (No Auth)",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Get Custom Fonts",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Font Upload (No Auth)",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Font Delete (No Auth)",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "User Registration",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Pre-Login Registration",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "User Login",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Facebook Login (Expected Failure)",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Get Current User",
       "success": true,
       "details": ""
     },
@@ -95,149 +15,39 @@
       "details": ""
     },
     {
-      "test": "Get Admin Pages",
+      "test": "Get Privacy Page - AZ",
       "success": true,
       "details": ""
     },
     {
-      "test": "Update Admin Page - privacy",
+      "test": "Get Privacy Page - EN",
       "success": true,
       "details": ""
     },
     {
-      "test": "Public Page - privacy",
+      "test": "Get Privacy Page - RU",
       "success": true,
       "details": ""
     },
     {
-      "test": "Public Page - terms",
+      "test": "Get Admin Pages (Multi-language)",
       "success": true,
       "details": ""
     },
     {
-      "test": "Public Page - contact",
+      "test": "Update Privacy Page (Multi-language)",
       "success": true,
       "details": ""
     },
     {
-      "test": "Create Event for Demo",
+      "test": "Verify Multi-language Update",
       "success": true,
       "details": ""
     },
     {
-      "test": "Demo Invitation",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Get User Events for Custom Design Check",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Check Existing Custom Designs",
-      "success": true,
-      "details": "No existing custom designs found"
-    },
-    {
-      "test": "Get Templates",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Get Templates by Category",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Create Event",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Get User Events",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Get Event Detail",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Update Event",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Create Event with Envelope Animation",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Get Event Detail with Envelope Animation",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Envelope Animation Field Verification",
-      "success": true,
-      "details": "show_envelope_animation field present: True"
-    },
-    {
-      "test": "Add Guest",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Envelope Animation in Guest Invitation",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Envelope Animation Guest Access",
-      "success": true,
-      "details": "Guest can access envelope animation: True"
-    },
-    {
-      "test": "Add Guest",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Get Event Guests",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Public Invitation",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "RSVP Response",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Create Event with Custom Design",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Add Guest",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Invitation Custom Design Test",
-      "success": true,
-      "details": ""
-    },
-    {
-      "test": "Custom Design Full Validation",
-      "success": true,
-      "details": "Custom design validated: 4 elements, canvas 400x600"
+      "test": "Multi-language Fields Verification",
+      "success": false,
+      "details": "No multi-language fields saved"
     }
   ]
 }
