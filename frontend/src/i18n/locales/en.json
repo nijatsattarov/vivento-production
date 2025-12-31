@@ -37,14 +37,89 @@
     "myEvents": "My Events",
     "addBalance": "Add Balance",
     "adminPanel": "Admin Panel",
-    "favorites": "Favorites"
+    "favorites": "Favorites",
+    "categories": "Categories",
+    "searchPlaceholder": "Search template name, category...",
+    "noResults": "No results found",
+    "searchHint": "Enter at least 2 characters to search"
+  },
+  "categories": {
+    "title": "Categories",
+    "subtitle": "Choose invitations suitable for your event type",
+    "templatesCount": "templates",
+    "exploreAll": "Explore all templates",
+    "toy": {
+      "name": "Wedding",
+      "subcategories": {
+        "toy-devetname": "Invitations",
+        "nisan": "Engagement"
+      }
+    },
+    "dogum-gunu": {
+      "name": "Birthday",
+      "subcategories": {
+        "ad-gunu-devetname": "Birthday Invitations",
+        "ad-gunu-sam": "Birthday Dinner",
+        "ad-gunu-kart": "Birthday Cards"
+      }
+    },
+    "usaq": {
+      "name": "Kids",
+      "subcategories": {
+        "korpe": "Baby",
+        "cinsiyyet-partisi": "Gender Reveal",
+        "usaq-ad-gunu": "Kids Birthday"
+      }
+    },
+    "biznes": {
+      "name": "Business",
+      "subcategories": {
+        "forum": "Forum",
+        "korporativ": "Corporate Event",
+        "vip-event": "VIP Event",
+        "networking": "Networking",
+        "launch-party": "Launch Party",
+        "breakfast": "Breakfast",
+        "biznes-idlonumu": "Business Meeting",
+        "sam-yemeyi": "Dinner",
+        "mukafatlandirma": "Awards"
+      }
+    },
+    "tebrik": {
+      "name": "Congratulation Flyers",
+      "subcategories": {}
+    },
+    "bayramlar": {
+      "name": "Holidays",
+      "subcategories": {
+        "novruz": "Nowruz Holiday",
+        "qurban": "Eid al-Adha",
+        "yeni-il": "New Year",
+        "ramazan": "Ramadan",
+        "8-mart": "March 8"
+      }
+    },
+    "diger": {
+      "name": "Other",
+      "subcategories": {
+        "ad-gunu": "Name Day",
+        "tesekkur": "Thank You",
+        "yubiley": "Anniversary",
+        "tebrik": "Congratulations",
+        "teqaud": "Retirement"
+      }
+    }
   },
   "home": {
     "hero": {
       "title": "Digital Invitations",
       "subtitle": "Create beautiful digital invitations for weddings, engagements, birthdays and other events",
       "cta": "Get Started",
-      "viewTemplates": "View Templates"
+      "viewTemplates": "View Templates",
+      "defaultTitle": "Creating digital invitations has never been this easy",
+      "defaultSubtitle": "Create beautiful invitations for your weddings, engagements, birthdays and other events with Vivento. Invite your guests and track RSVP responses in real-time.",
+      "startFree": "Start Free",
+      "signIn": "Sign In"
     },
     "features": {
       "title": "Why Vivento?",
@@ -94,12 +169,20 @@
     },
     "blog": {
       "title": "Latest Blog Posts",
-      "subtitle": "Helpful articles about wedding planning and invitation preparation"
+      "subtitle": "Helpful articles about wedding planning and invitation preparation",
+      "viewAll": "View all posts"
     },
     "cta": {
-      "title": "Ready to create your first invitation?",
-      "subtitle": "Register now and use free templates",
-      "button": "Start Free"
+      "title": "Plan your next event today",
+      "subtitle": "Millions of people celebrate their most important moments with Vivento. Join us and create perfect invitations.",
+      "button": "Start now"
+    },
+    "pricing": {
+      "title": "Simple and transparent pricing",
+      "subtitle": "Choose the plan that suits your needs",
+      "mostPopular": "Most popular",
+      "perMonth": "/ month",
+      "select": "Select"
     }
   },
   "auth": {
@@ -164,6 +247,12 @@
     "useTemplate": "Use Template",
     "category": "Category",
     "filterBy": "Filter",
+    "templatesFound": "templates found",
+    "backToHome": "Back to Home",
+    "viewAndSelect": "View & Select",
+    "categoryNotFound": "Category not found",
+    "noTemplatesInCategory": "No templates in this category",
+    "moreTemplatesSoon": "More templates coming soon",
     "categories": {
       "all": "All",
       "wedding": "Wedding",
@@ -193,13 +282,17 @@
   "footer": {
     "description": "Digital invitation platform",
     "quickLinks": "Quick Links",
+    "product": "Product",
+    "company": "Company",
     "legal": "Legal",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
     "followUs": "Follow Us",
     "allRightsReserved": "All rights reserved",
     "contact": "Contact",
-    "support": "Support"
+    "support": "Support",
+    "features": "Features",
+    "pricing": "Pricing"
   },
   "admin": {
     "dashboard": "Admin Panel",

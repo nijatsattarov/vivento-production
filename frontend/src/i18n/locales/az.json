@@ -37,14 +37,89 @@
     "myEvents": "Tədbirlərim",
     "addBalance": "Balans əlavə et",
     "adminPanel": "Admin Panel",
-    "favorites": "Seçilmişlər"
+    "favorites": "Seçilmişlər",
+    "categories": "Kateqoriyalar",
+    "searchPlaceholder": "Şablon adı, kateqoriya axtar...",
+    "noResults": "Heç bir nəticə tapılmadı",
+    "searchHint": "Axtarış üçün ən azı 2 hərf daxil edin"
+  },
+  "categories": {
+    "title": "Kateqoriyalar",
+    "subtitle": "Tədbirinizin növünə uyğun dəvətnamələr seçin",
+    "templatesCount": "şablon",
+    "exploreAll": "Bütün şablonları kəşf edin",
+    "toy": {
+      "name": "Toy",
+      "subcategories": {
+        "toy-devetname": "Dəvətnamələr",
+        "nisan": "Nişan"
+      }
+    },
+    "dogum-gunu": {
+      "name": "Doğum günü",
+      "subcategories": {
+        "ad-gunu-devetname": "Ad günü dəvətnaməsi",
+        "ad-gunu-sam": "Ad günü şam yeyməyi",
+        "ad-gunu-kart": "Ad günü kartları"
+      }
+    },
+    "usaq": {
+      "name": "Uşaq",
+      "subcategories": {
+        "korpe": "Körpə",
+        "cinsiyyet-partisi": "Cinsiyyət partisi",
+        "usaq-ad-gunu": "Ad günü"
+      }
+    },
+    "biznes": {
+      "name": "Biznes",
+      "subcategories": {
+        "forum": "Forum",
+        "korporativ": "Korporativ tədbir",
+        "vip-event": "VIP Event",
+        "networking": "Networking",
+        "launch-party": "Launch Party",
+        "breakfast": "Breakfast",
+        "biznes-idlonumu": "Biznes görüşü",
+        "sam-yemeyi": "Şam yeməyi",
+        "mukafatlandirma": "Mükafatlandırma"
+      }
+    },
+    "tebrik": {
+      "name": "Təbrik postları-flayer",
+      "subcategories": {}
+    },
+    "bayramlar": {
+      "name": "Bayramlar",
+      "subcategories": {
+        "novruz": "Novruz bayramı",
+        "qurban": "Qurban bayramı",
+        "yeni-il": "Yeni il",
+        "ramazan": "Ramazan bayramı",
+        "8-mart": "8 Mart"
+      }
+    },
+    "diger": {
+      "name": "Digər",
+      "subcategories": {
+        "ad-gunu": "Ad günü",
+        "tesekkur": "Təşəkkür",
+        "yubiley": "Yubiley",
+        "tebrik": "Təbrik",
+        "teqaud": "Təqaüd"
+      }
+    }
   },
   "home": {
     "hero": {
       "title": "Rəqəmsal Dəvətnamələr",
       "subtitle": "Toy, nişan, doğum günü və digər tədbirlər üçün gözəl rəqəmsal dəvətnamələr yaradın",
       "cta": "İndi Başla",
-      "viewTemplates": "Şablonlara Bax"
+      "viewTemplates": "Şablonlara Bax",
+      "defaultTitle": "Rəqəmsal dəvətnamə yaratmaq heç vaxt bu qədər asan olmayıb",
+      "defaultSubtitle": "Vivento ilə toy, nişan, doğum günü və digər tədbirləriniz üçün gözəl dəvətnamələr yaradın. Qonaqlarınızı dəvət edin və RSVP cavablarını real vaxtda izləyin.",
+      "startFree": "Pulsuz başla",
+      "signIn": "Giriş et"
     },
     "features": {
       "title": "Niyə Vivento?",
@@ -94,12 +169,20 @@
     },
     "blog": {
       "title": "Son Bloq Yazıları",
-      "subtitle": "Toy planlaması və dəvətnamə hazırlığı haqqında faydalı məqalələr"
+      "subtitle": "Toy planlaması və dəvətnamə hazırlığı haqqında faydalı məqalələr",
+      "viewAll": "Bütün yazılara bax"
     },
     "cta": {
-      "title": "İlk dəvətnamənizi yaratmağa hazırsınız?",
-      "subtitle": "İndi qeydiyyatdan keçin və pulsuz şablonlardan istifadə edin",
-      "button": "Pulsuz Başla"
+      "title": "Növbəti tədbirinizi bugün planlaşdırın",
+      "subtitle": "Milyonlarla insan Vivento ilə özlərinin ən vacib anlarını qeyd edir. Siz də bizə qoşulun və mükəmməl dəvətnamələr yaradın.",
+      "button": "İndi başla"
+    },
+    "pricing": {
+      "title": "Sadə və şəffaf qiymətlər",
+      "subtitle": "Ehtiyaclarınıza uyğun planı seçin",
+      "mostPopular": "Ən populyar",
+      "perMonth": "/ ay",
+      "select": "Seç"
     }
   },
   "auth": {
@@ -164,6 +247,12 @@
     "useTemplate": "Şablonu İstifadə Et",
     "category": "Kateqoriya",
     "filterBy": "Filtr",
+    "templatesFound": "şablon tapıldı",
+    "backToHome": "Ana səhifəyə qayıt",
+    "viewAndSelect": "Bax və Seç",
+    "categoryNotFound": "Kateqoriya tapılmadı",
+    "noTemplatesInCategory": "Bu kateqoriyada şablon yoxdur",
+    "moreTemplatesSoon": "Yaxında daha çox şablon əlavə ediləcək",
     "categories": {
       "all": "Hamısı",
       "wedding": "Toy",
@@ -193,13 +282,17 @@
   "footer": {
     "description": "Rəqəmsal dəvətnamə platforması",
     "quickLinks": "Sürətli Keçidlər",
+    "product": "Məhsul",
+    "company": "Şirkət",
     "legal": "Hüquqi",
     "privacy": "Məxfilik Siyasəti",
     "terms": "İstifadə Şərtləri",
     "followUs": "Bizi İzləyin",
     "allRightsReserved": "Bütün hüquqlar qorunur",
     "contact": "Əlaqə",
-    "support": "Dəstək"
+    "support": "Dəstək",
+    "features": "Xüsusiyyətlər",
+    "pricing": "Qiymətlər"
   },
   "admin": {
     "dashboard": "Admin Panel",
