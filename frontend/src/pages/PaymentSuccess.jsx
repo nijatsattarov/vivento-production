@@ -18,45 +18,24 @@ const PaymentSuccess = () => {
   const [paymentDetails, setPaymentDetails] = useState(null);
   const [newBalance, setNewBalance] = useState(null);
   const [error, setError] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
-  // Get payment info from multiple sources
-  const getPaymentInfo = () => {
-    // Try localStorage first
-    let paymentId = localStorage.getItem('pending_payment_id');
-    let paymentAmount = localStorage.getItem('pending_payment_amount');
-    
-    // Try URL params (Epoint might send order_id)
+  const confirmPayment = async (authToken) => {
+    // Get payment info from multiple sources
+    const paymentId = localStorage.getItem('pending_payment_id');
+    const paymentAmount = localStorage.getItem('pending_payment_amount');
     const orderIdFromUrl = searchParams.get('order_id');
-    const amountFromUrl = searchParams.get('amount');
     
-    console.log('Payment info sources:', {
-      localStorage: { paymentId, paymentAmount },
-      urlParams: { orderIdFromUrl, amountFromUrl }
-    });
-    
-    return {
-      paymentId,
-      paymentAmount: paymentAmount || amountFromUrl,
-      orderId: orderIdFromUrl
-    };
-  };
+    console.log('=== Payment Confirmation Debug ===');
+    console.log('Token:', authToken ? 'exists' : 'missing');
+    console.log('Payment ID from localStorage:', paymentId);
+    console.log('Payment Amount from localStorage:', paymentAmount);
+    console.log('Order ID from URL:', orderIdFromUrl);
 
-  const confirmPayment = async () => {
-    const { paymentId, paymentAmount } = getPaymentInfo();
-    
-    console.log('Confirming payment:', { paymentId, paymentAmount, token: token ? 'exists' : 'missing' });
-
-    if (!paymentId) {
-      console.error('No payment ID found');
-      setError('Ödəniş ID tapılmadı. Dashboard-dan balansınızı yoxlayın.');
-      setLoading(false);
-      return;
-    }
-
-    if (!token) {
-      console.error('No auth token');
+    if (!authToken) {
+      console.error('No auth token available');
       setError('Giriş sessiyası tapılmadı. Zəhmət olmasa yenidən daxil olun.');
       setLoading(false);
       return;
@@ -65,13 +44,20 @@ const PaymentSuccess = () => {
     try {
       setConfirming(true);
       
+      // Build request body with available identifiers
+      const requestBody = {};
+      if (paymentId) requestBody.payment_id = paymentId;
+      if (orderIdFromUrl) requestBody.order_id = orderIdFromUrl;
+      
+      console.log('Sending confirm request with body:', requestBody);
+      
       // Confirm payment and add balance
       const response = await axios.post(
         `${API_BASE_URL}/api/payments/confirm-success`,
-        { payment_id: paymentId },
+        requestBody,
         {
           headers: { 
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authToken}`,
             'Content-Type': 'application/json'
           }
         }
@@ -91,40 +77,40 @@ const PaymentSuccess = () => {
         localStorage.removeItem('pending_payment_amount');
 
         toast.success(`${response.data.amount} AZN balansınıza əlavə edildi!`);
+        setError(null);
       }
     } catch (err) {
-      console.error('Payment confirmation error:', err);
-      
-      // Show amount from localStorage even if confirmation fails
-      if (paymentAmount) {
-        setPaymentDetails({
-          amount: paymentAmount,
-          status: 'pending'
-        });
-      }
+      console.error('Payment confirmation error:', err.response?.data || err.message);
       
       const errorMsg = err.response?.data?.detail || 'Ödəniş təsdiqlənərkən xəta';
       
-      // If payment already completed, it's actually success
-      if (errorMsg.includes('artıq tamamlanıb')) {
+      // If payment already completed, it's success
+      if (errorMsg.includes('artıq tamamlanıb') || errorMsg.includes('already')) {
         setPaymentDetails({
-          amount: paymentAmount,
+          amount: paymentAmount || '?',
           status: 'completed'
         });
-        toast.success('Ödəniş artıq tamamlanıb!');
         
         // Fetch current balance
         try {
           const balanceRes = await axios.get(`${API_BASE_URL}/api/balance`, {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${authToken}` }
           });
           setNewBalance(balanceRes.data.balance);
+          toast.success('Ödəniş artıq tamamlanıb!');
+          setError(null);
         } catch (e) {
           console.error('Balance fetch error:', e);
         }
       } else {
+        // Show amount from localStorage even if confirmation fails
+        if (paymentAmount) {
+          setPaymentDetails({
+            amount: paymentAmount,
+            status: 'pending'
+          });
+        }
         setError(errorMsg);
-        toast.error(errorMsg);
       }
     } finally {
       setLoading(false);
@@ -135,17 +121,30 @@ const PaymentSuccess = () => {
   const retryConfirmation = () => {
     setError(null);
     setLoading(true);
-    confirmPayment();
+    setRetryCount(prev => prev + 1);
+    confirmPayment(token);
   };
 
   useEffect(() => {
-    // Wait a bit for auth context to load
-    const timer = setTimeout(() => {
-      confirmPayment();
-    }, 500);
-    
-    return () => clearTimeout(timer);
-  }, [token]);
+    // Wait for auth context to be ready
+    const checkAndConfirm = () => {
+      if (token) {
+        console.log('Token available, confirming payment...');
+        confirmPayment(token);
+      } else if (retryCount < 5) {
+        console.log(`Waiting for token... retry ${retryCount + 1}/5`);
+        setTimeout(() => {
+          setRetryCount(prev => prev + 1);
+        }, 1000);
+      } else {
+        console.error('Token not available after 5 retries');
+        setError('Giriş sessiyası tapılmadı. Dashboard-a keçib yenidən cəhd edin.');
+        setLoading(false);
+      }
+    };
+
+    checkAndConfirm();
+  }, [token, retryCount]);
 
   if (loading) {
     return <LoadingSpinner text="Balans yenilənir..." />;
@@ -158,33 +157,32 @@ const PaymentSuccess = () => {
       <div className="max-w-2xl mx-auto px-4 py-16">
         <Card className="shadow-2xl border-0">
           <CardContent className="p-12 text-center">
-            {/* Success Icon */}
+            {/* Icon */}
             <div className="mb-6 flex justify-center">
-              <div className={`w-24 h-24 ${error ? 'bg-orange-100' : 'bg-green-100'} rounded-full flex items-center justify-center ${!error ? 'animate-bounce' : ''}`}>
-                <CheckCircle className={`h-12 w-12 ${error ? 'text-orange-600' : 'text-green-600'}`} />
+              <div className={`w-24 h-24 ${error && !paymentDetails ? 'bg-orange-100' : 'bg-green-100'} rounded-full flex items-center justify-center ${!error ? 'animate-bounce' : ''}`}>
+                <CheckCircle className={`h-12 w-12 ${error && !paymentDetails ? 'text-orange-600' : 'text-green-600'}`} />
               </div>
             </div>
 
             {/* Message */}
             <h1 className="text-3xl font-bold text-gray-900 mb-3">
-              {error ? 'Ödəniş Qəbul Edildi' : 'Ödəniş Uğurla Tamamlandı! 🎉'}
+              {error && !paymentDetails ? 'Ödəniş Emal Olunur' : 'Ödəniş Uğurla Tamamlandı! 🎉'}
             </h1>
             <p className="text-gray-600 mb-8">
-              {error 
+              {error && !paymentDetails
                 ? 'Ödənişiniz qəbul edildi. Balans bir neçə dəqiqə ərzində yenilənəcək.'
                 : 'Balansınız uğurla yeniləndi və artıq dəvətnamələr göndərə bilərsiniz.'
               }
             </p>
 
-            {/* Error Message */}
+            {/* Error with retry */}
             {error && (
               <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-6 text-left">
-                <p className="text-orange-700 text-sm">{error}</p>
+                <p className="text-orange-700 text-sm mb-2">{error}</p>
                 <Button 
                   onClick={retryConfirmation} 
                   variant="outline" 
-                  size="sm" 
-                  className="mt-2"
+                  size="sm"
                   disabled={confirming}
                 >
                   <RefreshCw className={`mr-2 h-4 w-4 ${confirming ? 'animate-spin' : ''}`} />
@@ -243,21 +241,12 @@ const PaymentSuccess = () => {
               </Button>
             </div>
 
-            {/* Info Note */}
+            {/* Help */}
             <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
               <p className="text-sm text-blue-700">
-                💡 <strong>Məlumat:</strong> Əgər balans dərhal yenilənmədisə, Dashboard-dan yoxlaya bilərsiniz.
-                Balans bir neçə dəqiqə ərzində avtomatik yenilənəcək.
+                💡 <strong>Məlumat:</strong> Əgər balans görünmürsə, Dashboard-a keçin və səhifəni yeniləyin.
               </p>
             </div>
-
-            {/* Debug info - only in development */}
-            {process.env.NODE_ENV === 'development' && (
-              <div className="mt-4 p-4 bg-gray-100 rounded text-left text-xs">
-                <p>Debug: token={token ? 'yes' : 'no'}, user={user?.email || 'none'}</p>
-                <p>localStorage payment_id: {localStorage.getItem('pending_payment_id') || 'none'}</p>
-              </div>
-            )}
           </CardContent>
         </Card>
       </div>
