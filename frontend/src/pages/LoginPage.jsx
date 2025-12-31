@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useSiteSettings } from '../contexts/SiteSettingsContext';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -17,6 +18,7 @@ const LoginPage = () => {
   const { login } = useAuth();
   const { settings } = useSiteSettings();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -37,7 +39,7 @@ const LoginPage = () => {
     console.log('Login form submitted with:', formData);
     
     if (!formData.email || !formData.password) {
-      toast.error('Bütün sahələri doldurmuaq lazımdır');
+      toast.error(t('errors.required'));
       return;
     }
 
