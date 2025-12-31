@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
@@ -27,6 +28,7 @@ import { toast } from 'sonner';
 const Dashboard = () => {
   const { user, token, setUser, setIsAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processingAuth, setProcessingAuth] = useState(false);
