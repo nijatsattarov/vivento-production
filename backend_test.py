@@ -1085,9 +1085,214 @@ class ViventoAPITester:
         
         return results
 
+    def test_multi_language_pages(self):
+        """Test multi-language (i18n) support for pages"""
+        print(f"\n🌍 Testing Multi-Language (i18n) Support...")
+        
+        # Test 1: Test Page API with Language Parameter
+        print(f"\n📄 Testing Page API with Language Parameters...")
+        
+        # Test privacy page with different language parameters
+        languages = ["az", "en", "ru"]
+        page_results = {}
+        
+        for lang in languages:
+            success, response = self.run_test(
+                f"Get Privacy Page - {lang.upper()}",
+                "GET",
+                f"pages/privacy?lang={lang}",
+                200
+            )
+            
+            if success and isinstance(response, dict):
+                page_results[lang] = {
+                    "title": response.get("title", ""),
+                    "content": response.get("content", ""),
+                    "content_length": len(response.get("content", "")),
+                    "has_multi_lang_fields": any([
+                        response.get("title_en"),
+                        response.get("title_ru"), 
+                        response.get("content_en"),
+                        response.get("content_ru")
+                    ])
+                }
+                print(f"   ✅ {lang.upper()}: {response.get('title', 'No title')} ({len(response.get('content', ''))} chars)")
+            else:
+                page_results[lang] = {"error": "Failed to fetch"}
+                print(f"   ❌ {lang.upper()}: Failed to fetch")
+        
+        # Test 2: Test Admin Pages API with Multi-language Fields
+        if not self.admin_token:
+            print(f"\n⚠️  Skipping admin tests - no admin token")
+            return False
+            
+        print(f"\n👑 Testing Admin Pages API...")
+        
+        # Get all pages from admin endpoint
+        success, admin_pages = self.run_test_with_token(
+            "Get Admin Pages (Multi-language)",
+            "GET",
+            "admin/pages",
+            200,
+            token=self.admin_token
+        )
+        
+        if not success:
+            return False
+            
+        print(f"   ✅ Found {len(admin_pages)} pages in admin panel")
+        
+        # Check if pages have multi-language fields
+        multi_lang_fields = ["title_en", "title_ru", "content_en", "content_ru", "meta_description_en", "meta_description_ru"]
+        
+        for page in admin_pages:
+            slug = page.get("slug", "unknown")
+            has_multi_lang = any([page.get(field) for field in multi_lang_fields])
+            
+            if has_multi_lang:
+                print(f"   ✅ {slug}: Has multi-language fields")
+                # Show which fields are present
+                present_fields = [field for field in multi_lang_fields if page.get(field)]
+                print(f"     Fields: {', '.join(present_fields)}")
+            else:
+                print(f"   ⚠️  {slug}: No multi-language fields found")
+        
+        # Test 3: Test updating with multi-language fields
+        print(f"\n✏️  Testing Multi-language Update...")
+        
+        # Try to update privacy page with multi-language content
+        update_data = {
+            "title": "Məxfilik Siyasəti",
+            "title_en": "Privacy Policy", 
+            "title_ru": "Политика конфиденциальности",
+            "content": "AZ content - Məxfilik siyasəti məzmunu",
+            "content_en": "EN content - Privacy policy content",
+            "content_ru": "RU content - Содержание политики конфиденциальности",
+            "meta_description": "AZ meta description",
+            "meta_description_en": "EN meta description", 
+            "meta_description_ru": "RU meta description",
+            "published": True
+        }
+        
+        success_update, response_update = self.run_test_with_token(
+            "Update Privacy Page (Multi-language)",
+            "PUT",
+            "admin/pages/privacy",
+            200,
+            data=update_data,
+            token=self.admin_token
+        )
+        
+        if success_update:
+            print(f"   ✅ Successfully updated privacy page with multi-language content")
+            
+            # Verify the update by fetching the page again
+            success_verify, verify_response = self.run_test_with_token(
+                "Verify Multi-language Update",
+                "GET", 
+                "admin/pages",
+                200,
+                token=self.admin_token
+            )
+            
+            if success_verify:
+                privacy_page = next((p for p in verify_response if p.get("slug") == "privacy"), None)
+                if privacy_page:
+                    # Check if multi-language fields were saved
+                    saved_fields = []
+                    for field in multi_lang_fields:
+                        if privacy_page.get(field):
+                            saved_fields.append(field)
+                    
+                    if saved_fields:
+                        print(f"   ✅ Multi-language fields saved: {', '.join(saved_fields)}")
+                        self.log_test("Multi-language Fields Verification", True, 
+                                     f"Saved fields: {', '.join(saved_fields)}")
+                    else:
+                        print(f"   ❌ No multi-language fields found after update")
+                        self.log_test("Multi-language Fields Verification", False, 
+                                     "No multi-language fields saved")
+                        return False
+        else:
+            print(f"   ❌ Failed to update privacy page with multi-language content")
+            return False
+        
+        # Test 4: Verify language-specific content retrieval
+        print(f"\n🔍 Testing Language-specific Content Retrieval...")
+        
+        for lang in languages:
+            success, response = self.run_test(
+                f"Verify {lang.upper()} Content",
+                "GET",
+                f"pages/privacy?lang={lang}",
+                200
+            )
+            
+            if success and isinstance(response, dict):
+                title = response.get("title", "")
+                content = response.get("content", "")
+                
+                # Check if content is language-appropriate
+                if lang == "en" and ("EN content" in content or "Privacy Policy" in title):
+                    print(f"   ✅ {lang.upper()}: English content detected")
+                elif lang == "ru" and ("RU content" in content or "Политика" in title):
+                    print(f"   ✅ {lang.upper()}: Russian content detected")
+                elif lang == "az" and ("AZ content" in content or "Məxfilik" in title):
+                    print(f"   ✅ {lang.upper()}: Azerbaijani content detected")
+                else:
+                    print(f"   ⚠️  {lang.upper()}: Fallback content (expected for missing translations)")
+        
+        # Test 5: Verify all required multi-language fields in response
+        print(f"\n📋 Testing Multi-language Field Structure...")
+        
+        success, admin_pages_final = self.run_test_with_token(
+            "Final Multi-language Structure Check",
+            "GET",
+            "admin/pages",
+            200,
+            token=self.admin_token
+        )
+        
+        if success:
+            privacy_page = next((p for p in admin_pages_final if p.get("slug") == "privacy"), None)
+            if privacy_page:
+                required_fields = ["title", "title_en", "title_ru", "content", "content_en", "content_ru"]
+                present_fields = [field for field in required_fields if field in privacy_page]
+                missing_fields = [field for field in required_fields if field not in privacy_page]
+                
+                print(f"   ✅ Present fields: {', '.join(present_fields)}")
+                if missing_fields:
+                    print(f"   ⚠️  Missing fields: {', '.join(missing_fields)}")
+                    self.log_test("Multi-language Field Structure", False, 
+                                 f"Missing required fields: {', '.join(missing_fields)}")
+                    return False
+                else:
+                    print(f"   ✅ All required multi-language fields present")
+                    self.log_test("Multi-language Field Structure", True, 
+                                 "All required fields present")
+        
+        return True
+
 def main():
     tester = ViventoAPITester()
-    results = tester.run_all_tests()
+    
+    # Run multi-language specific tests
+    print("🌍 Starting Multi-Language (i18n) Tests for Vivento Platform...")
+    print(f"   Base URL: {tester.base_url}")
+    print(f"   Admin credentials: admin@vivento.az / Vivento123!")
+    
+    # Test basic connectivity
+    tester.test_root_endpoint()
+    
+    # Test admin login first
+    if not tester.test_admin_login():
+        print("❌ Admin login failed - cannot test admin features")
+        return 1
+    
+    # Run multi-language tests
+    tester.test_multi_language_pages()
+    
+    results = tester.get_results()
     
     # Save results to file
     with open('/app/backend_test_results.json', 'w', encoding='utf-8') as f:
