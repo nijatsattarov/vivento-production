@@ -2,17 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useSiteSettings } from '../contexts/SiteSettingsContext';
+import { useTranslation } from 'react-i18next';
 import { Button } from './ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from './ui/dropdown-menu';
-import { LogOut, User, Settings, Plus, Home, Menu, Heart, ChevronRight, ChevronDown, Search, X } from 'lucide-react';
+import { LogOut, User, Settings, Plus, Home, Menu, Heart, ChevronRight, ChevronDown, Search, X, Globe } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Input } from './ui/input';
 import axios from 'axios';
 
+const languages = [
+  { code: 'az', name: 'Azərbaycan', flag: '🇦🇿' },
+  { code: 'en', name: 'English', flag: '🇬🇧' },
+  { code: 'ru', name: 'Русский', flag: '🇷🇺' }
+];
+
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
+  const { t, i18n } = useTranslation();
   const { settings } = useSiteSettings();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
