@@ -333,6 +333,33 @@ const Navbar = () => {
 
           {/* RIGHT SIDE - Favorites & Auth */}
           <div className="flex items-center space-x-2 md:space-x-3">
+            {/* Language Selector */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="hover:bg-gray-100 h-10 px-3 gap-2">
+                  <Globe className="h-5 w-5 text-gray-700" />
+                  <span className="text-sm font-medium hidden sm:inline">
+                    {languages.find(l => l.code === i18n.language)?.flag || '🇦🇿'}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-40">
+                {languages.map((lang) => (
+                  <DropdownMenuItem
+                    key={lang.code}
+                    onClick={() => i18n.changeLanguage(lang.code)}
+                    className={`cursor-pointer ${i18n.language === lang.code ? 'bg-blue-50 text-blue-600' : ''}`}
+                  >
+                    <span className="mr-2">{lang.flag}</span>
+                    {lang.name}
+                    {i18n.language === lang.code && (
+                      <span className="ml-auto text-blue-600">✓</span>
+                    )}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             {/* Favorites Icon */}
             <Button 
               variant="ghost" 
