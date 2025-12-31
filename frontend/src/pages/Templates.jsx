@@ -182,6 +182,8 @@ const Templates = () => {
   const categoryStructure = getLocalizedCategoryStructure();
 
   useEffect(() => {
+    const categoryStructure = getLocalizedCategoryStructure();
+    
     fetchTemplates();
     // Build display info
     if (parent && categoryStructure[parent]) {
