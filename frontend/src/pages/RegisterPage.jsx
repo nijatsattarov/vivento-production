@@ -219,7 +219,6 @@ const RegisterPage = () => {
                 <Link to="/privacy" className="text-blue-600 hover:underline">
                   {t('footer.privacy')}
                 </Link>
-                ni qəbul etmiş olursunuz.
               </div>
 
               <Button 
@@ -231,10 +230,10 @@ const RegisterPage = () => {
                 {isLoading ? (
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span>Hesab yaradılır...</span>
+                    <span>{t('common.loading')}</span>
                   </div>
                 ) : (
-                  'Hesab yarat'
+                  t('auth.registerButton')
                 )}
               </Button>
             </form>
@@ -242,13 +241,13 @@ const RegisterPage = () => {
             {/* Login Link */}
             <div className="text-center pt-6 border-t border-gray-200">
               <p className="text-gray-600">
-                Artıq hesabınız var?{' '}
+                {t('auth.hasAccount')}{' '}
                 <Link 
                   to="/login" 
                   className="font-medium text-blue-600 hover:text-blue-800 transition-colors"
                   data-testid="login-link"
                 >
-                  Giriş edin
+                  {t('auth.loginButton')}
                 </Link>
               </p>
             </div>
