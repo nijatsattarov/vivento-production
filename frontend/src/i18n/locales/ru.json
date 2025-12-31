@@ -27,13 +27,17 @@
     "close": "Закрыть",
     "yes": "Да",
     "no": "Нет",
-    "language": "Язык"
+    "language": "Язык",
+    "viewAll": "Смотреть все",
+    "learnMore": "Подробнее",
+    "getStarted": "Начать"
   },
   "navbar": {
     "createEvent": "Создать событие",
     "myEvents": "Мои события",
     "addBalance": "Пополнить баланс",
-    "adminPanel": "Админ панель"
+    "adminPanel": "Админ панель",
+    "favorites": "Избранное"
   },
   "home": {
     "hero": {
@@ -45,16 +49,28 @@
     "features": {
       "title": "Почему Vivento?",
       "feature1": {
-        "title": "Простота использования",
-        "description": "Создавайте красивые приглашения за минуты"
+        "title": "Редактор в стиле Canva",
+        "description": "Создавайте приглашения легко с помощью drag & drop"
       },
       "feature2": {
-        "title": "Премиум шаблоны",
-        "description": "Шаблоны от профессиональных дизайнеров"
+        "title": "Управление гостями",
+        "description": "Добавляйте гостей и отслеживайте ответы RSVP"
       },
       "feature3": {
-        "title": "Мгновенная отправка",
-        "description": "Легко делитесь в WhatsApp, SMS и других платформах"
+        "title": "Легкий обмен",
+        "description": "Делитесь одним кликом через WhatsApp и email"
+      },
+      "feature4": {
+        "title": "Мобильная версия",
+        "description": "Адаптивный дизайн, идеально выглядящий на всех устройствах"
+      },
+      "feature5": {
+        "title": "QR-код",
+        "description": "Создайте уникальный QR-код для каждого приглашения"
+      },
+      "feature6": {
+        "title": "RSVP в реальном времени",
+        "description": "Получайте мгновенные ответы от гостей"
       }
     },
     "howItWorks": {
@@ -71,11 +87,26 @@
         "title": "Поделитесь",
         "description": "Отправьте гостям"
       }
+    },
+    "templates": {
+      "title": "Популярные шаблоны",
+      "subtitle": "Шаблоны от наших профессиональных дизайнеров"
+    },
+    "blog": {
+      "title": "Последние статьи блога",
+      "subtitle": "Полезные статьи о планировании свадьбы и подготовке приглашений"
+    },
+    "cta": {
+      "title": "Готовы создать первое приглашение?",
+      "subtitle": "Зарегистрируйтесь сейчас и используйте бесплатные шаблоны",
+      "button": "Начать бесплатно"
     }
   },
   "auth": {
-    "loginTitle": "Вход",
+    "loginTitle": "Добро пожаловать",
+    "loginSubtitle": "Войдите в свой аккаунт",
     "registerTitle": "Регистрация",
+    "registerSubtitle": "Создайте новый аккаунт",
     "email": "Эл. почта",
     "password": "Пароль",
     "confirmPassword": "Подтвердите пароль",
@@ -86,8 +117,9 @@
     "hasAccount": "Уже есть аккаунт?",
     "loginButton": "Войти",
     "registerButton": "Зарегистрироваться",
-    "orContinueWith": "или продолжить с",
-    "googleLogin": "Войти через Google"
+    "orContinueWith": "или",
+    "googleLogin": "Войти через Google",
+    "facebookLogin": "Войти через Facebook"
   },
   "dashboard": {
     "welcome": "Добро пожаловать",
@@ -96,9 +128,10 @@
     "totalEvents": "Всего событий",
     "totalGuests": "Всего гостей",
     "confirmedGuests": "Подтвержденных гостей",
-    "recentEvents": "Последние события",
+    "recentEvents": "Недавние события",
     "noEvents": "Вы еще не создали ни одного события",
-    "createFirstEvent": "Создать первое событие"
+    "createFirstEvent": "Создать первое событие",
+    "addBalance": "Пополнить баланс"
   },
   "events": {
     "createEvent": "Создать событие",
@@ -130,7 +163,15 @@
     "preview": "Предпросмотр",
     "useTemplate": "Использовать шаблон",
     "category": "Категория",
-    "filterBy": "Фильтр"
+    "filterBy": "Фильтр",
+    "categories": {
+      "all": "Все",
+      "wedding": "Свадьба",
+      "engagement": "Помолвка",
+      "birthday": "День рождения",
+      "babyShower": "Baby Shower",
+      "corporate": "Корпоратив"
+    }
   },
   "payment": {
     "addBalance": "Пополнить баланс",
@@ -145,7 +186,9 @@
     "status": "Статус",
     "successful": "Успешно",
     "goToDashboard": "Перейти в панель",
-    "addMore": "Добавить еще"
+    "addMore": "Добавить еще",
+    "perGuest": "за гостя",
+    "freeGuests": "первые 30 гостей бесплатно"
   },
   "footer": {
     "description": "Платформа цифровых приглашений",
@@ -154,7 +197,9 @@
     "privacy": "Политика конфиденциальности",
     "terms": "Условия использования",
     "followUs": "Следите за нами",
-    "allRightsReserved": "Все права защищены"
+    "allRightsReserved": "Все права защищены",
+    "contact": "Контакты",
+    "support": "Поддержка"
   },
   "admin": {
     "dashboard": "Админ панель",
@@ -164,7 +209,8 @@
     "payments": "Платежи",
     "settings": "Настройки",
     "pages": "Страницы",
-    "blog": "Блог"
+    "blog": "Блог",
+    "slider": "Слайдер"
   },
   "errors": {
     "required": "Это поле обязательно",
