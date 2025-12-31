@@ -131,7 +131,7 @@ const LoginPage = () => {
               
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-sm font-medium text-gray-700">
-                  Parol
+                  {t('auth.password')}
                 </Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -139,7 +139,7 @@ const LoginPage = () => {
                     id="password"
                     name="password"
                     type="password"
-                    placeholder="Parolunuz"
+                    placeholder="********"
                     value={formData.password}
                     onChange={handleInputChange}
                     className="pl-10 h-12 border-gray-200 focus:border-blue-500 custom-input"
@@ -155,7 +155,7 @@ const LoginPage = () => {
                   className="text-blue-600 hover:text-blue-800 transition-colors"
                   data-testid="forgot-password-link"
                 >
-                  Parolunu unutmusan?
+                  {t('auth.forgotPassword')}
                 </Link>
               </div>
 
@@ -168,10 +168,10 @@ const LoginPage = () => {
                 {isLoading ? (
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span>Giriş edilir...</span>
+                    <span>{t('common.loading')}</span>
                   </div>
                 ) : (
-                  'Giriş et'
+                  t('auth.loginButton')
                 )}
               </Button>
             </form>
