@@ -200,7 +200,7 @@ const Templates = () => {
         });
       }
     }
-  }, [parent, sub, i18n.language]);
+  }, [parent, sub, getLocalizedCategoryStructure, fetchTemplates]);
 
   const fetchTemplates = useCallback(async () => {
     try {
