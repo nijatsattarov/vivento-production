@@ -74,7 +74,7 @@ const LoginPage = () => {
           data-testid="back-home-link"
         >
           <ArrowLeft className="h-4 w-4" />
-          <span>Ana səhifəyə qayıt</span>
+          <span>{t('common.home')}</span>
         </Link>
 
         {/* Login Card */}
@@ -88,8 +88,8 @@ const LoginPage = () => {
               />
             </div>
             <div className="space-y-2">
-              <CardTitle className="text-2xl font-bold text-gray-900">Xoş gəlmisiniz</CardTitle>
-              <p className="text-gray-600">Hesabınıza giriş edin</p>
+              <CardTitle className="text-2xl font-bold text-gray-900">{t('auth.loginTitle')}</CardTitle>
+              <p className="text-gray-600">{t('auth.loginSubtitle')}</p>
             </div>
           </CardHeader>
           
@@ -103,7 +103,7 @@ const LoginPage = () => {
             <div className="relative">
               <Separator />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="bg-white px-3 text-sm text-gray-500">və ya</span>
+                <span className="bg-white px-3 text-sm text-gray-500">{t('auth.orContinueWith')}</span>
               </div>
             </div>
 
@@ -111,7 +111,7 @@ const LoginPage = () => {
             <form onSubmit={handleSubmit} className="space-y-5" data-testid="login-form">
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                  Email ünvanı
+                  {t('auth.email')}
                 </Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -119,7 +119,7 @@ const LoginPage = () => {
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="email@misla.com"
+                    placeholder="email@example.com"
                     value={formData.email}
                     onChange={handleInputChange}
                     className="pl-10 h-12 border-gray-200 focus:border-blue-500 custom-input"
