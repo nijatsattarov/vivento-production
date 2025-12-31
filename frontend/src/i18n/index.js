@@ -17,14 +17,18 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
+    lng: 'az', // Default language
     fallbackLng: 'az',
     debug: false,
     interpolation: {
       escapeValue: false
     },
     detection: {
-      order: ['localStorage', 'navigator'],
-      caches: ['localStorage']
+      order: ['localStorage', 'querystring', 'cookie'],
+      caches: ['localStorage', 'cookie'],
+      lookupLocalStorage: 'i18nextLng',
+      lookupQuerystring: 'lng',
+      lookupCookie: 'i18next'
     }
   });
 
