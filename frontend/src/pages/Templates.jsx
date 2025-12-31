@@ -202,7 +202,7 @@ const Templates = () => {
     }
   }, [parent, sub, i18n.language]);
 
-  const fetchTemplates = async () => {
+  const fetchTemplates = useCallback(async () => {
     try {
       let url;
       if (parent && sub) {
@@ -224,7 +224,7 @@ const Templates = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [parent, sub, API_BASE_URL]);
 
   const handleTemplateSelect = (template) => {
     // Navigate to template detail/single page 
