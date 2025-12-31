@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Button } from './ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import axios from 'axios';
@@ -11,6 +12,7 @@ const HeroSlider = () => {
   const [slides, setSlides] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
