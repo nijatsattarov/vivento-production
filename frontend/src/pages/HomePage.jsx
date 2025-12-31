@@ -46,33 +46,33 @@ const HomePage = () => {
   const features = [
     {
       icon: <Palette className="h-8 w-8 text-blue-600" />,
-      title: "Canva Tipli Editor",
-      description: "Drag & drop ilə dəvətnamələrinizi asanlıqla dizayn edin. Şəkil, mətn və rəngləri dəyişdirin."
+      title: t('home.features.feature1.title'),
+      description: t('home.features.feature1.description')
     },
     {
       icon: <Users className="h-8 w-8 text-purple-600" />,
-      title: "Qonaq İdarəetməsi",
-      description: "Qonaqlarınızı əlavə edin, RSVP cavablarını izləyin və hesabatlar alın."
+      title: t('home.features.feature2.title'),
+      description: t('home.features.feature2.description')
     },
     {
       icon: <Share2 className="h-8 w-8 text-green-600" />,
-      title: "Asan Paylaşım",
-      description: "WhatsApp və email ilə dəvətnamələrinizi bir kliklə paylaşın."
+      title: t('home.features.feature3.title'),
+      description: t('home.features.feature3.description')
     },
     {
       icon: <Smartphone className="h-8 w-8 text-orange-600" />,
-      title: "Mobil Uyğun",
-      description: "Bütün cihazlarda mükəmməl görünən responsive dizayn."
+      title: t('home.features.feature4.title'),
+      description: t('home.features.feature4.description')
     },
     {
       icon: <Zap className="h-8 w-8 text-yellow-600" />,
-      title: "QR Kod",
-      description: "Hər dəvətnamə üçün unikal QR kod yaradın və paylaşın."
+      title: t('home.features.feature5.title'),
+      description: t('home.features.feature5.description')
     },
     {
       icon: <MessageSquare className="h-8 w-8 text-pink-600" />,
-      title: "Real-vaxt RSVP",
-      description: "Qonaqlarınızdan dərhal cavab alın və statistikalar görün."
+      title: t('home.features.feature6.title'),
+      description: t('home.features.feature6.description')
     }
   ];
 
