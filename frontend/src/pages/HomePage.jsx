@@ -28,6 +28,7 @@ const HomePage = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const { settings } = useSiteSettings();
+  const { t } = useTranslation();
   const [blogPosts, setBlogPosts] = useState([]);
   const [templates, setTemplates] = useState([]);
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
