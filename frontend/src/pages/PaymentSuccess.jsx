@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import Navbar from '../components/Navbar';
@@ -12,7 +13,7 @@ import { toast } from 'sonner';
 const PaymentSuccess = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [paymentDetails, setPaymentDetails] = useState(null);
   const [newBalance, setNewBalance] = useState(null);
@@ -22,17 +23,14 @@ const PaymentSuccess = () => {
 
   useEffect(() => {
     const confirmPayment = async () => {
-      // Get payment info from localStorage
       const paymentAmount = localStorage.getItem('pending_payment_amount');
       
       if (!token) {
-        // Wait for token
         setTimeout(() => confirmPayment(), 500);
         return;
       }
 
       try {
-        // Call balance endpoint - it will auto-confirm pending payments
         const response = await axios.get(`${API_BASE_URL}/api/balance`, {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -43,15 +41,13 @@ const PaymentSuccess = () => {
           status: 'completed'
         });
 
-        // Clear localStorage
         localStorage.removeItem('pending_payment_id');
         localStorage.removeItem('pending_payment_amount');
 
-        toast.success('Ödəniş uğurla tamamlandı!');
+        toast.success(t('payment.paymentSuccess'));
         
       } catch (error) {
         console.error('Balance fetch error:', error);
-        // Still show success - payment was made
         setPaymentDetails({
           amount: paymentAmount || '?',
           status: 'completed'
@@ -62,9 +58,8 @@ const PaymentSuccess = () => {
     };
 
     confirmPayment();
-  }, [token, API_BASE_URL]);
+  }, [token, API_BASE_URL, t]);
 
-  // Auto-redirect countdown
   useEffect(() => {
     if (!loading && paymentDetails) {
       const timer = setInterval(() => {
@@ -83,7 +78,7 @@ const PaymentSuccess = () => {
   }, [loading, paymentDetails, navigate]);
 
   if (loading) {
-    return <LoadingSpinner text="Ödəniş təsdiqlənir..." />;
+    return <LoadingSpinner text={t('common.loading')} />;
   }
 
   return (
@@ -93,62 +88,57 @@ const PaymentSuccess = () => {
       <div className="max-w-2xl mx-auto px-4 py-16">
         <Card className="shadow-2xl border-0">
           <CardContent className="p-12 text-center">
-            {/* Success Icon with Animation */}
             <div className="mb-6 flex justify-center">
               <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center animate-bounce">
                 <CheckCircle className="h-12 w-12 text-green-600" />
               </div>
             </div>
 
-            {/* Success Message */}
             <h1 className="text-3xl font-bold text-green-600 mb-3">
-              ✓ Ödəniş Uğurla Tamamlandı!
+              ✓ {t('payment.paymentSuccess')}
             </h1>
             <p className="text-gray-600 mb-8">
-              Balansınız yeniləndi. Artıq dəvətnamələr göndərə bilərsiniz.
+              {t('dashboard.balance')} {t('common.success').toLowerCase()}.
             </p>
 
-            {/* Payment Details */}
             {paymentDetails && (
               <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-8 text-left">
                 <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                  Ödəniş Detalları
+                  {t('payment.addedAmount')}
                 </h3>
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Əlavə edilən məbləğ:</span>
+                    <span className="text-gray-600">{t('payment.addedAmount')}:</span>
                     <span className="font-bold text-green-600 text-lg">
                       +{parseFloat(paymentDetails.amount).toFixed(2)} AZN
                     </span>
                   </div>
                   {newBalance !== null && (
                     <div className="flex justify-between border-t border-green-200 pt-3">
-                      <span className="text-gray-600">Yeni balans:</span>
+                      <span className="text-gray-600">{t('payment.newBalance')}:</span>
                       <span className="font-bold text-blue-600 text-xl">
                         {parseFloat(newBalance).toFixed(2)} AZN
                       </span>
                     </div>
                   )}
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Status:</span>
+                    <span className="text-gray-600">{t('payment.status')}:</span>
                     <span className="font-semibold text-green-600">
-                      ✓ Uğurlu
+                      ✓ {t('payment.successful')}
                     </span>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Auto-redirect notice */}
             <p className="text-sm text-gray-500 mb-6">
               {redirectCountdown > 0 
-                ? `${redirectCountdown} saniyə sonra Dashboard-a yönləndiriləcəksiniz...`
-                : 'Yönləndirilir...'
+                ? `${redirectCountdown} ${t('payment.redirecting')}`
+                : t('common.loading')
               }
             </p>
 
-            {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 onClick={() => navigate('/dashboard')}
@@ -156,7 +146,7 @@ const PaymentSuccess = () => {
                 className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
               >
                 <Home className="mr-2 h-4 w-4" />
-                Dashboard-a keç
+                {t('payment.goToDashboard')}
               </Button>
               <Button
                 onClick={() => navigate('/add-balance')}
@@ -165,7 +155,7 @@ const PaymentSuccess = () => {
                 className="border-2"
               >
                 <Wallet className="mr-2 h-4 w-4" />
-                Daha çox əlavə et
+                {t('payment.addMore')}
               </Button>
             </div>
           </CardContent>
