@@ -200,7 +200,7 @@ const Templates = () => {
         });
       }
     }
-  }, [parent, sub]);
+  }, [parent, sub, i18n.language]);
 
   const fetchTemplates = async () => {
     try {
