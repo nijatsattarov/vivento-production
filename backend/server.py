@@ -2373,9 +2373,54 @@ async def confirm_payment_success(
 
 @api_router.get("/balance")
 async def get_balance(current_user: User = Depends(get_current_user)):
-    """Get user's current balance"""
+    """Get user's current balance and auto-confirm pending payments"""
     try:
-        user = current_user
+        # AUTO-CONFIRM: Find and process any pending payments for this user
+        pending_payments = await db.payments.find({
+            "user_id": current_user.id,
+            "status": "pending"
+        }, {"_id": 0}).to_list(100)
+        
+        if pending_payments:
+            logger.info(f"Found {len(pending_payments)} pending payments for user {current_user.id}")
+            
+            total_to_add = 0
+            for payment in pending_payments:
+                # Mark as completed
+                await db.payments.update_one(
+                    {"id": payment["id"]},
+                    {"$set": {"status": "completed", "completed_at": datetime.now(timezone.utc)}}
+                )
+                total_to_add += payment["amount"]
+                
+                # Create transaction record
+                transaction = BalanceTransaction(
+                    id=str(uuid.uuid4()),
+                    user_id=current_user.id,
+                    amount=payment["amount"],
+                    transaction_type="payment",
+                    description=f"Balans artırma: {payment['amount']} AZN",
+                    payment_method="epoint",
+                    payment_id=payment["id"],
+                    status="completed"
+                )
+                await db.balance_transactions.insert_one(transaction.model_dump())
+                logger.info(f"Auto-confirmed payment {payment['id']} for {payment['amount']} AZN")
+            
+            # Update user balance
+            if total_to_add > 0:
+                user_doc = await db.users.find_one({"id": current_user.id}, {"_id": 0})
+                current_balance = user_doc.get("balance", 0.0)
+                new_balance = current_balance + total_to_add
+                
+                await db.users.update_one(
+                    {"id": current_user.id},
+                    {"$set": {"balance": new_balance, "updated_at": datetime.now(timezone.utc)}}
+                )
+                logger.info(f"User {current_user.id} balance updated: {current_balance} -> {new_balance} AZN")
+        
+        # Get updated user data
+        user = await db.users.find_one({"id": current_user.id}, {"_id": 0})
         
         return {
             "balance": user.balance,
