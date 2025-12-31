@@ -2423,9 +2423,9 @@ async def get_balance(current_user: User = Depends(get_current_user)):
         user = await db.users.find_one({"id": current_user.id}, {"_id": 0})
         
         return {
-            "balance": user.balance,
-            "free_invitations_used": user.free_invitations_used,
-            "free_invitations_remaining": max(0, 30 - user.free_invitations_used)
+            "balance": user.get("balance", 0),
+            "free_invitations_used": user.get("free_invitations_used", 0),
+            "free_invitations_remaining": max(0, 30 - user.get("free_invitations_used", 0))
         }
     except HTTPException:
         raise
