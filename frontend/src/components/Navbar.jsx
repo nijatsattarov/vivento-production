@@ -471,7 +471,7 @@ const Navbar = () => {
               ) : (
                 <div className="text-center py-8 text-gray-500">
                   <Search className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                  <p>Axtarış üçün ən azı 2 hərf daxil edin</p>
+                  <p>{t('navbar.searchHint')}</p>
                 </div>
               )}
             </div>
