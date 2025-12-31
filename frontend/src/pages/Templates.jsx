@@ -29,7 +29,7 @@ const Templates = () => {
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   // Localized category structure for display
-  const getLocalizedCategoryStructure = () => {
+  const getLocalizedCategoryStructure = useCallback(() => {
     const structures = {
       az: {
         'toy': { name: 'Toy', icon: '💍', color: 'from-pink-400 to-red-400',
@@ -177,7 +177,7 @@ const Templates = () => {
       }
     };
     return structures[i18n.language] || structures.az;
-  };
+  }, [i18n.language]);
 
   useEffect(() => {
     const categoryStructure = getLocalizedCategoryStructure();
