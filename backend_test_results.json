@@ -1,8 +1,8 @@
 {
-  "total_tests": 9,
-  "passed_tests": 8,
-  "failed_tests": 1,
-  "success_rate": "88.9%",
+  "total_tests": 14,
+  "passed_tests": 14,
+  "failed_tests": 0,
+  "success_rate": "100.0%",
   "test_details": [
     {
       "test": "Root API",
@@ -46,8 +46,33 @@
     },
     {
       "test": "Multi-language Fields Verification",
-      "success": false,
-      "details": "No multi-language fields saved"
+      "success": true,
+      "details": "Saved fields: title_en, title_ru, content_en, content_ru, meta_description_en, meta_description_ru"
+    },
+    {
+      "test": "Verify AZ Content",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Verify EN Content",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Verify RU Content",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Final Multi-language Structure Check",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Multi-language Field Structure",
+      "success": true,
+      "details": "All required fields present"
     }
   ]
 }
