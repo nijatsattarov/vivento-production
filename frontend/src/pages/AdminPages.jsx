@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Navbar from '../components/Navbar';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
@@ -14,215 +15,136 @@ import {
   Save, 
   Eye,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Globe
 } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
 
-// PageEditor component moved outside to fix React Hook rules
-const PageEditor = ({ page, formData, handleInputChange, handleSave, saving, preview, setPreview }) => {
+const languages = [
+  { code: 'az', name: 'Azərbaycan', flag: '🇦🇿' },
+  { code: 'en', name: 'English', flag: '🇬🇧' },
+  { code: 'ru', name: 'Русский', flag: '🇷🇺' }
+];
+
+// Multi-language Page Editor Component
+const PageEditor = ({ page, formData, handleInputChange, handleSave, saving }) => {
   const slug = page.slug;
   const data = formData[slug] || {};
+  const [activeLang, setActiveLang] = useState('az');
+
+  const getFieldName = (field, lang) => {
+    if (lang === 'az') return field;
+    return `${field}_${lang}`;
+  };
 
   return (
     <div className="space-y-6">
+      {/* Language Tabs */}
+      <div className="border-b pb-4">
+        <Label className="text-base font-semibold mb-3 block">
+          <Globe className="inline-block w-4 h-4 mr-2" />
+          Dil Seçimi
+        </Label>
+        <div className="flex gap-2">
+          {languages.map((lang) => (
+            <Button
+              key={lang.code}
+              variant={activeLang === lang.code ? "default" : "outline"}
+              size="sm"
+              onClick={() => setActiveLang(lang.code)}
+              className="flex items-center gap-2"
+            >
+              <span>{lang.flag}</span>
+              {lang.name}
+            </Button>
+          ))}
+        </div>
+      </div>
+
       {/* Title */}
       <div>
-        <Label htmlFor={`title-${slug}`} className="text-base font-semibold">
-          Başlıq
+        <Label htmlFor={`title-${slug}-${activeLang}`} className="text-base font-semibold">
+          Başlıq ({languages.find(l => l.code === activeLang)?.name})
         </Label>
         <Input
-          id={`title-${slug}`}
-          value={data.title || ''}
-          onChange={(e) => handleInputChange(slug, 'title', e.target.value)}
+          id={`title-${slug}-${activeLang}`}
+          value={data[getFieldName('title', activeLang)] || ''}
+          onChange={(e) => handleInputChange(slug, getFieldName('title', activeLang), e.target.value)}
           className="mt-2"
-          placeholder="Səhifə başlığı"
+          placeholder={`Səhifə başlığı (${activeLang.toUpperCase()})`}
         />
       </div>
 
       {/* Meta Description */}
       <div>
-        <Label htmlFor={`meta-${slug}`} className="text-base font-semibold">
-          Meta Təsvir (SEO)
+        <Label htmlFor={`meta-${slug}-${activeLang}`} className="text-base font-semibold">
+          Meta Təsvir ({languages.find(l => l.code === activeLang)?.name})
         </Label>
         <Textarea
-          id={`meta-${slug}`}
-          value={data.meta_description || ''}
-          onChange={(e) => handleInputChange(slug, 'meta_description', e.target.value)}
+          id={`meta-${slug}-${activeLang}`}
+          value={data[getFieldName('meta_description', activeLang)] || ''}
+          onChange={(e) => handleInputChange(slug, getFieldName('meta_description', activeLang), e.target.value)}
           className="mt-2"
           rows={2}
-          placeholder="Axtarış motorları üçün qısa təsvir"
+          placeholder={`SEO meta təsviri (${activeLang.toUpperCase()})`}
         />
       </div>
 
-      {/* Content Editor */}
+      {/* Content */}
       <div>
-        <Label className="text-base font-semibold mb-2 block">
-          Məzmun
+        <Label htmlFor={`content-${slug}-${activeLang}`} className="text-base font-semibold">
+          Məzmun ({languages.find(l => l.code === activeLang)?.name})
         </Label>
-        
-        {!preview ? (
-          <>
-            {/* HTML Toolbar */}
-            <div className="flex flex-wrap gap-2 mb-3 p-3 bg-gray-100 rounded-lg border">
-              <button
-                type="button"
-                onClick={() => {
-                  const textarea = document.getElementById(`content-${slug}`);
-                  const start = textarea.selectionStart;
-                  const end = textarea.selectionEnd;
-                  const selectedText = data.content.substring(start, end) || 'Başlıq';
-                  const newContent = data.content.substring(0, start) + `<h2>${selectedText}</h2>` + data.content.substring(end);
-                  handleInputChange(slug, 'content', newContent);
-                }}
-                className="px-3 py-1 text-sm border rounded hover:bg-gray-200"
-              >
-                H2
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  const textarea = document.getElementById(`content-${slug}`);
-                  const start = textarea.selectionStart;
-                  const end = textarea.selectionEnd;
-                  const selectedText = data.content.substring(start, end) || 'Alt başlıq';
-                  const newContent = data.content.substring(0, start) + `<h3>${selectedText}</h3>` + data.content.substring(end);
-                  handleInputChange(slug, 'content', newContent);
-                }}
-                className="px-3 py-1 text-sm border rounded hover:bg-gray-200"
-              >
-                H3
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  const textarea = document.getElementById(`content-${slug}`);
-                  const start = textarea.selectionStart;
-                  const end = textarea.selectionEnd;
-                  const selectedText = data.content.substring(start, end) || 'Paraqraf';
-                  const newContent = data.content.substring(0, start) + `<p>${selectedText}</p>` + data.content.substring(end);
-                  handleInputChange(slug, 'content', newContent);
-                }}
-                className="px-3 py-1 text-sm border rounded hover:bg-gray-200"
-              >
-                P
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  const textarea = document.getElementById(`content-${slug}`);
-                  const start = textarea.selectionStart;
-                  const end = textarea.selectionEnd;
-                  const selectedText = data.content.substring(start, end) || 'Qalın mətn';
-                  const newContent = data.content.substring(0, start) + `<strong>${selectedText}</strong>` + data.content.substring(end);
-                  handleInputChange(slug, 'content', newContent);
-                }}
-                className="px-3 py-1 text-sm font-bold border rounded hover:bg-gray-200"
-              >
-                B
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  const textarea = document.getElementById(`content-${slug}`);
-                  const start = textarea.selectionStart;
-                  const end = textarea.selectionEnd;
-                  const selectedText = data.content.substring(start, end) || 'Link';
-                  const newContent = data.content.substring(0, start) + `<a href="https://example.com">${selectedText}</a>` + data.content.substring(end);
-                  handleInputChange(slug, 'content', newContent);
-                }}
-                className="px-3 py-1 text-sm border rounded hover:bg-gray-200"
-              >
-                🔗 Link
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  const textarea = document.getElementById(`content-${slug}`);
-                  const start = textarea.selectionStart;
-                  const end = textarea.selectionEnd;
-                  const selectedText = data.content.substring(start, end) || 'Siyahı';
-                  const newContent = data.content.substring(0, start) + `<ul>\n  <li>${selectedText}</li>\n</ul>` + data.content.substring(end);
-                  handleInputChange(slug, 'content', newContent);
-                }}
-                className="px-3 py-1 text-sm border rounded hover:bg-gray-200"
-              >
-                • List
-              </button>
+        <p className="text-sm text-gray-500 mt-1 mb-2">
+          HTML formatında yazın. Başlıqlar üçün &lt;h2&gt;, &lt;h3&gt;, paraqraf üçün &lt;p&gt;, siyahı üçün &lt;ul&gt;&lt;li&gt; istifadə edin.
+        </p>
+        <Textarea
+          id={`content-${slug}-${activeLang}`}
+          value={data[getFieldName('content', activeLang)] || ''}
+          onChange={(e) => handleInputChange(slug, getFieldName('content', activeLang), e.target.value)}
+          className="mt-2 font-mono text-sm"
+          rows={15}
+          placeholder={`Səhifə məzmunu (${activeLang.toUpperCase()})`}
+        />
+      </div>
+
+      {/* Status Indicators */}
+      <div className="flex items-center gap-4 text-sm">
+        {languages.map((lang) => {
+          const hasContent = data[getFieldName('content', lang.code)]?.length > 10;
+          return (
+            <div key={lang.code} className="flex items-center gap-1">
+              <span>{lang.flag}</span>
+              {hasContent ? (
+                <CheckCircle2 className="w-4 h-4 text-green-500" />
+              ) : (
+                <AlertCircle className="w-4 h-4 text-orange-400" />
+              )}
             </div>
-            
-            {/* Textarea HTML Editor */}
-            <Textarea
-              id={`content-${slug}`}
-              value={data.content || ''}
-              onChange={(e) => handleInputChange(slug, 'content', e.target.value)}
-              className="font-mono text-sm min-h-[400px]"
-              placeholder="HTML məzmun daxil edin..."
-            />
-            <p className="text-xs text-gray-500 mt-2">
-              💡 HTML tag-lərindən istifadə edin: &lt;h2&gt;, &lt;h3&gt;, &lt;p&gt;, &lt;strong&gt;, &lt;a&gt;, &lt;ul&gt;, &lt;li&gt;
-            </p>
-          </>
-        ) : (
-          <div 
-            className="prose max-w-none p-6 bg-gray-50 rounded-lg border min-h-[400px]"
-            dangerouslySetInnerHTML={{ __html: data.content }}
-          />
-        )}
-      </div>
-
-      {/* Actions */}
-      <div className="flex items-center justify-between pt-4">
-        <Button
-          variant="outline"
-          onClick={() => setPreview(!preview)}
-          className="flex items-center gap-2"
-        >
-          <Eye className="h-4 w-4" />
-          {preview ? 'Redaktə et' : 'Baxış'}
-        </Button>
-
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 text-sm">
-            {data.published ? (
-              <>
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
-                <span className="text-green-600 font-medium">Aktiv</span>
-              </>
-            ) : (
-              <>
-                <AlertCircle className="h-4 w-4 text-orange-600" />
-                <span className="text-orange-600 font-medium">Deaktiv</span>
-              </>
-            )}
-          </div>
-
-          <Button
-            onClick={() => handleSave(slug)}
-            disabled={saving}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-          >
-            {saving ? (
-              <>Saxlanılır...</>
-            ) : (
-              <>
-                <Save className="mr-2 h-4 w-4" />
-                Yadda Saxla
-              </>
-            )}
-          </Button>
-        </div>
-      </div>
-
-      {/* Last Updated */}
-      <div className="text-sm text-gray-500 pt-4 border-t">
-        Son yenilənmə: {new Date(page.updated_at).toLocaleDateString('az-AZ', {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
+          );
         })}
+      </div>
+
+      {/* Save Button */}
+      <div className="flex justify-end pt-4 border-t">
+        <Button 
+          onClick={() => handleSave(slug)} 
+          disabled={saving}
+          className="min-w-[150px]"
+        >
+          {saving ? (
+            <>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+              Saxlanılır...
+            </>
+          ) : (
+            <>
+              <Save className="mr-2 h-4 w-4" />
+              Yadda Saxla
+            </>
+          )}
+        </Button>
       </div>
     </div>
   );
@@ -231,13 +153,13 @@ const PageEditor = ({ page, formData, handleInputChange, handleSave, saving, pre
 const AdminPages = () => {
   const { user, token } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const [pages, setPages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [pages, setPages] = useState([]);
   const [activeTab, setActiveTab] = useState('privacy');
   const [formData, setFormData] = useState({});
-  const [preview, setPreview] = useState(false);
-
+  
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
@@ -246,63 +168,42 @@ const AdminPages = () => {
       return;
     }
     fetchPages();
-  }, [user]);
+  }, [user, navigate]);
 
   const fetchPages = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(`${API_BASE_URL}/api/admin/pages`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
       setPages(response.data);
       
-      // Initialize form data
+      // Initialize form data with all language fields
       const initialData = {};
       response.data.forEach(page => {
         initialData[page.slug] = {
-          title: page.title,
-          content: page.content,
+          title: page.title || '',
+          title_en: page.title_en || '',
+          title_ru: page.title_ru || '',
+          content: page.content || '',
+          content_en: page.content_en || '',
+          content_ru: page.content_ru || '',
           meta_description: page.meta_description || '',
-          published: page.published
+          meta_description_en: page.meta_description_en || '',
+          meta_description_ru: page.meta_description_ru || ''
         };
       });
       setFormData(initialData);
       
+      if (response.data.length > 0) {
+        setActiveTab(response.data[0].slug);
+      }
     } catch (error) {
-      console.error('Fetch pages error:', error);
+      console.error('Səhifələr yüklənərkən xəta:', error);
       toast.error('Səhifələr yüklənə bilmədi');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleSave = async (slug) => {
-    if (!formData[slug]) {
-      toast.error('Məlumat tapılmadı');
-      return;
-    }
-
-    setSaving(true);
-
-    try {
-      await axios.put(
-        `${API_BASE_URL}/api/admin/pages/${slug}`,
-        formData[slug],
-        {
-          headers: { 
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      );
-
-      toast.success('Səhifə uğurla yadda saxlanıldı');
-      fetchPages(); // Refresh data
-    } catch (error) {
-      console.error('Save page error:', error);
-      toast.error(error.response?.data?.detail || 'Saxlanarkən xəta baş verdi');
-    } finally {
-      setSaving(false);
     }
   };
 
@@ -316,58 +217,91 @@ const AdminPages = () => {
     }));
   };
 
+  const handleSave = async (slug) => {
+    try {
+      setSaving(true);
+      const data = formData[slug];
+      
+      await axios.put(
+        `${API_BASE_URL}/api/admin/pages/${slug}`,
+        data,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      
+      toast.success('Səhifə uğurla yeniləndi!');
+    } catch (error) {
+      console.error('Səhifə saxlanarkən xəta:', error);
+      toast.error('Səhifə saxlanarkən xəta baş verdi');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   if (loading) {
     return <LoadingSpinner text="Səhifələr yüklənir..." />;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
       
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Səhifə İdarəetməsi
+          <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+            <FileText className="h-8 w-8 text-blue-600" />
+            Səhifə İdarəetməsi (CMS)
           </h1>
-          <p className="text-gray-600">
-            Məxfilik, şərtlər və əlaqə səhifələrini redaktə edin
+          <p className="text-gray-600 mt-2">
+            Statik səhifələrin məzmununu 3 dildə (AZ, EN, RU) redaktə edin
           </p>
         </div>
 
-        {/* Tabs */}
-        <Card className="shadow-xl">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <FileText className="h-5 w-5" />
-              Səhifələr
-            </CardTitle>
+        {/* Main Content */}
+        <Card className="shadow-lg">
+          <CardHeader className="border-b bg-gray-50">
+            <CardTitle>Səhifələr</CardTitle>
             <CardDescription>
-              Hər bir səhifəni seçib redaktə edə bilərsiniz
+              Hər səhifənin məzmununu Azərbaycan, İngilis və Rus dillərində yazın
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-3 mb-6">
-                <TabsTrigger value="privacy">Məxfilik</TabsTrigger>
-                <TabsTrigger value="terms">Şərtlər</TabsTrigger>
-                <TabsTrigger value="contact">Əlaqə</TabsTrigger>
-              </TabsList>
-
-              {pages.map(page => (
-                <TabsContent key={page.slug} value={page.slug}>
-                  <PageEditor 
-                    page={page}
-                    formData={formData}
-                    handleInputChange={handleInputChange}
-                    handleSave={handleSave}
-                    saving={saving}
-                    preview={preview}
-                    setPreview={setPreview}
-                  />
-                </TabsContent>
-              ))}
-            </Tabs>
+          
+          <CardContent className="p-0">
+            {pages.length === 0 ? (
+              <div className="p-8 text-center">
+                <AlertCircle className="h-12 w-12 text-orange-500 mx-auto mb-4" />
+                <p className="text-gray-600">Heç bir səhifə tapılmadı</p>
+              </div>
+            ) : (
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <TabsList className="w-full justify-start border-b rounded-none bg-white px-4 pt-4">
+                  {pages.map((page) => (
+                    <TabsTrigger 
+                      key={page.slug} 
+                      value={page.slug}
+                      className="data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 px-6"
+                    >
+                      {page.slug === 'privacy' && '🔒 Məxfilik'}
+                      {page.slug === 'terms' && '📋 Şərtlər'}
+                      {page.slug === 'contact' && '📧 Əlaqə'}
+                      {!['privacy', 'terms', 'contact'].includes(page.slug) && page.title}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+                
+                {pages.map((page) => (
+                  <TabsContent key={page.slug} value={page.slug} className="p-6 m-0">
+                    <PageEditor
+                      page={page}
+                      formData={formData}
+                      handleInputChange={handleInputChange}
+                      handleSave={handleSave}
+                      saving={saving}
+                    />
+                  </TabsContent>
+                ))}
+              </Tabs>
+            )}
           </CardContent>
         </Card>
       </div>
