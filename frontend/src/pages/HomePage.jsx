@@ -181,10 +181,10 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
-              Niyə <span className="gradient-text">Vivento</span> seçməlisiniz?
+              {t('home.features.title')}
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Dəvətnamə yaratmaqdan RSVP cavablarını toplamağa qədər bütün prosesi sadələşdiririk
+              {t('home.hero.subtitle')}
             </p>
           </div>
 
