@@ -264,7 +264,7 @@ const Templates = () => {
             className="mb-4"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Ana səhifəyə qayıt
+            {t('backToHome', 'Ana səhifəyə qayıt')}
           </Button>
           
           <div className="text-center mb-8">
