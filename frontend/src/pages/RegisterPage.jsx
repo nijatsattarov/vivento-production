@@ -105,8 +105,12 @@ const RegisterPage = () => {
         {/* Register Card */}
         <Card className="glass border-0 shadow-2xl">
           <CardHeader className="text-center space-y-4 pb-8">
-            <div className="mx-auto w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center">
-              <span className="text-white font-bold text-2xl">V</span>
+            <div className="mx-auto w-16 h-16 rounded-2xl flex items-center justify-center overflow-hidden">
+              <img 
+                src="/vivento-icon.png" 
+                alt="Vivento Icon" 
+                className="w-full h-full object-contain"
+              />
             </div>
             <div className="space-y-2">
               <CardTitle className="text-2xl font-bold text-gray-900">{t('auth.registerTitle')}</CardTitle>
