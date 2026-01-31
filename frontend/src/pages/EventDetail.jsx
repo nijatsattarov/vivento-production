@@ -458,7 +458,7 @@ const EventDetail = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => shareViaWhatsApp(guest.unique_token, guest.name)}
+                          onClick={() => shareViaWhatsApp(guest.unique_token, guest.name, guest.phone)}
                           className="flex-1 text-xs border-green-600 text-green-600 hover:bg-green-50"
                           data-testid={`whatsapp-${guest.id}`}
                         >
