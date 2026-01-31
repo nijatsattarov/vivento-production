@@ -565,7 +565,7 @@ const TemplateEditor = () => {
             <Tabs defaultValue="elements" className="space-y-4">
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="elements" data-testid="elements-tab">Elementlər</TabsTrigger>
-                <TabsTrigger value="styles" data-testid="styles-tab">Üslub</TabsTrigger>
+                <TabsTrigger value="styles" data-testid="styles-tab">Stil</TabsTrigger>
                 <TabsTrigger value="settings" data-testid="settings-tab">Ayarlar</TabsTrigger>
               </TabsList>
 
