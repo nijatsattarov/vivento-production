@@ -1973,7 +1973,8 @@ async def create_slide(
         }
         
         await db.hero_slides.insert_one(new_slide)
-        del new_slide["_id"] if "_id" in new_slide else None
+        if "_id" in new_slide:
+            del new_slide["_id"]
         return new_slide
     except Exception as e:
         logger.error(f"Create slide error: {e}")
