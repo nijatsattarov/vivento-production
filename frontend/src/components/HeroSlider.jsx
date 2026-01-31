@@ -155,10 +155,10 @@ const HeroSlider = () => {
               <div className="relative h-full max-w-7xl mx-auto px-4 flex items-center">
                 <div className="max-w-3xl space-y-6 animate-fade-in">
                   <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight drop-shadow-lg">
-                    {slide.title}
+                    {getLocalizedText(slide.title)}
                   </h1>
                   <p className="text-xl sm:text-2xl text-white/90 leading-relaxed drop-shadow-md">
-                    {slide.subtitle}
+                    {getLocalizedText(slide.subtitle)}
                   </p>
                   {slide.button_text && (
                     <Button
@@ -166,7 +166,7 @@ const HeroSlider = () => {
                       size="lg"
                       className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg rounded-xl shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
                     >
-                      {slide.button_text}
+                      {getLocalizedText(slide.button_text, t('common.getStarted'))}
                     </Button>
                   )}
                 </div>
