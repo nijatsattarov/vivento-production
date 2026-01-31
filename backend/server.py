@@ -1979,16 +1979,19 @@ async def create_slide(
         logger.error(f"Create slide error: {e}")
         raise HTTPException(status_code=500, detail="Slider yaradılarkən xəta baş verdi")
 
-@api_router.put("/admin/slides/{slide_id}", response_model=HeroSlide)
+class SlideUpdate(BaseModel):
+    title: Optional[Dict[str, str]] = None
+    subtitle: Optional[Dict[str, str]] = None
+    button_text: Optional[Dict[str, str]] = None
+    image_url: Optional[str] = None
+    button_link: Optional[str] = None
+    order: Optional[int] = None
+    is_active: Optional[bool] = None
+
+@api_router.put("/admin/slides/{slide_id}")
 async def update_slide(
     slide_id: str,
-    title: Optional[str] = None,
-    subtitle: Optional[str] = None,
-    image_url: Optional[str] = None,
-    button_text: Optional[str] = None,
-    button_link: Optional[str] = None,
-    order: Optional[int] = None,
-    is_active: Optional[bool] = None,
+    slide_data: SlideUpdate,
     current_user: User = Depends(get_current_user)
 ):
     """Update hero slide (Admin only)"""
@@ -1997,25 +2000,25 @@ async def update_slide(
     
     try:
         update_data = {}
-        if title is not None:
-            update_data["title"] = title
-        if subtitle is not None:
-            update_data["subtitle"] = subtitle
-        if image_url is not None:
-            update_data["image_url"] = image_url
-        if button_text is not None:
-            update_data["button_text"] = button_text
-        if button_link is not None:
-            update_data["button_link"] = button_link
-        if order is not None:
-            update_data["order"] = order
-        if is_active is not None:
-            update_data["is_active"] = is_active
+        if slide_data.title is not None:
+            update_data["title"] = slide_data.title
+        if slide_data.subtitle is not None:
+            update_data["subtitle"] = slide_data.subtitle
+        if slide_data.button_text is not None:
+            update_data["button_text"] = slide_data.button_text
+        if slide_data.image_url is not None:
+            update_data["image_url"] = slide_data.image_url
+        if slide_data.button_link is not None:
+            update_data["button_link"] = slide_data.button_link
+        if slide_data.order is not None:
+            update_data["order"] = slide_data.order
+        if slide_data.is_active is not None:
+            update_data["is_active"] = slide_data.is_active
         
         if not update_data:
             raise HTTPException(status_code=400, detail="Heç bir məlumat dəyişdirilmədi")
         
-        update_data["updated_at"] = datetime.now(timezone.utc)
+        update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
         
         result = await db.hero_slides.update_one(
             {"id": slide_id},
@@ -2025,8 +2028,8 @@ async def update_slide(
         if result.matched_count == 0:
             raise HTTPException(status_code=404, detail="Slider tapılmadı")
         
-        updated_slide = await db.hero_slides.find_one({"id": slide_id})
-        return HeroSlide(**updated_slide)
+        updated_slide = await db.hero_slides.find_one({"id": slide_id}, {"_id": 0})
+        return updated_slide
     except HTTPException:
         raise
     except Exception as e:
