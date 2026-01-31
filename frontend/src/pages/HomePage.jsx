@@ -132,43 +132,6 @@ const HomePage = () => {
     }
   };
 
-  const pricingPlans = [
-    {
-      name: "Pulsuz",
-      price: "0",
-      features: [
-        "1 tədbir",
-        "Maksimum 50 dəvətnamə",
-        "Əsas şablonlar",
-        "WhatsApp paylaşımı"
-      ]
-    },
-    {
-      name: "Premium",
-      price: "9.99",
-      features: [
-        "Limitsiz tədbir",
-        "Limitsiz dəvətnamə",
-        "Premium şablonlar",
-        "Email & WhatsApp",
-        "QR kod generasiyası",
-        "Detallı statistikalar"
-      ],
-      popular: true
-    },
-    {
-      name: "VIP",
-      price: "19.99",
-      features: [
-        "Bütün Premium xüsusiyyətlər",
-        "Şəkil və video qalereya",
-        "Öz brendinizi əlavə edin",
-        "Priority dəstək",
-        "Analytics və hesabatlar"
-      ]
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <Navbar />
