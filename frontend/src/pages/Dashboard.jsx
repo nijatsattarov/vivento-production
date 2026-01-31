@@ -494,10 +494,11 @@ const Dashboard = () => {
                   </p>
                 </div>
                 <Button 
+                  onClick={() => navigate('/add-balance')}
                   className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                   data-testid="upgrade-button"
                 >
-                  Yeniləyin
+                  YÜKSƏLDİN
                 </Button>
               </div>
             </CardContent>
