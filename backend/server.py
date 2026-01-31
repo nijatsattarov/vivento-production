@@ -289,13 +289,18 @@ class CustomFont(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
-# Hero Slider Model
+# Hero Slider Model - Multilingual
+class MultilingualText(BaseModel):
+    az: str = ""
+    en: str = ""
+    ru: str = ""
+
 class HeroSlide(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    title: str
-    subtitle: str
-    image_url: str
-    button_text: Optional[str] = "Başla"
+    title: Union[str, Dict[str, str]] = ""  # Can be string or {az, en, ru}
+    subtitle: Union[str, Dict[str, str]] = ""  # Can be string or {az, en, ru}
+    button_text: Union[str, Dict[str, str]] = "Başla"  # Can be string or {az, en, ru}
+    image_url: str = ""
     button_link: Optional[str] = "/register"
     order: int = 0
     is_active: bool = True
