@@ -461,6 +461,30 @@ async def login(request: LoginRequest):
         user=user
     )
 
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+@api_router.post("/auth/forgot-password")
+async def forgot_password(request: ForgotPasswordRequest):
+    """
+    Handle forgot password request.
+    For security, always return success even if email doesn't exist.
+    In a real app, this would send an email with a reset link.
+    """
+    # Check if user exists (but don't reveal this to the client)
+    user_doc = await db.users.find_one({"email": request.email})
+    
+    if user_doc:
+        # In production, you would:
+        # 1. Generate a password reset token
+        # 2. Store it in the database with expiry
+        # 3. Send an email with the reset link
+        # For now, we just log it
+        print(f"Password reset requested for: {request.email}")
+    
+    # Always return success for security
+    return {"success": True, "message": "Əgər bu e-poçt mövcuddursa, şifrə bərpa linki göndərildi"}
+
 @api_router.post("/auth/facebook", response_model=TokenResponse)
 async def facebook_login(request: FacebookLoginRequest):
     # Verify Facebook token
