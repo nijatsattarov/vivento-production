@@ -172,11 +172,32 @@ const EventDetail = () => {
     toast.success('Link kopyalandı');
   };
 
-  const shareViaWhatsApp = (guestToken, guestName) => {
+  const shareViaWhatsApp = (guestToken, guestName, guestPhone = null) => {
     const link = `${window.location.origin}/invite/${guestToken}`;
     const message = `Salam ${guestName}! ${event?.name} tədbirimizə dəvətlisiniz. Dəvətnamənizi baxın: ${link}`;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    
+    // If guest has a phone number, send directly to that number
+    if (guestPhone) {
+      // Clean phone number - remove spaces, dashes, and ensure it starts with country code
+      let cleanPhone = guestPhone.replace(/[\s\-\(\)]/g, '');
+      // If starts with 0, replace with country code
+      if (cleanPhone.startsWith('0')) {
+        cleanPhone = '994' + cleanPhone.substring(1);
+      }
+      // If doesn't have country code, add it
+      if (!cleanPhone.startsWith('+') && !cleanPhone.startsWith('994')) {
+        cleanPhone = '994' + cleanPhone;
+      }
+      // Remove + sign if present
+      cleanPhone = cleanPhone.replace('+', '');
+      
+      const whatsappUrl = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+    } else {
+      // No phone number - open WhatsApp with just the message
+      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+    }
   };
 
   if (loading) {
