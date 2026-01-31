@@ -92,8 +92,8 @@ const AddBalance = () => {
       return;
     }
 
-    if (amountNum > 10000) {
-      toast.error('Maksimum məbləğ 10,000 AZN ola bilər');
+    if (amountNum > 999) {
+      toast.error('Maksimum məbləğ 999 AZN ola bilər');
       return;
     }
 
