@@ -203,6 +203,29 @@ const Templates = () => {
     }
   }, [parent, sub, API_BASE_URL]);
 
+  useEffect(() => {
+    const categoryStructure = getLocalizedCategoryStructure();
+    
+    fetchTemplates();
+    // Build display info
+    if (parent && categoryStructure[parent]) {
+      const parentInfo = categoryStructure[parent];
+      if (sub && parentInfo.subcategories && parentInfo.subcategories[sub]) {
+        setCategoryDisplayInfo({
+          name: `${parentInfo.name} - ${parentInfo.subcategories[sub].name}`,
+          icon: parentInfo.icon,
+          color: parentInfo.color
+        });
+      } else {
+        setCategoryDisplayInfo({
+          name: parentInfo.name,
+          icon: parentInfo.icon,
+          color: parentInfo.color
+        });
+      }
+    }
+  }, [parent, sub, getLocalizedCategoryStructure, fetchTemplates]);
+
   const handleTemplateSelect = (template) => {
     // Navigate to template detail/single page 
     navigate(`/template/${template.id}`);
