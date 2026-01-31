@@ -239,11 +239,11 @@ const AddBalance = () => {
                       id="amount"
                       type="number"
                       min="1"
-                      max="1000"
+                      max="999"
                       step="0.01"
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
-                      placeholder="Məbləğ daxil edin"
+                      placeholder="Məbləği qeyd edin"
                       className="pr-12"
                     />
                     <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
@@ -251,7 +251,7 @@ const AddBalance = () => {
                     </span>
                   </div>
                   <p className="text-sm text-gray-500 mt-1">
-                    Minimum: 1 AZN, Maksimum: 1000 AZN
+                    Minimum: 1 AZN, Maksimum: 999 AZN
                   </p>
                 </div>
               </CardContent>
