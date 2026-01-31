@@ -593,7 +593,7 @@ const HomePage = () => {
           )}
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Vivento. {t('footer.allRightsReserved')}.</p>
+            <p>&copy; 2025 Vivento. {t('footer.allRightsReserved')}.</p>
           </div>
         </div>
       </footer>
