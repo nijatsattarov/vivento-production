@@ -27,7 +27,8 @@ import {
   QrCode,
   BarChart3,
   User,
-  Phone
+  Phone,
+  Wallet
 } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
