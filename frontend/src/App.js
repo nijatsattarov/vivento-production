@@ -64,6 +64,14 @@ const AppRoutes = () => {
           <RegisterPage />
         } 
       />
+      <Route 
+        path="/forgot-password" 
+        element={
+          isAuthenticated ? 
+          <Navigate to="/dashboard" replace /> : 
+          <ForgotPassword />
+        } 
+      />
       <Route path="/invite/:token" element={<InvitationPage />} />
       
       {/* Template routes */}
