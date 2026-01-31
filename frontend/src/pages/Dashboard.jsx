@@ -187,6 +187,56 @@ const Dashboard = () => {
     return 'bg-green-500';
   };
 
+  const handleDeleteEvent = async (eventId) => {
+    if (!window.confirm('Bu tədbiri silmək istədiyinizə əminsiniz?')) {
+      return;
+    }
+    
+    setDeletingEventId(eventId);
+    try {
+      await axios.delete(`${API_BASE_URL}/api/events/${eventId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      toast.success('Tədbir uğurla silindi');
+      setEvents(events.filter(e => e.id !== eventId));
+      calculateStats(events.filter(e => e.id !== eventId));
+    } catch (error) {
+      console.error('Delete event error:', error);
+      toast.error('Tədbir silinərkən xəta baş verdi');
+    } finally {
+      setDeletingEventId(null);
+    }
+  };
+
+  const handleShareEvent = async (event) => {
+    const inviteUrl = `${window.location.origin}/invite/${event.invite_token || event.id}`;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: event.name,
+          text: `${event.name} tədbirinə dəvət olunursunuz!`,
+          url: inviteUrl
+        });
+      } catch (error) {
+        // User cancelled sharing
+        if (error.name !== 'AbortError') {
+          copyToClipboard(inviteUrl);
+        }
+      }
+    } else {
+      copyToClipboard(inviteUrl);
+    }
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      toast.success('Dəvət linki kopyalandı!');
+    }).catch(() => {
+      toast.error('Link kopyalana bilmədi');
+    });
+  };
+
   if (loading || processingAuth) {
     return <LoadingSpinner text={processingAuth ? "Giriş edilir..." : "Məlumatlar yüklənir..."} />;
   }
