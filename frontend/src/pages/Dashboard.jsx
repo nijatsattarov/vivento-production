@@ -481,29 +481,6 @@ const Dashboard = () => {
             </div>
           )}
         </div>
-
-        {/* Subscription Status */}
-        {user?.subscription_type === 'free' && (
-          <Card className="mt-8 bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200" data-testid="upgrade-prompt">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Premium xüsusiyyətləri kəşf edin</h3>
-                  <p className="text-gray-600 mt-1">
-                    Limitsiz tədbir, premium şablonlar və daha çox imkan əldə edin
-                  </p>
-                </div>
-                <Button 
-                  onClick={() => navigate('/add-balance')}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-                  data-testid="upgrade-button"
-                >
-                  YÜKSƏLDİN
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
       </div>
     </div>
   );
