@@ -439,7 +439,6 @@ const HomePage = () => {
               <ul className="space-y-2 text-gray-400">
                 <li><Link to="/" className="hover:text-white transition-colors">{t('footer.features')}</Link></li>
                 <li><Link to="/" className="hover:text-white transition-colors">{t('common.templates')}</Link></li>
-                <li><Link to="/" className="hover:text-white transition-colors">{t('footer.pricing')}</Link></li>
               </ul>
             </div>
             <div className="space-y-4">
