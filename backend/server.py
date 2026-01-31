@@ -1918,37 +1918,40 @@ async def delete_font(font_id: str, current_user: User = Depends(get_current_use
 
 # Hero Slider Endpoints
 @api_router.get("/slides", response_model=List[HeroSlide])
-async def get_slides():
+async def get_slides(lang: Optional[str] = None):
     """Get all active hero slides (public)"""
     try:
-        slides = await db.hero_slides.find({"is_active": True}).sort("order", 1).to_list(length=None)
-        return [HeroSlide(**slide) for slide in slides]
+        slides = await db.hero_slides.find({"is_active": True}, {"_id": 0}).sort("order", 1).to_list(length=None)
+        return slides
     except Exception as e:
         logger.error(f"Get slides error: {e}")
         raise HTTPException(status_code=500, detail="Sliderlər yüklənərkən xəta baş verdi")
 
-@api_router.get("/admin/slides", response_model=List[HeroSlide])
+@api_router.get("/admin/slides")
 async def get_all_slides(current_user: User = Depends(get_current_user)):
     """Get all hero slides including inactive (Admin only)"""
     if current_user.email != "admin@vivento.az" and "admin" not in current_user.email.lower():
         raise HTTPException(status_code=403, detail="Admin hüquqları tələb olunur")
     
     try:
-        slides = await db.hero_slides.find().sort("order", 1).to_list(length=None)
-        return [HeroSlide(**slide) for slide in slides]
+        slides = await db.hero_slides.find({}, {"_id": 0}).sort("order", 1).to_list(length=None)
+        return slides
     except Exception as e:
         logger.error(f"Get all slides error: {e}")
         raise HTTPException(status_code=500, detail="Sliderlər yüklənərkən xəta baş verdi")
 
-@api_router.post("/admin/slides", response_model=HeroSlide)
+class SlideCreate(BaseModel):
+    title: Dict[str, str] = {"az": "", "en": "", "ru": ""}
+    subtitle: Dict[str, str] = {"az": "", "en": "", "ru": ""}
+    button_text: Dict[str, str] = {"az": "Başla", "en": "Start", "ru": "Начать"}
+    image_url: str = ""
+    button_link: str = "/register"
+    order: int = 0
+    is_active: bool = True
+
+@api_router.post("/admin/slides")
 async def create_slide(
-    title: str,
-    subtitle: str,
-    image_url: str,
-    button_text: Optional[str] = "Başla",
-    button_link: Optional[str] = "/register",
-    order: int = 0,
-    is_active: bool = True,
+    slide_data: SlideCreate,
     current_user: User = Depends(get_current_user)
 ):
     """Create hero slide (Admin only)"""
@@ -1956,17 +1959,21 @@ async def create_slide(
         raise HTTPException(status_code=403, detail="Admin hüquqları tələb olunur")
     
     try:
-        new_slide = HeroSlide(
-            title=title,
-            subtitle=subtitle,
-            image_url=image_url,
-            button_text=button_text,
-            button_link=button_link,
-            order=order,
-            is_active=is_active
-        )
+        new_slide = {
+            "id": str(uuid.uuid4()),
+            "title": slide_data.title,
+            "subtitle": slide_data.subtitle,
+            "button_text": slide_data.button_text,
+            "image_url": slide_data.image_url,
+            "button_link": slide_data.button_link,
+            "order": slide_data.order,
+            "is_active": slide_data.is_active,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
         
-        await db.hero_slides.insert_one(new_slide.dict())
+        await db.hero_slides.insert_one(new_slide)
+        del new_slide["_id"] if "_id" in new_slide else None
         return new_slide
     except Exception as e:
         logger.error(f"Create slide error: {e}")
