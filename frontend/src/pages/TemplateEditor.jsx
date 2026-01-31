@@ -525,18 +525,6 @@ const TemplateEditor = () => {
                 Önizləmə
               </Button>
               
-              <Button
-                variant="outline"
-                onClick={() => {
-                  const inviteUrl = `${window.location.origin}/invite/demo-${event?.id}`;
-                  window.open(inviteUrl, '_blank');
-                }}
-                data-testid="preview-invitation-button"
-              >
-                <Eye className="mr-2 h-4 w-4" />
-                Dəvətnamə Önizləməsi
-              </Button>
-              
               <Button 
                 onClick={saveDesign}
                 disabled={isSaving}
