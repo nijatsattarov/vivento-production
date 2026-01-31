@@ -43,12 +43,18 @@ const EventDetail = () => {
   const [newGuest, setNewGuest] = useState({ name: '', phone: '', email: '' });
   const [isAddingGuest, setIsAddingGuest] = useState(false);
   const [showEnvelope, setShowEnvelope] = useState(false);
+  const [balance, setBalance] = useState({
+    balance: 0,
+    free_invitations_used: 0,
+    free_invitations_remaining: 30
+  });
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
     // Always fetch data on mount or when eventId changes
     fetchEventData();
+    fetchBalance();
     
     // Set up polling for RSVP updates (every 30 seconds)
     const pollInterval = setInterval(() => {
@@ -58,6 +64,21 @@ const EventDetail = () => {
     // Cleanup on unmount
     return () => clearInterval(pollInterval);
   }, [eventId]);
+
+  const fetchBalance = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/balance`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setBalance({
+        balance: response.data.balance || 0,
+        free_invitations_used: response.data.free_invitations_used || 0,
+        free_invitations_remaining: response.data.free_invitations_remaining || 30
+      });
+    } catch (error) {
+      console.error('Balance fetch error:', error);
+    }
+  };
 
   const fetchEventData = async () => {
     try {
