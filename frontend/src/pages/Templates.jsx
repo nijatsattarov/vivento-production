@@ -223,8 +223,15 @@ const Templates = () => {
           color: parentInfo.color
         });
       }
+    } else if (!parent) {
+      // No category selected - show all templates
+      setCategoryDisplayInfo({
+        name: t('templates.allTemplates'),
+        icon: '📋',
+        color: 'from-blue-500 to-purple-500'
+      });
     }
-  }, [parent, sub, getLocalizedCategoryStructure, fetchTemplates]);
+  }, [parent, sub, getLocalizedCategoryStructure, fetchTemplates, t]);
 
   const handleTemplateSelect = (template) => {
     // Navigate to template detail/single page 
