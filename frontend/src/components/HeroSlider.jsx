@@ -30,6 +30,16 @@ const HeroSlider = () => {
     }
   };
 
+  // Helper function to get localized text
+  const getLocalizedText = (text, fallback = '') => {
+    if (!text) return fallback;
+    if (typeof text === 'string') return text;
+    if (typeof text === 'object') {
+      return text[i18n.language] || text['az'] || text['en'] || fallback;
+    }
+    return fallback;
+  };
+
   const CustomPrevArrow = ({ onClick }) => (
     <button
       onClick={onClick}
