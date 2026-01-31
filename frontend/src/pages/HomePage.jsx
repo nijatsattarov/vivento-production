@@ -325,7 +325,16 @@ const HomePage = () => {
                       <Button 
                         size="sm" 
                         className="w-full text-xs sm:text-sm"
-                        onClick={() => navigate('/register')}
+                        onClick={() => {
+                          if (isAuthenticated) {
+                            // Redirect to create event with this template
+                            navigate(`/create-event?template=${template.id}`);
+                          } else {
+                            // Store template ID and redirect to register
+                            localStorage.setItem('selectedTemplateId', template.id);
+                            navigate('/register');
+                          }
+                        }}
                       >
                         İstifadə et
                       </Button>
