@@ -453,6 +453,7 @@ const Dashboard = () => {
                           variant="ghost"
                           size="sm"
                           className="text-gray-600 hover:text-green-600"
+                          onClick={() => handleShareEvent(event)}
                           data-testid={`share-event-${event.id}`}
                         >
                           <Share2 className="h-4 w-4" />
@@ -462,9 +463,15 @@ const Dashboard = () => {
                           variant="ghost"
                           size="sm"
                           className="text-gray-600 hover:text-red-600"
+                          onClick={() => handleDeleteEvent(event.id)}
+                          disabled={deletingEventId === event.id}
                           data-testid={`delete-event-${event.id}`}
                         >
-                          <Trash2 className="h-4 w-4" />
+                          {deletingEventId === event.id ? (
+                            <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                          ) : (
+                            <Trash2 className="h-4 w-4" />
+                          )}
                         </Button>
                       </div>
                     </div>
