@@ -42,18 +42,6 @@ const AddBalance = () => {
       name: t('payment.payNow'),
       icon: <CreditCard className="h-5 w-5" />,
       description: 'Visa, MasterCard'
-    },
-    {
-      id: 'bank_transfer',
-      name: 'Bank Köçürməsi',
-      icon: <Building2 className="h-5 w-5" />,
-      description: 'Bank hesabından'
-    },
-    {
-      id: 'mobile_payment',
-      name: 'Mobil Ödəmə',
-      icon: <Smartphone className="h-5 w-5" />,
-      description: 'Azercell, Bakcell, Nar'
     }
   ];
 
