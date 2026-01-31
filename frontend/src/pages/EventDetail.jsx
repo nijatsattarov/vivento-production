@@ -286,7 +286,7 @@ const EventDetail = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           <Card className="bg-white shadow-lg border-0" data-testid="stats-total-guests">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -343,6 +343,38 @@ const EventDetail = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Balance Card */}
+        <Card className="mb-8 bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-xl">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                  <Wallet className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <p className="text-green-100 text-sm font-medium">Balans</p>
+                  <p className="text-2xl font-bold text-white">
+                    {balance.balance.toFixed(2)} AZN
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-green-100 text-sm">Pulsuz dəvətnamə</p>
+                <p className="text-lg font-semibold text-white">
+                  {balance.free_invitations_remaining}/30
+                </p>
+              </div>
+              <button 
+                onClick={() => navigate('/add-balance')}
+                className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2"
+              >
+                <Plus className="h-4 w-4" />
+                <span>Artır</span>
+              </button>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Main Content */}
         <Tabs defaultValue="guests" className="space-y-6">
