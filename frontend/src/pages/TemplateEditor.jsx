@@ -1117,7 +1117,7 @@ const TemplateEditor = () => {
           <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4 shadow-xl">
             <h3 className="text-xl font-semibold mb-4 text-center">Dəvətnaməniz hazırdır! 🎉</h3>
             <p className="text-gray-600 mb-6 text-center">
-              İndi qonaqlarınızı dəvət edin və ya birbaşa link paylaşın
+              İndi qonaqlarınızı dəvət edin
             </p>
             
             <div className="space-y-3">
@@ -1130,20 +1130,6 @@ const TemplateEditor = () => {
               >
                 <UserPlus className="h-5 w-5" />
                 <span>Qonaq Əlavə Et</span>
-              </button>
-              
-              <button
-                onClick={() => {
-                  const inviteUrl = `${window.location.origin}/events/${eventId}/share`;
-                  navigator.clipboard.writeText(inviteUrl).then(() => {
-                    toast.success('Link panoya kopyalandı!');
-                    setShowNextStepModal(false);
-                  });
-                }}
-                className="w-full flex items-center justify-center space-x-2 bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition-colors"
-              >
-                <Share2 className="h-5 w-5" />
-                <span>Link Paylaş</span>
               </button>
               
               <button
