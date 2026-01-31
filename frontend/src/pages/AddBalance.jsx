@@ -12,8 +12,6 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { 
   ArrowLeft,
   CreditCard,
-  Building2,
-  Smartphone,
   Check,
   AlertCircle,
   DollarSign,
