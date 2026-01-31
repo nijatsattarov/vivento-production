@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent } from '../ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Switch } from '../ui/switch';
-import { Trash2, Edit, Plus, Upload, Image as ImageIcon, MoveUp, MoveDown } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { Trash2, Edit, Plus, MoveUp, MoveDown } from 'lucide-react';
 import { toast } from 'sonner';
 import axios from 'axios';
 
@@ -17,10 +18,10 @@ const SliderManager = ({ token }) => {
   const [uploadingImage, setUploadingImage] = useState(false);
   
   const [formData, setFormData] = useState({
-    title: '',
-    subtitle: '',
+    title: { az: '', en: '', ru: '' },
+    subtitle: { az: '', en: '', ru: '' },
+    button_text: { az: 'Başla', en: 'Start', ru: 'Начать' },
     image_url: '',
-    button_text: 'Başla',
     button_link: '/register',
     order: 0,
     is_active: true
@@ -51,13 +52,13 @@ const SliderManager = ({ token }) => {
     if (!file) return;
 
     setUploadingImage(true);
-    const formData = new FormData();
-    formData.append('file', file);
+    const uploadFormData = new FormData();
+    uploadFormData.append('file', file);
 
     try {
       const response = await axios.post(
         `${API_BASE_URL}/api/upload/background`,
-        formData,
+        uploadFormData,
         {
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -65,11 +66,9 @@ const SliderManager = ({ token }) => {
         }
       );
 
-      // Backend returns relative path like /api/uploads/filename.jpg
       const imageUrl = response.data.file_url || response.data.url;
       setFormData(prev => ({ ...prev, image_url: imageUrl }));
       toast.success('Şəkil yükləndi');
-      console.log('✅ Image uploaded:', imageUrl);
     } catch (error) {
       console.error('Şəkil yüklənərkən xəta:', error);
       toast.error('Şəkil yüklənə bilmədi');
@@ -82,26 +81,28 @@ const SliderManager = ({ token }) => {
     e.preventDefault();
 
     try {
+      const payload = {
+        title: formData.title,
+        subtitle: formData.subtitle,
+        button_text: formData.button_text,
+        image_url: formData.image_url,
+        button_link: formData.button_link,
+        order: formData.order,
+        is_active: formData.is_active
+      };
+
       if (editingSlide) {
-        // Update existing slide
         await axios.put(
           `${API_BASE_URL}/api/admin/slides/${editingSlide.id}`,
-          formData,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-            params: formData
-          }
+          payload,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         toast.success('Slider yeniləndi');
       } else {
-        // Create new slide
         await axios.post(
           `${API_BASE_URL}/api/admin/slides`,
-          null,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-            params: formData
-          }
+          payload,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         toast.success('Slider yaradıldı');
       }
@@ -117,14 +118,23 @@ const SliderManager = ({ token }) => {
 
   const handleEdit = (slide) => {
     setEditingSlide(slide);
+    
+    // Handle both old string format and new multilingual format
+    const getMultilingualValue = (value, defaultVal = { az: '', en: '', ru: '' }) => {
+      if (typeof value === 'string') {
+        return { az: value, en: value, ru: value };
+      }
+      return value || defaultVal;
+    };
+
     setFormData({
-      title: slide.title,
-      subtitle: slide.subtitle,
-      image_url: slide.image_url,
-      button_text: slide.button_text || 'Başla',
+      title: getMultilingualValue(slide.title),
+      subtitle: getMultilingualValue(slide.subtitle),
+      button_text: getMultilingualValue(slide.button_text, { az: 'Başla', en: 'Start', ru: 'Начать' }),
+      image_url: slide.image_url || '',
       button_link: slide.button_link || '/register',
-      order: slide.order,
-      is_active: slide.is_active
+      order: slide.order || 0,
+      is_active: slide.is_active !== false
     });
     setIsDialogOpen(true);
   };
@@ -148,11 +158,8 @@ const SliderManager = ({ token }) => {
     try {
       await axios.put(
         `${API_BASE_URL}/api/admin/slides/${slideId}`,
-        null,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          params: { order: newOrder }
-        }
+        { order: newOrder },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       fetchSlides();
     } catch (error) {
@@ -164,14 +171,42 @@ const SliderManager = ({ token }) => {
   const resetForm = () => {
     setEditingSlide(null);
     setFormData({
-      title: '',
-      subtitle: '',
+      title: { az: '', en: '', ru: '' },
+      subtitle: { az: '', en: '', ru: '' },
+      button_text: { az: 'Başla', en: 'Start', ru: 'Начать' },
       image_url: '',
-      button_text: 'Başla',
       button_link: '/register',
       order: 0,
       is_active: true
     });
+  };
+
+  const updateTitle = (lang, value) => {
+    setFormData(prev => ({
+      ...prev,
+      title: { ...prev.title, [lang]: value }
+    }));
+  };
+
+  const updateSubtitle = (lang, value) => {
+    setFormData(prev => ({
+      ...prev,
+      subtitle: { ...prev.subtitle, [lang]: value }
+    }));
+  };
+
+  const updateButtonText = (lang, value) => {
+    setFormData(prev => ({
+      ...prev,
+      button_text: { ...prev.button_text, [lang]: value }
+    }));
+  };
+
+  // Helper to get display text (for preview)
+  const getDisplayText = (value) => {
+    if (typeof value === 'string') return value;
+    if (typeof value === 'object') return value.az || value.en || '';
+    return '';
   };
 
   if (loading) {
@@ -193,37 +228,82 @@ const SliderManager = ({ token }) => {
               Yeni Slider
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingSlide ? 'Slideri Redaktə Et' : 'Yeni Slider Yarat'}
               </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Multilingual Title */}
               <div>
-                <Label htmlFor="title">Başlıq *</Label>
-                <Input
-                  id="title"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  required
-                  placeholder="Rəqəmsal dəvətnamə yaratmaq..."
-                />
+                <Label className="text-base font-semibold mb-2 block">Başlıq (çoxdilli)</Label>
+                <Tabs defaultValue="az" className="w-full">
+                  <TabsList className="mb-2">
+                    <TabsTrigger value="az">🇦🇿 Azərbaycan</TabsTrigger>
+                    <TabsTrigger value="en">🇬🇧 English</TabsTrigger>
+                    <TabsTrigger value="ru">🇷🇺 Русский</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="az">
+                    <Input
+                      value={formData.title.az}
+                      onChange={(e) => updateTitle('az', e.target.value)}
+                      placeholder="Rəqəmsal dəvətnamə yaratmaq..."
+                    />
+                  </TabsContent>
+                  <TabsContent value="en">
+                    <Input
+                      value={formData.title.en}
+                      onChange={(e) => updateTitle('en', e.target.value)}
+                      placeholder="Creating digital invitations..."
+                    />
+                  </TabsContent>
+                  <TabsContent value="ru">
+                    <Input
+                      value={formData.title.ru}
+                      onChange={(e) => updateTitle('ru', e.target.value)}
+                      placeholder="Создание цифровых приглашений..."
+                    />
+                  </TabsContent>
+                </Tabs>
               </div>
 
+              {/* Multilingual Subtitle */}
               <div>
-                <Label htmlFor="subtitle">Alt başlıq *</Label>
-                <Input
-                  id="subtitle"
-                  value={formData.subtitle}
-                  onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
-                  required
-                  placeholder="Vivento ilə toy, nişan..."
-                />
+                <Label className="text-base font-semibold mb-2 block">Alt başlıq (çoxdilli)</Label>
+                <Tabs defaultValue="az" className="w-full">
+                  <TabsList className="mb-2">
+                    <TabsTrigger value="az">🇦🇿 Azərbaycan</TabsTrigger>
+                    <TabsTrigger value="en">🇬🇧 English</TabsTrigger>
+                    <TabsTrigger value="ru">🇷🇺 Русский</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="az">
+                    <Input
+                      value={formData.subtitle.az}
+                      onChange={(e) => updateSubtitle('az', e.target.value)}
+                      placeholder="Vivento ilə toy, nişan..."
+                    />
+                  </TabsContent>
+                  <TabsContent value="en">
+                    <Input
+                      value={formData.subtitle.en}
+                      onChange={(e) => updateSubtitle('en', e.target.value)}
+                      placeholder="Create beautiful invitations with Vivento..."
+                    />
+                  </TabsContent>
+                  <TabsContent value="ru">
+                    <Input
+                      value={formData.subtitle.ru}
+                      onChange={(e) => updateSubtitle('ru', e.target.value)}
+                      placeholder="Создавайте красивые приглашения с Vivento..."
+                    />
+                  </TabsContent>
+                </Tabs>
               </div>
 
+              {/* Image Upload */}
               <div>
-                <Label htmlFor="image">Arxa fon şəkli *</Label>
+                <Label htmlFor="image">Arxa fon şəkli</Label>
                 <div className="space-y-2">
                   {formData.image_url && (
                     <div className="relative w-full h-48 rounded-lg overflow-hidden border">
@@ -256,16 +336,39 @@ const SliderManager = ({ token }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="button_text">Düymə mətni</Label>
-                  <Input
-                    id="button_text"
-                    value={formData.button_text}
-                    onChange={(e) => setFormData({ ...formData, button_text: e.target.value })}
-                    placeholder="Başla"
-                  />
+              {/* Multilingual Button Text */}
+              <div>
+                <Label className="text-base font-semibold mb-2 block">Düymə mətni (çoxdilli)</Label>
+                <div className="grid grid-cols-3 gap-2">
+                  <div>
+                    <Label className="text-xs text-gray-500">🇦🇿 AZ</Label>
+                    <Input
+                      value={formData.button_text.az}
+                      onChange={(e) => updateButtonText('az', e.target.value)}
+                      placeholder="Başla"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs text-gray-500">🇬🇧 EN</Label>
+                    <Input
+                      value={formData.button_text.en}
+                      onChange={(e) => updateButtonText('en', e.target.value)}
+                      placeholder="Start"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs text-gray-500">🇷🇺 RU</Label>
+                    <Input
+                      value={formData.button_text.ru}
+                      onChange={(e) => updateButtonText('ru', e.target.value)}
+                      placeholder="Начать"
+                    />
+                  </div>
                 </div>
+              </div>
+
+              {/* Button Link and Order */}
+              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="button_link">Düymə linki</Label>
                   <Input
@@ -275,26 +378,25 @@ const SliderManager = ({ token }) => {
                     placeholder="/register"
                   />
                 </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="order">Sıra nömrəsi</Label>
                   <Input
                     id="order"
                     type="number"
                     value={formData.order}
-                    onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })}
+                    onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
                   />
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="is_active"
-                    checked={formData.is_active}
-                    onCheckedChange={(checked) => setFormData({ ...formData, is_active: checked })}
-                  />
-                  <Label htmlFor="is_active">Aktiv</Label>
-                </div>
+              </div>
+
+              {/* Active Status */}
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="is_active"
+                  checked={formData.is_active}
+                  onCheckedChange={(checked) => setFormData({ ...formData, is_active: checked })}
+                />
+                <Label htmlFor="is_active">Aktiv</Label>
               </div>
 
               <div className="flex justify-end space-x-2 pt-4">
@@ -330,18 +432,20 @@ const SliderManager = ({ token }) => {
               <CardContent className="p-4">
                 <div className="flex gap-4">
                   <div className="w-32 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
-                    <img
-                      src={slide.image_url}
-                      alt={slide.title}
-                      className="w-full h-full object-cover"
-                    />
+                    {slide.image_url && (
+                      <img
+                        src={slide.image_url}
+                        alt={getDisplayText(slide.title)}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between">
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-lg truncate">{slide.title}</h4>
-                        <p className="text-sm text-gray-600 truncate">{slide.subtitle}</p>
-                        <div className="flex items-center gap-2 mt-2">
+                        <h4 className="font-semibold text-lg truncate">{getDisplayText(slide.title)}</h4>
+                        <p className="text-sm text-gray-600 truncate">{getDisplayText(slide.subtitle)}</p>
+                        <div className="flex items-center gap-2 mt-2 flex-wrap">
                           <span className="text-xs bg-gray-100 px-2 py-1 rounded">
                             Sıra: {slide.order}
                           </span>
@@ -352,6 +456,11 @@ const SliderManager = ({ token }) => {
                           }`}>
                             {slide.is_active ? 'Aktiv' : 'Deaktiv'}
                           </span>
+                          {typeof slide.title === 'object' && (
+                            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                              Çoxdilli
+                            </span>
+                          )}
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
