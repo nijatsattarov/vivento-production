@@ -231,7 +231,7 @@ const AddBalance = () => {
                       step="0.01"
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
-                      placeholder="Məbləği qeyd edin"
+                      placeholder="İstədiyiniz məbləği qeyd edin"
                       className="pr-12"
                     />
                     <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">
