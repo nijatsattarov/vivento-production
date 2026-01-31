@@ -76,9 +76,13 @@ const AppRoutes = () => {
       <Route path="/invite/:token" element={<InvitationPage />} />
       
       {/* Template routes */}
+      <Route path="/templates" element={<Templates />} />
       <Route path="/templates/:parent/:sub" element={<Templates />} />
       <Route path="/templates/:parent" element={<Templates />} />
       <Route path="/template/:templateId" element={<TemplateDetail />} />
+      
+      {/* Features page */}
+      <Route path="/features" element={<Features />} />
       
       {/* Protected routes */}
       <Route 
