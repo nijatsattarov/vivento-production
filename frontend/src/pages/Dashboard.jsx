@@ -32,6 +32,7 @@ const Dashboard = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [processingAuth, setProcessingAuth] = useState(false);
+  const [deletingEventId, setDeletingEventId] = useState(null);
   const [balance, setBalance] = useState({
     balance: 0,
     free_invitations_used: 0,
