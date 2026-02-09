@@ -2752,11 +2752,12 @@ async def get_balance_transactions(
         logger.error(f"Get transactions error: {e}")
         raise HTTPException(status_code=500, detail="Tranzaksiya tarixçəsi alınarkən xəta")
 
-@api_router.post("/admin/sync-payments")
-async def admin_sync_all_pending_payments(current_user: User = Depends(get_current_user)):
+@api_router.post("/admin/expire-pending-payments")
+async def admin_expire_pending_payments(current_user: User = Depends(get_current_user)):
     """
-    Admin endpoint to sync ALL pending payments for the current user.
-    Call this manually if payments are stuck.
+    Admin endpoint to expire ALL pending payments for the current user.
+    This does NOT add balance - only marks stuck payments as expired.
+    Balans artirmaq ucun YALNIZ Epoint callback istifade edilmelidir.
     """
     try:
         # Find all pending payments
@@ -2769,64 +2770,32 @@ async def admin_sync_all_pending_payments(current_user: User = Depends(get_curre
             return {
                 "success": True,
                 "message": "Gözləyən ödəniş yoxdur",
-                "processed": 0,
-                "total_amount": 0
+                "expired": 0
             }
         
-        total_amount = 0
-        processed_count = 0
+        expired_count = 0
         
         for payment in pending_payments:
-            # Mark as completed
+            # Mark as EXPIRED - NOT completed
             await db.payments.update_one(
                 {"id": payment["id"]},
-                {"$set": {"status": "completed", "completed_at": datetime.now(timezone.utc)}}
+                {"$set": {
+                    "status": "expired",
+                    "updated_at": datetime.now(timezone.utc).isoformat()
+                }}
             )
-            
-            total_amount += payment["amount"]
-            processed_count += 1
-            
-            # Create transaction record
-            existing_tx = await db.balance_transactions.find_one({"payment_id": payment["id"]})
-            if not existing_tx:
-                transaction = BalanceTransaction(
-                    id=str(uuid.uuid4()),
-                    user_id=current_user.id,
-                    amount=payment["amount"],
-                    transaction_type="payment",
-                    description=f"Balans artırma: {payment['amount']} AZN",
-                    payment_method="epoint",
-                    payment_id=payment["id"],
-                    status="completed"
-                )
-                await db.balance_transactions.insert_one(transaction.model_dump())
-            
-            logger.info(f"Synced payment {payment['id']} for {payment['amount']} AZN")
-        
-        # Update user balance
-        if total_amount > 0:
-            user = await db.users.find_one({"id": current_user.id}, {"_id": 0})
-            current_balance = user.get("balance", 0.0)
-            new_balance = current_balance + total_amount
-            
-            await db.users.update_one(
-                {"id": current_user.id},
-                {"$set": {"balance": new_balance, "updated_at": datetime.now(timezone.utc)}}
-            )
-            
-            logger.info(f"User {current_user.id} balance synced: {current_balance} -> {new_balance} AZN")
+            expired_count += 1
+            logger.info(f"Expired pending payment {payment['id']} for {payment['amount']} AZN")
         
         return {
             "success": True,
-            "message": f"{processed_count} ödəniş uğurla sinxronlaşdırıldı",
-            "processed": processed_count,
-            "total_amount": total_amount,
-            "new_balance": new_balance if total_amount > 0 else None
+            "message": f"{expired_count} gözləyən ödəniş müddəti bitmiş kimi işarələndi",
+            "expired": expired_count
         }
         
     except Exception as e:
-        logger.error(f"Sync payments error: {e}")
-        raise HTTPException(status_code=500, detail="Ödənişlər sinxronlaşdırılarkən xəta")
+        logger.error(f"Expire payments error: {e}")
+        raise HTTPException(status_code=500, detail="Ödənişlər işarələnərkən xəta")
 
 # Include the router in the main app
 app.include_router(api_router)
