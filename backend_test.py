@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 import time
 
 class ViventoAPITester:
-    def __init__(self, base_url="https://vivento-invites.preview.emergentagent.com"):
+    def __init__(self, base_url="https://vivento-ux-polish.preview.emergentagent.com"):
         self.base_url = base_url
         self.token = None
         self.user_id = None
