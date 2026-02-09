@@ -2365,8 +2365,8 @@ async def confirm_payment_success(
 ):
     """
     Confirm successful payment and add balance.
-    Called when user is redirected to success page.
-    Accepts payment_id or order_id
+    IMPORTANT: This should only be called after Epoint callback confirms payment.
+    For security, we check if payment was already marked as 'callback_received'.
     """
     try:
         body = await request.json()
@@ -2389,19 +2389,6 @@ async def confirm_payment_success(
                 "user_id": current_user.id
             }, {"_id": 0})
         
-        # If still no payment, try to find the most recent pending payment for this user
-        if not payment:
-            payment = await db.payments.find_one(
-                {
-                    "user_id": current_user.id,
-                    "status": "pending"
-                },
-                {"_id": 0},
-                sort=[("created_at", -1)]
-            )
-            if payment:
-                logger.info(f"Found most recent pending payment: {payment.get('id')}")
-        
         if not payment:
             logger.warning(f"Payment not found for user {current_user.id}")
             raise HTTPException(status_code=404, detail="Ödəniş tapılmadı")
@@ -2417,13 +2404,22 @@ async def confirm_payment_success(
                 "new_balance": user.get("balance", 0)
             }
         
+        # SECURITY: Only confirm if payment status is 'callback_received'
+        # This means Epoint callback already confirmed this payment
+        if payment.get("status") != "callback_received":
+            logger.warning(f"Payment {payment.get('id')} not yet confirmed by Epoint callback. Status: {payment.get('status')}")
+            raise HTTPException(
+                status_code=400, 
+                detail="Ödəniş hələ Epoint tərəfindən təsdiqlənməyib. Zəhmət olmasa bir neçə saniyə gözləyin."
+            )
+        
         # Mark payment as completed
         await db.payments.update_one(
             {"id": payment["id"]},
             {
                 "$set": {
                     "status": "completed",
-                    "completed_at": datetime.now(timezone.utc)
+                    "completed_at": datetime.now(timezone.utc).isoformat()
                 }
             }
         )
@@ -2438,7 +2434,7 @@ async def confirm_payment_success(
             {
                 "$set": {
                     "balance": new_balance,
-                    "updated_at": datetime.now(timezone.utc)
+                    "updated_at": datetime.now(timezone.utc).isoformat()
                 }
             }
         )
