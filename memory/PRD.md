@@ -40,6 +40,20 @@ Vivento is an Azerbaijani digital wedding/event invitation platform that allows 
   - `PaymentResult.jsx` no longer trusts URL parameters - always checks backend API status
 - **Status**: VERIFIED - 100% test pass rate (14/14 backend tests)
 
+**EMAIL INTEGRATION - Resend.com**
+- **Domain**: myvivento.com (verified on Resend)
+- **Sender**: noreply@myvivento.com
+- **Features Implemented**:
+  1. **Welcome Email**: Sent automatically on new user registration
+  2. **Password Reset Email**: Sent via `/api/auth/forgot-password` with secure token
+  3. **Payment Invoice Email**: Sent after successful payment via Epoint callback
+- **New Endpoints**:
+  - `/api/auth/forgot-password` - Generates reset token and sends email
+  - `/api/auth/reset-password` - Validates token and updates password
+- **New Pages**:
+  - `/reset-password` - Frontend page for setting new password
+- **Status**: VERIFIED - 100% test pass rate, emails confirmed sent via Resend
+
 ---
 
 ## Prioritized Backlog
