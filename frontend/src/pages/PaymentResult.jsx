@@ -31,53 +31,92 @@ const PaymentResult = () => {
       const paymentId = localStorage.getItem('pending_payment_id');
       const pendingAmount = localStorage.getItem('pending_payment_amount');
 
-      // CRITICAL: Always verify payment status from backend API
-      // NEVER trust URL parameters - they can be manipulated by user!
-      // Balance is ONLY updated via Epoint callback to backend
-      
-      if (paymentId) {
-        const response = await axios.get(
-          `${API_BASE_URL}/api/payments/${paymentId}/status`,
+      if (!paymentId) {
+        setPaymentStatus('unknown');
+        setLoading(false);
+        setChecking(false);
+        return;
+      }
+
+      // First, try to verify payment with Epoint API (this will update balance if successful)
+      try {
+        const verifyResponse = await axios.post(
+          `${API_BASE_URL}/api/payments/${paymentId}/verify`,
+          {},
           { headers: { Authorization: `Bearer ${token}` } }
         );
         
-        const status = response.data.status;
-        setPaymentDetails({
-          ...response.data,
-          amount: pendingAmount || response.data.amount
-        });
-
-        if (status === 'completed') {
+        console.log('Verify response:', verifyResponse.data);
+        
+        if (verifyResponse.data.success && verifyResponse.data.status === 'completed') {
           setPaymentStatus('completed');
-          
-          // Fetch updated balance
-          try {
-            const balanceResponse = await axios.get(
-              `${API_BASE_URL}/api/balance`,
-              { headers: { Authorization: `Bearer ${token}` } }
-            );
-            setNewBalance(balanceResponse.data.balance);
-          } catch (e) {
-            console.error('Balance fetch error:', e);
-          }
+          setPaymentDetails({
+            amount: pendingAmount || verifyResponse.data.amount,
+            status: 'completed'
+          });
+          setNewBalance(verifyResponse.data.balance);
+          toast.success('Ödəniş uğurla təsdiqləndi!');
           
           localStorage.removeItem('pending_payment_id');
           localStorage.removeItem('pending_payment_amount');
-        } else if (status === 'failed') {
+          setLoading(false);
+          setChecking(false);
+          return;
+        } else if (verifyResponse.data.status === 'failed') {
           setPaymentStatus('failed');
           localStorage.removeItem('pending_payment_id');
           localStorage.removeItem('pending_payment_amount');
-        } else if (status === 'expired') {
-          setPaymentStatus('expired');
-          localStorage.removeItem('pending_payment_id');
-          localStorage.removeItem('pending_payment_amount');
-        } else {
-          // Still pending - payment not completed or cancelled
-          // DO NOT auto-confirm! Just show pending status
-          setCheckAttempts(prev => prev + 1);
-          setPaymentStatus('pending');
+          setLoading(false);
+          setChecking(false);
+          return;
         }
+        // If still pending, continue to check status below
+      } catch (verifyError) {
+        console.log('Verify error (will fallback to status check):', verifyError);
+        // Continue to status check
+      }
+
+      // Fallback: Check payment status from our database
+      const response = await axios.get(
+        `${API_BASE_URL}/api/payments/${paymentId}/status`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      
+      const status = response.data.status;
+      setPaymentDetails({
+        ...response.data,
+        amount: pendingAmount || response.data.amount
+      });
+
+      if (status === 'completed') {
+        setPaymentStatus('completed');
+        
+        // Fetch updated balance
+        try {
+          const balanceResponse = await axios.get(
+            `${API_BASE_URL}/api/balance`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          setNewBalance(balanceResponse.data.balance);
+        } catch (e) {
+          console.error('Balance fetch error:', e);
+        }
+        
+        localStorage.removeItem('pending_payment_id');
+        localStorage.removeItem('pending_payment_amount');
+      } else if (status === 'failed') {
+        setPaymentStatus('failed');
+        localStorage.removeItem('pending_payment_id');
+        localStorage.removeItem('pending_payment_amount');
+      } else if (status === 'expired') {
+        setPaymentStatus('expired');
+        localStorage.removeItem('pending_payment_id');
+        localStorage.removeItem('pending_payment_amount');
       } else {
+        // Still pending
+        setCheckAttempts(prev => prev + 1);
+        setPaymentStatus('pending');
+      }
         setPaymentStatus('unknown');
       }
       
