@@ -483,19 +483,32 @@ class ForgotPasswordRequest(BaseModel):
 async def forgot_password(request: ForgotPasswordRequest):
     """
     Handle forgot password request.
-    For security, always return success even if email doesn't exist.
-    In a real app, this would send an email with a reset link.
+    Sends a password reset email with a secure token.
     """
     # Check if user exists (but don't reveal this to the client)
     user_doc = await db.users.find_one({"email": request.email})
     
     if user_doc:
-        # In production, you would:
-        # 1. Generate a password reset token
-        # 2. Store it in the database with expiry
-        # 3. Send an email with the reset link
-        # For now, we just log it
-        print(f"Password reset requested for: {request.email}")
+        # Generate a password reset token
+        reset_token = str(uuid.uuid4())
+        expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
+        
+        # Store reset token in database
+        await db.password_resets.delete_many({"email": request.email})  # Remove old tokens
+        await db.password_resets.insert_one({
+            "email": request.email,
+            "token": reset_token,
+            "expires_at": expires_at.isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat()
+        })
+        
+        # Send password reset email
+        try:
+            user_name = user_doc.get("name", "İstifadəçi")
+            await send_password_reset_email(request.email, user_name, reset_token)
+            logger.info(f"Password reset email sent to: {request.email}")
+        except Exception as e:
+            logger.error(f"Failed to send password reset email: {e}")
     
     # Always return success for security
     return {"success": True, "message": "Əgər bu e-poçt mövcuddursa, şifrə bərpa linki göndərildi"}
