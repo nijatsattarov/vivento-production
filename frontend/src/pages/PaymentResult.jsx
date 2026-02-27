@@ -31,43 +31,11 @@ const PaymentResult = () => {
       // Get payment ID from localStorage
       const paymentId = localStorage.getItem('pending_payment_id');
       const pendingAmount = localStorage.getItem('pending_payment_amount');
+
+      // CRITICAL: Always verify payment status from backend API
+      // NEVER trust URL parameters - they can be manipulated by user!
+      // Balance is ONLY updated via Epoint callback to backend
       
-      // Get order_id and status from URL params (Epoint sends this on redirect)
-      const orderId = searchParams.get('order_id');
-      const urlStatus = searchParams.get('status');
-
-      // If we have URL status from Epoint redirect
-      if (urlStatus === 'success') {
-        setPaymentStatus('completed');
-        setPaymentDetails({
-          order_id: orderId,
-          amount: pendingAmount,
-          status: 'completed'
-        });
-        
-        // Fetch updated balance
-        try {
-          const balanceResponse = await axios.get(
-            `${API_BASE_URL}/api/balance`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-          setNewBalance(balanceResponse.data.balance);
-        } catch (e) {
-          console.error('Balance fetch error:', e);
-        }
-        
-        // Clear localStorage
-        localStorage.removeItem('pending_payment_id');
-        localStorage.removeItem('pending_payment_amount');
-        return;
-      }
-
-      if (urlStatus === 'failed' || urlStatus === 'error') {
-        setPaymentStatus('failed');
-        return;
-      }
-
-      // If no URL status, check via API
       if (paymentId) {
         const response = await axios.get(
           `${API_BASE_URL}/api/payments/${paymentId}/status`,
@@ -100,8 +68,13 @@ const PaymentResult = () => {
           setPaymentStatus('failed');
           localStorage.removeItem('pending_payment_id');
           localStorage.removeItem('pending_payment_amount');
+        } else if (status === 'expired') {
+          setPaymentStatus('expired');
+          localStorage.removeItem('pending_payment_id');
+          localStorage.removeItem('pending_payment_amount');
         } else {
-          // Still pending - increment attempts
+          // Still pending - payment not completed or cancelled
+          // DO NOT auto-confirm! Just show pending status
           setCheckAttempts(prev => prev + 1);
           setPaymentStatus('pending');
         }
@@ -116,7 +89,7 @@ const PaymentResult = () => {
       setLoading(false);
       setChecking(false);
     }
-  }, [token, searchParams, API_BASE_URL]);
+  }, [token, API_BASE_URL]);
 
   useEffect(() => {
     checkPaymentStatus();
