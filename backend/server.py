@@ -448,6 +448,13 @@ async def register(request: RegisterRequest):
     # Create token
     access_token = create_access_token(data={"sub": user.id})
     
+    # Send welcome email (non-blocking, don't wait for result)
+    try:
+        asyncio.create_task(send_welcome_email(request.email, request.name))
+        logger.info(f"Welcome email queued for: {request.email}")
+    except Exception as e:
+        logger.error(f"Failed to queue welcome email: {e}")
+    
     return TokenResponse(
         access_token=access_token,
         token_type="bearer",
