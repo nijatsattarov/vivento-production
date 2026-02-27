@@ -267,7 +267,7 @@ const PaymentResult = () => {
                 Dashboard-a qayıt
               </Button>
               
-              {(paymentStatus === 'failed' || paymentStatus === 'unknown' || paymentStatus === 'error') && (
+              {(paymentStatus === 'failed' || paymentStatus === 'unknown' || paymentStatus === 'error' || paymentStatus === 'expired') && (
                 <Button
                   onClick={() => navigate('/add-balance')}
                   size="lg"
