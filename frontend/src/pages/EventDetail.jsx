@@ -47,6 +47,7 @@ const EventDetail = () => {
   const [newGuest, setNewGuest] = useState({ name: '', phone: '', email: '' });
   const [isAddingGuest, setIsAddingGuest] = useState(false);
   const [showEnvelope, setShowEnvelope] = useState(false);
+  const [guestViewMode, setGuestViewMode] = useState('cards'); // 'cards' or 'list'
   const [balance, setBalance] = useState({
     balance: 0,
     free_invitations_used: 0,
