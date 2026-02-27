@@ -2817,6 +2817,192 @@ async def get_payment_status(
         logger.error(f"Get payment status error: {e}")
         raise HTTPException(status_code=500, detail="Ödəniş statusu alınarkən xəta baş verdi")
 
+@api_router.post("/payments/{payment_id}/verify")
+async def verify_payment_with_epoint(
+    payment_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Verify payment status directly with Epoint API and update balance if successful.
+    This is a fallback when Epoint callback doesn't reach our server.
+    """
+    try:
+        # Find payment
+        payment = await db.payments.find_one(
+            {"id": payment_id, "user_id": current_user.id},
+            {"_id": 0}
+        )
+        
+        if not payment:
+            raise HTTPException(status_code=404, detail="Ödəniş tapılmadı")
+        
+        # If already completed, return success
+        if payment.get("status") == "completed":
+            user = await db.users.find_one({"id": current_user.id}, {"_id": 0})
+            return {
+                "success": True,
+                "status": "completed",
+                "message": "Ödəniş artıq tamamlanıb",
+                "amount": payment["amount"],
+                "balance": user.get("balance", 0)
+            }
+        
+        # If expired or failed, return error
+        if payment.get("status") in ["expired", "failed"]:
+            return {
+                "success": False,
+                "status": payment["status"],
+                "message": "Ödəniş uğursuz olub və ya müddəti bitib"
+            }
+        
+        # Check status with Epoint API
+        order_id = payment.get("order_id")
+        if not order_id:
+            raise HTTPException(status_code=400, detail="Order ID tapılmadı")
+        
+        # Create status check request
+        status_request = epoint_service.get_payment_status_request(order_id)
+        
+        # Call Epoint API to check status
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                status_request["url"],
+                data={
+                    "data": status_request["data"],
+                    "signature": status_request["signature"]
+                },
+                timeout=30.0
+            )
+        
+        logger.info(f"Epoint status check response: {response.status_code} - {response.text}")
+        
+        if response.status_code != 200:
+            logger.error(f"Epoint status check failed: {response.text}")
+            return {
+                "success": False,
+                "status": "pending",
+                "message": "Epoint ilə əlaqə qurula bilmədi. Zəhmət olmasa bir az gözləyin."
+            }
+        
+        # Parse response
+        try:
+            epoint_response = response.json()
+        except:
+            # Try to decode base64 response
+            try:
+                import base64
+                decoded = base64.b64decode(response.text).decode('utf-8')
+                epoint_response = json.loads(decoded)
+            except:
+                logger.error(f"Failed to parse Epoint response: {response.text}")
+                return {
+                    "success": False,
+                    "status": "pending", 
+                    "message": "Epoint cavabı oxuna bilmədi"
+                }
+        
+        logger.info(f"Epoint status response parsed: {epoint_response}")
+        
+        # Check if payment was successful
+        epoint_status = epoint_response.get("status", "").lower()
+        transaction_id = epoint_response.get("transaction") or epoint_response.get("transaction_id")
+        
+        if epoint_status == "success" or epoint_response.get("code") == "00":
+            # Payment successful - update balance
+            
+            # Mark payment as completed
+            await db.payments.update_one(
+                {"id": payment_id},
+                {
+                    "$set": {
+                        "status": "completed",
+                        "completed_at": datetime.now(timezone.utc).isoformat(),
+                        "transaction_id": transaction_id,
+                        "verified_via": "manual_check"
+                    }
+                }
+            )
+            
+            # Update user balance
+            user = await db.users.find_one({"id": current_user.id}, {"_id": 0})
+            current_balance = user.get("balance", 0.0)
+            new_balance = current_balance + payment["amount"]
+            
+            await db.users.update_one(
+                {"id": current_user.id},
+                {
+                    "$set": {
+                        "balance": new_balance,
+                        "updated_at": datetime.now(timezone.utc).isoformat()
+                    }
+                }
+            )
+            
+            # Create balance transaction record
+            transaction = BalanceTransaction(
+                id=str(uuid.uuid4()),
+                user_id=current_user.id,
+                amount=payment["amount"],
+                transaction_type="payment",
+                description=f"Balans artırma: {payment['amount']} AZN",
+                payment_method="epoint",
+                payment_id=transaction_id or payment_id,
+                status="completed"
+            )
+            await db.balance_transactions.insert_one(transaction.model_dump())
+            
+            logger.info(f"Payment verified and balance updated for user {current_user.id}: +{payment['amount']} AZN (new balance: {new_balance} AZN)")
+            
+            # Send invoice email
+            try:
+                user_email = user.get("email")
+                user_name = user.get("name", "İstifadəçi")
+                if user_email:
+                    asyncio.create_task(send_payment_invoice_email(
+                        user_email,
+                        user_name,
+                        payment["amount"],
+                        new_balance,
+                        transaction_id or payment_id
+                    ))
+            except Exception as e:
+                logger.error(f"Failed to send invoice email: {e}")
+            
+            return {
+                "success": True,
+                "status": "completed",
+                "message": "Ödəniş uğurla təsdiqləndi!",
+                "amount": payment["amount"],
+                "balance": new_balance
+            }
+        
+        elif epoint_status in ["failed", "error", "declined"]:
+            # Payment failed
+            await db.payments.update_one(
+                {"id": payment_id},
+                {"$set": {"status": "failed", "completed_at": datetime.now(timezone.utc).isoformat()}}
+            )
+            return {
+                "success": False,
+                "status": "failed",
+                "message": "Ödəniş uğursuz oldu"
+            }
+        
+        else:
+            # Still pending or unknown status
+            return {
+                "success": False,
+                "status": "pending",
+                "message": "Ödəniş hələ emal olunur. Zəhmət olmasa bir az gözləyin.",
+                "epoint_status": epoint_status
+            }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Verify payment error: {e}")
+        raise HTTPException(status_code=500, detail="Ödəniş yoxlanılarkən xəta baş verdi")
+
 @api_router.get("/balance/transactions")
 async def get_balance_transactions(
     current_user: User = Depends(get_current_user),
