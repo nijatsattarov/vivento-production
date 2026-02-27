@@ -395,25 +395,25 @@ const EventDetail = () => {
               
               <div className="flex items-center gap-3">
                 {/* View Mode Toggle */}
-                <div className="flex items-center bg-gray-100 rounded-lg p-1">
+                <div className="inline-flex items-center bg-gray-100 rounded-lg p-1">
                   <Button
-                    variant={guestViewMode === 'cards' ? 'default' : 'ghost'}
+                    variant="ghost"
                     size="sm"
                     onClick={() => setGuestViewMode('cards')}
-                    className={`px-3 ${guestViewMode === 'cards' ? 'bg-white shadow-sm' : ''}`}
+                    className={`px-3 py-1.5 rounded-md transition-all ${guestViewMode === 'cards' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
                     data-testid="view-cards-btn"
                   >
-                    <LayoutGrid className="h-4 w-4 mr-1" />
+                    <LayoutGrid className="h-4 w-4 mr-1.5" />
                     Kartlar
                   </Button>
                   <Button
-                    variant={guestViewMode === 'list' ? 'default' : 'ghost'}
+                    variant="ghost"
                     size="sm"
                     onClick={() => setGuestViewMode('list')}
-                    className={`px-3 ${guestViewMode === 'list' ? 'bg-white shadow-sm' : ''}`}
+                    className={`px-3 py-1.5 rounded-md transition-all ${guestViewMode === 'list' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
                     data-testid="view-list-btn"
                   >
-                    <List className="h-4 w-4 mr-1" />
+                    <List className="h-4 w-4 mr-1.5" />
                     Siyahı
                   </Button>
                 </div>
