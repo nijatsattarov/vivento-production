@@ -149,18 +149,35 @@ const PaymentResult = () => {
         return (
           <>
             <div className="mb-6 flex justify-center">
-              <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center">
-                <RefreshCw className="h-12 w-12 text-blue-600 animate-spin" />
+              <div className="w-24 h-24 bg-yellow-100 rounded-full flex items-center justify-center">
+                <AlertCircle className="h-12 w-12 text-yellow-600" />
               </div>
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-3">
-              Ödəniş Emal Olunur...
+              Ödəniş Tamamlanmadı
             </h1>
             <p className="text-gray-600 mb-4">
-              Ödənişiniz emal olunur. Zəhmət olmasa gözləyin.
+              Ödəniş prosesi tamamlanmadı və ya ləğv edildi. Balansınız dəyişməyib.
             </p>
             <p className="text-sm text-gray-500 mb-8">
-              Cəhd: {checkAttempts}/5
+              Əgər ödəniş etdinizsə, bir neçə dəqiqə gözləyin. (Cəhd: {checkAttempts}/5)
+            </p>
+          </>
+        );
+      
+      case 'expired':
+        return (
+          <>
+            <div className="mb-6 flex justify-center">
+              <div className="w-24 h-24 bg-orange-100 rounded-full flex items-center justify-center">
+                <AlertCircle className="h-12 w-12 text-orange-600" />
+              </div>
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-3">
+              Ödəniş Müddəti Bitdi
+            </h1>
+            <p className="text-gray-600 mb-8">
+              Ödəniş müddəti bitdi. Zəhmət olmasa yenidən cəhd edin.
             </p>
           </>
         );
