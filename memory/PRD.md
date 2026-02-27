@@ -54,6 +54,18 @@ Vivento is an Azerbaijani digital wedding/event invitation platform that allows 
   - `/reset-password` - Frontend page for setting new password
 - **Status**: VERIFIED - 100% test pass rate, emails confirmed sent via Resend
 
+**PAYMENT VERIFICATION FIX**
+- **Issue**: Epoint callback wasn't reaching production server
+- **Fix**: Added `/api/payments/{payment_id}/verify` endpoint that checks payment status directly with Epoint API
+- **Key Change**: Changed field from `transaction` to `order_id` in Epoint status check
+- **Status**: VERIFIED - Payments now correctly update balance
+
+**GUEST LIST VIEW MODES**
+- **Feature**: Added toggle between "Kartlar" (Cards) and "Siyahı" (List) views for guest list
+- **List View**: Table format with #, Name, Phone, Status, Actions (copy link, view invite, WhatsApp)
+- **Cards View**: Original card-based layout
+- **Status**: IMPLEMENTED
+
 ---
 
 ## Prioritized Backlog
