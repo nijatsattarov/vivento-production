@@ -1,0 +1,89 @@
+# Vivento - Dəvətnamə Platforması PRD
+
+## Original Problem Statement
+Vivento is an Azerbaijani digital wedding/event invitation platform that allows users to create, customize, and share digital invitations with guests. The platform includes template management, event creation, guest management, balance/payment system, and multilingual support (AZ, EN, RU).
+
+## User Personas
+- **Event Organizers**: Primary users creating invitations for weddings, birthdays, etc.
+- **Admin Users**: Manage templates, categories, CMS content, and user data
+
+## Core Requirements
+1. Template selection and customization
+2. Guest management with invitation tracking
+3. Balance-based payment system (Epoint.az integration)
+4. Multilingual support (Azerbaijani, English, Russian)
+5. Admin panel for content management
+
+---
+
+## What's Been Implemented
+
+### December 2024
+- Full multi-language system (Navbar, Slider, Pages)
+- Forgot Password page and backend endpoint
+- Subscription/pricing sections removed
+- AddBalance page simplified
+- EventDetail balance display
+- Features page created
+- Footer links fixed
+- Template selection flow fixed
+
+### February 2025 (This Session)
+**P0 BUG FIX - Payment Gateway Cancellation**
+- **Issue**: Users could receive balance credits even when cancelling payment on Epoint.az gateway
+- **Root Cause**: Multiple endpoints could auto-confirm pending payments
+- **Fix Applied**:
+  - Removed dangerous `/api/admin/sync-payments` endpoint
+  - `/api/balance` now only expires old pending payments (>30 min), does NOT auto-confirm
+  - New `/api/admin/expire-pending-payments` marks payments as expired WITHOUT crediting balance
+  - `/api/payments/callback` is now the ONLY endpoint that can credit user balance
+  - `PaymentResult.jsx` no longer trusts URL parameters - always checks backend API status
+- **Status**: VERIFIED - 100% test pass rate (14/14 backend tests)
+
+---
+
+## Prioritized Backlog
+
+### P1 - High Priority
+- [ ] Invitation Thumbnail Display Bug (recurring visual issue - images cropped/zoomed incorrectly)
+- [ ] Full Epoint.az Payment Flow Production Testing
+
+### P2 - Medium Priority
+- [ ] Multilingual Blog Posts Editing in Admin CMS
+- [ ] Re-enable Google/Facebook Login
+
+### P3 - Low Priority
+- [ ] Envelope Animation Enhancements (sound effects)
+- [ ] Refactor server.py into routers directory
+- [ ] Refactor EventDetail.jsx (decouple complex logic)
+
+---
+
+## Technical Architecture
+
+### Backend
+- FastAPI with MongoDB
+- Epoint.az payment integration
+- Cloudinary for image uploads
+- JWT authentication
+
+### Frontend
+- React with React Router
+- i18next for translations
+- Tailwind CSS + Shadcn/UI
+- Framer Motion for animations
+
+### Key Endpoints
+- `/api/payments/callback` - ONLY endpoint that credits balance (via Epoint webhook)
+- `/api/balance` - Get balance, expire old pending payments
+- `/api/admin/expire-pending-payments` - Safely expire stuck payments
+
+---
+
+## Test Credentials
+- Email: admin@vivento.az
+- Password: Vivento123!
+
+## Test Reports
+- `/app/test_reports/iteration_3.json` - Payment bug fix verification
+- `/app/backend/tests/test_payment_bug_fix.py` - Automated payment tests
