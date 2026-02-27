@@ -2744,6 +2744,22 @@ async def payment_callback(request: Request):
                 await db.balance_transactions.insert_one(transaction.model_dump())
                 
                 logger.info(f"Balance updated for user {payment['user_id']}: +{payment['amount']} AZN (new balance: {new_balance} AZN)")
+                
+                # Send payment invoice email (non-blocking)
+                try:
+                    user_email = user.get("email")
+                    user_name = user.get("name", "İstifadəçi")
+                    if user_email:
+                        asyncio.create_task(send_payment_invoice_email(
+                            user_email, 
+                            user_name, 
+                            payment["amount"], 
+                            new_balance, 
+                            transaction_id or order_id
+                        ))
+                        logger.info(f"Payment invoice email queued for: {user_email}")
+                except Exception as e:
+                    logger.error(f"Failed to queue payment invoice email: {e}")
         else:
             # Payment failed
             await db.payments.update_one(
