@@ -91,6 +91,14 @@ Vivento is an Azerbaijani digital wedding/event invitation platform that allows 
 - `/api/payments/callback` - ONLY endpoint that credits balance (via Epoint webhook)
 - `/api/balance` - Get balance, expire old pending payments
 - `/api/admin/expire-pending-payments` - Safely expire stuck payments
+- `/api/auth/forgot-password` - Send password reset email
+- `/api/auth/reset-password` - Reset password with token
+
+### Integrations
+- **Epoint.az**: Payment gateway for balance top-up
+- **Resend.com**: Transactional emails (welcome, password reset, invoices)
+- **Cloudinary**: Image uploads
+- **Google OAuth**: Social login (available but on hold)
 
 ---
 
