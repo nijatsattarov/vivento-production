@@ -108,4 +108,6 @@ Vivento is an Azerbaijani digital wedding/event invitation platform that allows 
 
 ## Test Reports
 - `/app/test_reports/iteration_3.json` - Payment bug fix verification
+- `/app/test_reports/iteration_4.json` - Email integration verification
 - `/app/backend/tests/test_payment_bug_fix.py` - Automated payment tests
+- `/app/backend/tests/test_email_integration.py` - Automated email tests
