@@ -477,6 +477,7 @@ const EventDetail = () => {
                   </div>
                 </DialogContent>
               </Dialog>
+              </div>
             </div>
 
             {/* Guests List */}
