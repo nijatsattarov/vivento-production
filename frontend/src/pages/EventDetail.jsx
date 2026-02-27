@@ -389,17 +389,42 @@ const EventDetail = () => {
           </TabsList>
 
           <TabsContent value="guests" className="space-y-6">
-            {/* Add Guest Button */}
-            <div className="flex justify-between items-center">
+            {/* Header with Add Guest Button and View Toggle */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <h2 className="text-xl font-semibold text-gray-900">Qonaq siyahısı</h2>
               
-              <Dialog open={isAddGuestOpen} onOpenChange={setIsAddGuestOpen}>
-                <DialogTrigger asChild>
-                  <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700" data-testid="add-guest-button">
-                    <Plus className="mr-2 h-4 w-4" />
-                    Qonaq əlavə et
+              <div className="flex items-center gap-3">
+                {/* View Mode Toggle */}
+                <div className="flex items-center bg-gray-100 rounded-lg p-1">
+                  <Button
+                    variant={guestViewMode === 'cards' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setGuestViewMode('cards')}
+                    className={`px-3 ${guestViewMode === 'cards' ? 'bg-white shadow-sm' : ''}`}
+                    data-testid="view-cards-btn"
+                  >
+                    <LayoutGrid className="h-4 w-4 mr-1" />
+                    Kartlar
                   </Button>
-                </DialogTrigger>
+                  <Button
+                    variant={guestViewMode === 'list' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setGuestViewMode('list')}
+                    className={`px-3 ${guestViewMode === 'list' ? 'bg-white shadow-sm' : ''}`}
+                    data-testid="view-list-btn"
+                  >
+                    <List className="h-4 w-4 mr-1" />
+                    Siyahı
+                  </Button>
+                </div>
+                
+                <Dialog open={isAddGuestOpen} onOpenChange={setIsAddGuestOpen}>
+                  <DialogTrigger asChild>
+                    <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700" data-testid="add-guest-button">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Qonaq əlavə et
+                    </Button>
+                  </DialogTrigger>
                 
                 <DialogContent data-testid="add-guest-dialog">
                   <DialogHeader>
