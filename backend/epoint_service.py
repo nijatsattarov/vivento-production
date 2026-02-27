@@ -163,21 +163,21 @@ class EpointService:
             logger.error(f"Error decoding callback data: {str(e)}")
             raise
     
-    def get_payment_status_request(self, transaction_id: str) -> Dict[str, Any]:
+    def get_payment_status_request(self, order_id: str) -> Dict[str, Any]:
         """
-        Create request to check payment status
+        Create request to check payment status by order_id
         
         Args:
-            transaction_id: Epoint transaction ID
+            order_id: Our order ID (e.g., BAL-xxxxx-XXXXXX)
             
         Returns:
             Dictionary with 'data' and 'signature' for status check
         """
         try:
-            # Prepare status check data
+            # Prepare status check data - use order_id field, NOT transaction
             status_data = {
                 "public_key": self.public_key,
-                "transaction": transaction_id
+                "order_id": order_id
             }
             
             # Convert to JSON and base64 encode
@@ -187,7 +187,7 @@ class EpointService:
             # Generate signature
             signature = self.generate_signature(data_encoded)
             
-            logger.info(f"Status check request created for transaction: {transaction_id}")
+            logger.info(f"Status check request created for order: {order_id}")
             
             return {
                 "data": data_encoded,
