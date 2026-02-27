@@ -19,6 +19,9 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
+# Import email service
+from email_service import send_welcome_email, send_password_reset_email, send_payment_invoice_email
+
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
