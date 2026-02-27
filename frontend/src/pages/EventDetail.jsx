@@ -492,7 +492,8 @@ const EventDetail = () => {
                   </div>
                 </CardContent>
               </Card>
-            ) : (
+            ) : guestViewMode === 'cards' ? (
+              /* Cards View */
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {guests.map((guest) => (
                   <Card key={guest.id} className="bg-white shadow-lg border-0 card-hover" data-testid={`guest-card-${guest.id}`}>
@@ -553,6 +554,104 @@ const EventDetail = () => {
                   </Card>
                 ))}
               </div>
+            ) : (
+              /* List/Table View */
+              <Card className="bg-white shadow-lg border-0 overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full" data-testid="guests-table">
+                    <thead className="bg-gray-50 border-b">
+                      <tr>
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          #
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Ad Soyad
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Telefon
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Status
+                        </th>
+                        <th className="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                          Əməliyyatlar
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {guests.map((guest, index) => (
+                        <tr key={guest.id} className="hover:bg-gray-50 transition-colors" data-testid={`guest-row-${guest.id}`}>
+                          <td className="px-4 py-3 text-sm text-gray-500">
+                            {index + 1}
+                          </td>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center">
+                              <div className="w-8 h-8 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center mr-3">
+                                <User className="h-4 w-4 text-blue-600" />
+                              </div>
+                              <span className="font-medium text-gray-900">{guest.name}</span>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 text-sm text-gray-600">
+                            {guest.phone || '-'}
+                          </td>
+                          <td className="px-4 py-3">
+                            <Badge 
+                              className={
+                                guest.rsvp_status === 'gəlirəm' 
+                                  ? 'bg-green-100 text-green-800 border-green-200'
+                                  : guest.rsvp_status === 'gəlmirəm'
+                                  ? 'bg-red-100 text-red-800 border-red-200'
+                                  : 'bg-gray-100 text-gray-800 border-gray-200'
+                              }
+                            >
+                              {guest.rsvp_status || 'Cavab yoxdur'}
+                            </Badge>
+                          </td>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center justify-center space-x-2">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => copyInviteLink(guest.unique_token)}
+                                className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                                title="Linki kopyala"
+                                data-testid={`list-copy-link-${guest.id}`}
+                              >
+                                <Copy className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => window.open(`${window.location.origin}/invite/${guest.unique_token}`, '_blank')}
+                                className="text-purple-600 hover:text-purple-700 hover:bg-purple-50"
+                                title="Dəvətnaməyə bax"
+                                data-testid={`list-view-${guest.id}`}
+                              >
+                                <ExternalLink className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => shareViaWhatsApp(guest.unique_token, guest.name, guest.phone)}
+                                className="text-green-600 hover:text-green-700 hover:bg-green-50"
+                                title="WhatsApp ilə paylaş"
+                                data-testid={`list-whatsapp-${guest.id}`}
+                              >
+                                <MessageSquare className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {/* Table Footer */}
+                <div className="bg-gray-50 px-4 py-3 border-t text-sm text-gray-600">
+                  Cəmi: {guests.length} qonaq
+                </div>
+              </Card>
             )}
           </TabsContent>
 
