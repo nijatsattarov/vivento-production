@@ -117,8 +117,6 @@ const PaymentResult = () => {
         setCheckAttempts(prev => prev + 1);
         setPaymentStatus('pending');
       }
-        setPaymentStatus('unknown');
-      }
       
     } catch (error) {
       console.error('Payment status check error:', error);
