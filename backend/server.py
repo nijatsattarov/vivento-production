@@ -513,6 +513,48 @@ async def forgot_password(request: ForgotPasswordRequest):
     # Always return success for security
     return {"success": True, "message": "Əgər bu e-poçt mövcuddursa, şifrə bərpa linki göndərildi"}
 
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
+@api_router.post("/auth/reset-password")
+async def reset_password(request: ResetPasswordRequest):
+    """
+    Reset password using token from email.
+    """
+    # Find the reset token
+    reset_doc = await db.password_resets.find_one({"token": request.token})
+    
+    if not reset_doc:
+        raise HTTPException(status_code=400, detail="Etibarsız və ya müddəti bitmiş link")
+    
+    # Check if token is expired
+    expires_at = datetime.fromisoformat(reset_doc["expires_at"].replace('Z', '+00:00'))
+    if datetime.now(timezone.utc) > expires_at:
+        await db.password_resets.delete_one({"token": request.token})
+        raise HTTPException(status_code=400, detail="Linkın müddəti bitib. Zəhmət olmasa yenidən cəhd edin.")
+    
+    # Validate new password
+    if len(request.new_password) < 6:
+        raise HTTPException(status_code=400, detail="Şifrə minimum 6 simvol olmalıdır")
+    
+    # Update user's password
+    hashed_password = simple_hash_password(request.new_password)
+    result = await db.users.update_one(
+        {"email": reset_doc["email"]},
+        {"$set": {"password": hashed_password, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(status_code=400, detail="İstifadəçi tapılmadı")
+    
+    # Delete used token
+    await db.password_resets.delete_one({"token": request.token})
+    
+    logger.info(f"Password reset successful for: {reset_doc['email']}")
+    
+    return {"success": True, "message": "Şifrəniz uğurla yeniləndi. İndi daxil ola bilərsiniz."}
+
 @api_router.post("/auth/facebook", response_model=TokenResponse)
 async def facebook_login(request: FacebookLoginRequest):
     # Verify Facebook token
