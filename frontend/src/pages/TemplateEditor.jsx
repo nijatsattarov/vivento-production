@@ -669,15 +669,33 @@ const TemplateEditor = () => {
         </div>
 
         {/* Toolbar - Undo/Redo/Download */}
-        <div className="mb-4 flex items-center justify-between">
+        <div className="mb-4 flex items-center justify-between bg-white rounded-lg p-2 shadow-sm">
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => {}} title="Geri al">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => {}} 
+              title="Geri al"
+              className="border-gray-300 text-gray-700 hover:bg-gray-100"
+            >
               <Undo className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="sm" onClick={() => {}} title="İrəli al">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => {}} 
+              title="İrəli al"
+              className="border-gray-300 text-gray-700 hover:bg-gray-100"
+            >
               <Redo className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="sm" onClick={exportDesign} title="Yüklə">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={exportDesign} 
+              title="Yüklə"
+              className="border-gray-300 text-gray-700 hover:bg-gray-100"
+            >
               <Download className="h-4 w-4" />
             </Button>
           </div>
@@ -688,6 +706,7 @@ const TemplateEditor = () => {
               const inviteUrl = `${window.location.origin}/invite/demo-${event?.id}`;
               window.open(inviteUrl, '_blank');
             }}
+            className="border-gray-300 text-gray-700 hover:bg-gray-100"
             data-testid="preview-button"
           >
             <Eye className="mr-1.5 h-4 w-4" />
