@@ -527,6 +527,83 @@ const TemplateEditor = () => {
     }
   };
 
+  const exportDesign = async () => {
+    try {
+      // Create a canvas element to render the design
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      // Set canvas size
+      canvas.width = canvasSize.width;
+      canvas.height = canvasSize.height;
+      
+      // Fill background
+      if (canvasSize.backgroundGradient) {
+        // Create gradient
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        const startColor = canvasSize.gradientStart || '#ffffff';
+        const endColor = canvasSize.gradientEnd || '#000000';
+        gradient.addColorStop(0, startColor);
+        gradient.addColorStop(1, endColor);
+        ctx.fillStyle = gradient;
+      } else {
+        ctx.fillStyle = canvasSize.background || '#ffffff';
+      }
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Render elements
+      for (const element of elements) {
+        if (element.type === 'text') {
+          ctx.fillStyle = element.color || '#000000';
+          ctx.font = `${element.fontWeight || 'normal'} ${element.fontSize || 16}px ${element.fontFamily || 'Arial'}`;
+          ctx.textAlign = element.textAlign || 'left';
+          
+          const lines = element.content.split('\n');
+          const lineHeight = (element.fontSize || 16) * 1.2;
+          
+          lines.forEach((line, index) => {
+            let x = element.x;
+            if (element.textAlign === 'center') {
+              x = element.x + element.width / 2;
+            } else if (element.textAlign === 'right') {
+              x = element.x + element.width;
+            }
+            
+            const y = element.y + (element.fontSize || 16) + (index * lineHeight);
+            ctx.fillText(line, x, y);
+          });
+        } else if (element.type === 'image' && element.src) {
+          // For images, we would need to load them first
+          // This is a simplified version
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          img.onload = () => {
+            ctx.drawImage(img, element.x, element.y, element.width, element.height);
+          };
+          img.src = element.src;
+        }
+      }
+      
+      // Convert to blob and download
+      canvas.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${event?.name || 'invitation'}-design.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        toast.success('Dizayn yükləndi!');
+      }, 'image/png');
+      
+    } catch (error) {
+      console.error('Export error:', error);
+      toast.error('Dizayn yüklənə bilmədi');
+    }
+  };
+
   const handleZoomIn = () => setZoom(prev => Math.min(200, prev + 25));
   const handleZoomOut = () => setZoom(prev => Math.max(50, prev - 25));
 
