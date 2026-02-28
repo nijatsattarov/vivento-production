@@ -617,8 +617,39 @@ const TemplateEditor = () => {
             Önizləmə
           </Button>
         </div>
-          {/* Tools Panel */}
-          <div className="lg:col-span-1">
+
+        {/* Main Editor Grid - Canvas first on mobile */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-6">
+          {/* Canvas Area - Shows first on mobile */}
+          <div className="lg:col-span-3 order-first lg:order-last">
+            <Card className="bg-white shadow-lg border-0">
+              <CardHeader className="pb-3 hidden lg:block">
+                <CardTitle className="text-lg font-semibold">Dəvətnamə dizaynı</CardTitle>
+              </CardHeader>
+              
+              <CardContent>
+                {/* Canvas Container - Mobile responsive */}
+                <div className="flex justify-center p-2 md:p-8 bg-gray-50 rounded-lg overflow-auto">
+                  <div 
+                    className="canvas-container relative border-2 border-gray-200 rounded-lg shadow-lg overflow-hidden"
+                    style={{ 
+                      width: `min(${canvasSize.width * (zoom / 100)}px, calc(100vw - 48px))`,
+                      height: 'auto',
+                      aspectRatio: `${canvasSize.width} / ${canvasSize.height}`,
+                      minWidth: '280px',
+                      background: canvasSize.backgroundGradient || canvasSize.background || '#ffffff',
+                      backgroundImage: canvasSize.backgroundImage ? 
+                        `url(${canvasSize.backgroundImage})${showGrid ? ', linear-gradient(rgba(0,0,0,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.1) 1px, transparent 1px)' : ''}` : 
+                        showGrid ? `linear-gradient(rgba(0,0,0,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.1) 1px, transparent 1px)` : 'none',
+                      backgroundSize: canvasSize.backgroundImage ? 
+                        `cover${showGrid ? ', 20px 20px, 20px 20px' : ''}` : 
+                        showGrid ? '20px 20px' : 'auto',
+                      backgroundPosition: 'center',
+                      backgroundRepeat: 'no-repeat',
+                      touchAction: 'none'
+                    }}
+                    data-testid="design-canvas"
+                  >
             <Tabs defaultValue="elements" className="space-y-4">
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="elements" data-testid="elements-tab">Elementlər</TabsTrigger>
