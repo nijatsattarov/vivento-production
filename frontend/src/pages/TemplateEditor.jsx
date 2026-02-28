@@ -1099,15 +1099,15 @@ const TemplateEditor = () => {
               </CardHeader>
               
               <CardContent>
-                {/* Canvas Container */}
-                <div className="flex justify-center p-4 md:p-8 bg-gray-50 rounded-lg overflow-x-auto">
+                {/* Canvas Container - Mobile responsive */}
+                <div className="flex justify-center p-2 md:p-8 bg-gray-50 rounded-lg overflow-auto">
                   <div 
-                    className="canvas-container relative border-2 border-gray-200 rounded-lg shadow-lg overflow-hidden mx-auto"
+                    className="canvas-container relative border-2 border-gray-200 rounded-lg shadow-lg overflow-hidden"
                     style={{ 
-                      width: canvasSize.width * (zoom / 100), 
-                      height: canvasSize.height * (zoom / 100),
+                      width: `min(${canvasSize.width * (zoom / 100)}px, calc(100vw - 48px))`,
+                      height: 'auto',
+                      aspectRatio: `${canvasSize.width} / ${canvasSize.height}`,
                       minWidth: '280px',
-                      maxWidth: '100%',
                       background: canvasSize.backgroundGradient || canvasSize.background || '#ffffff',
                       backgroundImage: canvasSize.backgroundImage ? 
                         `url(${canvasSize.backgroundImage})${showGrid ? ', linear-gradient(rgba(0,0,0,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.1) 1px, transparent 1px)' : ''}` : 
@@ -1116,7 +1116,8 @@ const TemplateEditor = () => {
                         `cover${showGrid ? ', 20px 20px, 20px 20px' : ''}` : 
                         showGrid ? '20px 20px' : 'auto',
                       backgroundPosition: 'center',
-                      backgroundRepeat: 'no-repeat'
+                      backgroundRepeat: 'no-repeat',
+                      touchAction: 'none'
                     }}
                     data-testid="design-canvas"
                   >
