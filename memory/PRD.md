@@ -66,6 +66,18 @@ Vivento is an Azerbaijani digital wedding/event invitation platform that allows 
 - **Cards View**: Original card-based layout
 - **Status**: IMPLEMENTED
 
+**MOBILE EDITOR FIXES**
+- **Issues Fixed**:
+  1. Header buttons ("Saxla", "Növbəti Addım") no longer overflow on mobile
+  2. Invitation design now shows fully with correct aspect ratio
+  3. Touch drag & drop support added for moving elements on mobile
+- **Technical Changes**:
+  - Added `touchstart`, `touchmove`, `touchend` event handlers
+  - Canvas uses responsive width with `aspectRatio` CSS property
+  - Reordered grid layout - canvas shows first on mobile, tools below
+  - Added `touch-none` CSS to prevent default touch scrolling on elements
+- **Status**: IMPLEMENTED
+
 ---
 
 ## Prioritized Backlog
