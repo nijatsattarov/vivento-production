@@ -1080,37 +1080,22 @@ const TemplateEditor = () => {
             </Tabs>
           </div>
 
-          {/* Canvas Area */}
-          <div className="lg:col-span-3">
-            <Card className="bg-white shadow-lg border-0 h-full">
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg font-semibold">Dəvətnamə dizaynı</CardTitle>
-                  
-                  <div className="flex items-center space-x-2">
-                    <Button variant="outline" size="sm" data-testid="undo-button">
-                      <Undo className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="sm" data-testid="redo-button">
-                      <Redo className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="sm" data-testid="download-button">
-                      <Download className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
+          {/* Canvas Area - Order 1 on mobile (above tools) */}
+          <div className="lg:col-span-3 order-1 lg:order-2">
+            <Card className="bg-white shadow-lg border-0">
+              <CardHeader className="pb-3 hidden lg:block">
+                <CardTitle className="text-lg font-semibold">Dəvətnamə dizaynı</CardTitle>
               </CardHeader>
               
-              <CardContent>
+              <CardContent className="p-2 md:p-6">
                 {/* Canvas Container - Mobile responsive */}
-                <div className="flex justify-center p-2 md:p-8 bg-gray-50 rounded-lg overflow-auto">
+                <div className="flex justify-center bg-gray-50 rounded-lg overflow-auto p-2 md:p-4">
                   <div 
                     className="canvas-container relative border-2 border-gray-200 rounded-lg shadow-lg overflow-hidden"
                     style={{ 
-                      width: `min(${canvasSize.width * (zoom / 100)}px, calc(100vw - 48px))`,
-                      height: 'auto',
+                      width: '100%',
+                      maxWidth: `${canvasSize.width}px`,
                       aspectRatio: `${canvasSize.width} / ${canvasSize.height}`,
-                      minWidth: '280px',
                       background: canvasSize.backgroundGradient || canvasSize.background || '#ffffff',
                       backgroundImage: canvasSize.backgroundImage ? 
                         `url(${canvasSize.backgroundImage})${showGrid ? ', linear-gradient(rgba(0,0,0,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.1) 1px, transparent 1px)' : ''}` : 
