@@ -502,52 +502,73 @@ const TemplateEditor = () => {
             <span>Tədbir səhifəsinə qayıt</span>
           </button>
           
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+          <div className="flex flex-col space-y-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900" data-testid="editor-title">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900" data-testid="editor-title">
                 Dəvətnamə Editoru
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-gray-600 mt-1 text-sm md:text-base">
                 {event?.name} - Canva tipli drag & drop editor
               </p>
             </div>
             
-            <div className="flex items-center space-x-3">
-              <Button 
-                variant="outline" 
-                onClick={() => {
-                  const inviteUrl = `${window.location.origin}/invite/demo-${event?.id}`;
-                  window.open(inviteUrl, '_blank');
-                }}
-                data-testid="preview-button"
-              >
-                <Eye className="mr-2 h-4 w-4" />
-                Önizləmə
-              </Button>
+            {/* Action Buttons - Mobile Responsive */}
+            <div className="flex flex-wrap items-center gap-2">
+              <Input 
+                placeholder="Tədbir adı"
+                value={event?.name || ''}
+                className="w-full sm:w-auto sm:min-w-[200px] text-sm"
+                readOnly
+              />
               
               <Button 
                 onClick={saveDesign}
                 disabled={isSaving}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                className="flex-1 sm:flex-none bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-sm"
                 data-testid="save-design-button"
               >
-                <Save className="mr-2 h-4 w-4" />
-                {isSaving ? 'Saxlanılır...' : 'Saxla'}
+                <Save className="mr-1.5 h-4 w-4" />
+                Saxla
               </Button>
 
               <Button 
                 onClick={() => setShowNextStepModal(true)}
-                className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+                className="flex-1 sm:flex-none bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-sm"
                 data-testid="next-step-button"
               >
-                <Users className="mr-2 h-4 w-4" />
+                <Users className="mr-1.5 h-4 w-4" />
                 Növbəti Addım
               </Button>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Toolbar - Undo/Redo/Download */}
+        <div className="mb-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => {}} title="Geri al">
+              <Undo className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => {}} title="İrəli al">
+              <Redo className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="sm" onClick={exportDesign} title="Yüklə">
+              <Download className="h-4 w-4" />
+            </Button>
+          </div>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => {
+              const inviteUrl = `${window.location.origin}/invite/demo-${event?.id}`;
+              window.open(inviteUrl, '_blank');
+            }}
+            data-testid="preview-button"
+          >
+            <Eye className="mr-1.5 h-4 w-4" />
+            Önizləmə
+          </Button>
+        </div>
           {/* Tools Panel */}
           <div className="lg:col-span-1">
             <Tabs defaultValue="elements" className="space-y-4">
