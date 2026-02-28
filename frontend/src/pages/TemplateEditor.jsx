@@ -162,15 +162,23 @@ const TemplateEditor = () => {
   useEffect(() => {
     const handleGlobalMouseMove = (e) => handleMouseMove(e);
     const handleGlobalMouseUp = () => handleMouseUp();
+    const handleGlobalTouchMove = (e) => handleTouchMove(e);
+    const handleGlobalTouchEnd = () => handleTouchEnd();
 
     if (isDragging) {
+      // Mouse events
       document.addEventListener('mousemove', handleGlobalMouseMove);
       document.addEventListener('mouseup', handleGlobalMouseUp);
+      // Touch events
+      document.addEventListener('touchmove', handleGlobalTouchMove, { passive: false });
+      document.addEventListener('touchend', handleGlobalTouchEnd);
     }
 
     return () => {
       document.removeEventListener('mousemove', handleGlobalMouseMove);
       document.removeEventListener('mouseup', handleGlobalMouseUp);
+      document.removeEventListener('touchmove', handleGlobalTouchMove);
+      document.removeEventListener('touchend', handleGlobalTouchEnd);
     };
   }, [isDragging, selectedElement, dragOffset, zoom, canvasSize]);
 
