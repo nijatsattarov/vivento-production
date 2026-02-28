@@ -300,13 +300,13 @@ const TemplateEditor = () => {
     setSelectedElement(element);
   };
 
+  // Mouse events
   const handleMouseDown = (e, element) => {
     e.preventDefault();
     setSelectedElement(element);
     setIsDragging(true);
     
     const rect = e.currentTarget.getBoundingClientRect();
-    const canvasRect = e.currentTarget.parentElement.getBoundingClientRect();
     
     setDragOffset({
       x: e.clientX - rect.left,
@@ -334,6 +334,46 @@ const TemplateEditor = () => {
   };
 
   const handleMouseUp = () => {
+    setIsDragging(false);
+    setDragOffset({ x: 0, y: 0 });
+  };
+
+  // Touch events for mobile
+  const handleTouchStart = (e, element) => {
+    e.preventDefault();
+    setSelectedElement(element);
+    setIsDragging(true);
+    
+    const touch = e.touches[0];
+    const rect = e.currentTarget.getBoundingClientRect();
+    
+    setDragOffset({
+      x: touch.clientX - rect.left,
+      y: touch.clientY - rect.top
+    });
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging || !selectedElement) return;
+    
+    e.preventDefault();
+    const touch = e.touches[0];
+    const canvasRect = document.querySelector('[data-testid="design-canvas"]').getBoundingClientRect();
+    
+    const newX = Math.max(0, Math.min(
+      canvasSize.width - selectedElement.width,
+      ((touch.clientX - canvasRect.left - dragOffset.x) / (zoom / 100))
+    ));
+    
+    const newY = Math.max(0, Math.min(
+      canvasSize.height - selectedElement.height,
+      ((touch.clientY - canvasRect.top - dragOffset.y) / (zoom / 100))
+    ));
+
+    updateElement(selectedElement.id, { x: newX, y: newY });
+  };
+
+  const handleTouchEnd = () => {
     setIsDragging(false);
     setDragOffset({ x: 0, y: 0 });
   };
