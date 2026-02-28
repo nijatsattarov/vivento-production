@@ -1124,11 +1124,12 @@ const TemplateEditor = () => {
                       <div
                         key={element.id}
                         onMouseDown={(e) => handleMouseDown(e, element)}
+                        onTouchStart={(e) => handleTouchStart(e, element)}
                         onClick={(e) => {
                           e.stopPropagation();
                           handleElementClick(element);
                         }}
-                        className={`absolute cursor-move transition-all select-none ${
+                        className={`absolute cursor-move transition-all select-none touch-none ${
                           selectedElement?.id === element.id 
                             ? 'ring-2 ring-blue-500 shadow-lg' 
                             : 'hover:ring-1 hover:ring-gray-300'
