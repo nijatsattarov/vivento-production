@@ -135,6 +135,51 @@ const BlogManager = ({ token }) => {
       .replace(/^-+|-+$/g, '');
   };
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Check file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Yalnız şəkil faylları qəbul edilir');
+      return;
+    }
+
+    // Check file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Fayl ölçüsü 5MB-dan çox olmamalıdır');
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+
+      const response = await axios.post(
+        `${API_BASE_URL}/api/upload/image`,
+        uploadFormData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+
+      if (response.data.url) {
+        setFormData({ ...formData, thumbnail: response.data.url });
+        toast.success('Şəkil yükləndi!');
+      }
+    } catch (error) {
+      console.error('Image upload error:', error);
+      toast.error('Şəkil yüklənərkən xəta: ' + (error.response?.data?.detail || error.message));
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return (
     <Card className="bg-white shadow-lg border-0">
       <CardHeader>
