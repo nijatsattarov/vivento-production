@@ -458,8 +458,9 @@ const EventDetail = () => {
 
         {/* Main Content */}
         <Tabs defaultValue="guests" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
+          <TabsList className="grid w-full grid-cols-4 lg:w-[500px]">
             <TabsTrigger value="guests" data-testid="guests-tab">Qonaqlar</TabsTrigger>
+            <TabsTrigger value="gallery" data-testid="gallery-tab">Qalereya</TabsTrigger>
             <TabsTrigger value="details" data-testid="details-tab">Təfərrüatlar</TabsTrigger>
             <TabsTrigger value="analytics" data-testid="analytics-tab">Analitika</TabsTrigger>
           </TabsList>
