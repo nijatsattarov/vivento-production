@@ -157,6 +157,17 @@ class Payment(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     completed_at: Optional[datetime] = None
 
+class GalleryPhoto(BaseModel):
+    """Gallery photo model - photos auto-expire after 5 days"""
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    event_id: str
+    user_id: str
+    url: str  # Cloudinary URL
+    cloudinary_public_id: str  # For deletion
+    caption: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    expires_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc) + timedelta(days=5))
+
 class SiteSettings(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     site_logo: Optional[str] = None
