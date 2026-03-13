@@ -3077,6 +3077,184 @@ async def admin_expire_pending_payments(current_user: User = Depends(get_current
         logger.error(f"Expire payments error: {e}")
         raise HTTPException(status_code=500, detail="Ödənişlər işarələnərkən xəta")
 
+# ================== GALLERY ENDPOINTS ==================
+
+@api_router.get("/events/{event_id}/gallery")
+async def get_event_gallery(event_id: str):
+    """
+    Get gallery photos for an event (public endpoint for invitation page)
+    Only returns non-expired photos
+    """
+    try:
+        now = datetime.now(timezone.utc)
+        
+        # Find non-expired photos
+        photos = await db.gallery_photos.find({
+            "event_id": event_id,
+            "expires_at": {"$gt": now.isoformat()}
+        }, {"_id": 0}).sort("created_at", -1).to_list(100)
+        
+        return {
+            "event_id": event_id,
+            "photos": photos,
+            "count": len(photos)
+        }
+        
+    except Exception as e:
+        logger.error(f"Get gallery error: {e}")
+        raise HTTPException(status_code=500, detail="Qalereya yüklənərkən xəta")
+
+@api_router.post("/events/{event_id}/gallery")
+async def upload_gallery_photo(
+    event_id: str,
+    file: UploadFile = File(...),
+    caption: Optional[str] = Form(None),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Upload a photo to event gallery
+    Photos expire after 5 days automatically
+    """
+    try:
+        # Verify event belongs to user
+        event = await db.events.find_one({
+            "id": event_id,
+            "user_id": current_user.id
+        }, {"_id": 0})
+        
+        if not event:
+            raise HTTPException(status_code=404, detail="Tədbir tapılmadı")
+        
+        # Check file type
+        if not file.content_type.startswith('image/'):
+            raise HTTPException(status_code=400, detail="Yalnız şəkil faylları qəbul edilir")
+        
+        # Check file size (max 10MB)
+        contents = await file.read()
+        if len(contents) > 10 * 1024 * 1024:
+            raise HTTPException(status_code=400, detail="Fayl ölçüsü 10MB-dan çox olmamalıdır")
+        
+        # Upload to Cloudinary with auto-delete tag
+        result = cloudinary.uploader.upload(
+            contents,
+            folder=f"vivento/gallery/{event_id}",
+            resource_type="image",
+            tags=["gallery", f"event_{event_id}", "auto_delete_5d"]
+        )
+        
+        # Create gallery photo record
+        expires_at = datetime.now(timezone.utc) + timedelta(days=5)
+        
+        photo = GalleryPhoto(
+            event_id=event_id,
+            user_id=current_user.id,
+            url=result["secure_url"],
+            cloudinary_public_id=result["public_id"],
+            caption=caption,
+            expires_at=expires_at
+        )
+        
+        await db.gallery_photos.insert_one(photo.model_dump())
+        
+        logger.info(f"Gallery photo uploaded: {photo.id} for event {event_id}, expires: {expires_at}")
+        
+        return {
+            "success": True,
+            "photo": {
+                "id": photo.id,
+                "url": photo.url,
+                "caption": photo.caption,
+                "created_at": photo.created_at.isoformat(),
+                "expires_at": photo.expires_at.isoformat()
+            }
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Upload gallery photo error: {e}")
+        raise HTTPException(status_code=500, detail="Foto yüklənərkən xəta")
+
+@api_router.delete("/events/{event_id}/gallery/{photo_id}")
+async def delete_gallery_photo(
+    event_id: str,
+    photo_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Delete a gallery photo"""
+    try:
+        # Find photo
+        photo = await db.gallery_photos.find_one({
+            "id": photo_id,
+            "event_id": event_id,
+            "user_id": current_user.id
+        }, {"_id": 0})
+        
+        if not photo:
+            raise HTTPException(status_code=404, detail="Foto tapılmadı")
+        
+        # Delete from Cloudinary
+        try:
+            cloudinary.uploader.destroy(photo["cloudinary_public_id"])
+        except Exception as e:
+            logger.warning(f"Could not delete from Cloudinary: {e}")
+        
+        # Delete from database
+        await db.gallery_photos.delete_one({"id": photo_id})
+        
+        logger.info(f"Gallery photo deleted: {photo_id}")
+        
+        return {"success": True, "message": "Foto silindi"}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Delete gallery photo error: {e}")
+        raise HTTPException(status_code=500, detail="Foto silinərkən xəta")
+
+@api_router.post("/cleanup/expired-gallery")
+async def cleanup_expired_gallery_photos():
+    """
+    Cleanup expired gallery photos (called by cron job or manually)
+    Deletes photos older than 5 days from both Cloudinary and database
+    """
+    try:
+        now = datetime.now(timezone.utc)
+        
+        # Find expired photos
+        expired_photos = await db.gallery_photos.find({
+            "expires_at": {"$lt": now.isoformat()}
+        }, {"_id": 0}).to_list(1000)
+        
+        deleted_count = 0
+        failed_count = 0
+        
+        for photo in expired_photos:
+            try:
+                # Delete from Cloudinary
+                cloudinary.uploader.destroy(photo["cloudinary_public_id"])
+                
+                # Delete from database
+                await db.gallery_photos.delete_one({"id": photo["id"]})
+                
+                deleted_count += 1
+                logger.info(f"Expired gallery photo deleted: {photo['id']}")
+                
+            except Exception as e:
+                logger.error(f"Failed to delete expired photo {photo['id']}: {e}")
+                failed_count += 1
+        
+        return {
+            "success": True,
+            "message": f"{deleted_count} müddəti bitmiş foto silindi",
+            "deleted": deleted_count,
+            "failed": failed_count
+        }
+        
+    except Exception as e:
+        logger.error(f"Cleanup expired gallery error: {e}")
+        raise HTTPException(status_code=500, detail="Təmizləmə zamanı xəta")
+
 # Include the router in the main app
 app.include_router(api_router)
 
