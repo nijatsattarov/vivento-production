@@ -179,6 +179,9 @@ const EventDetail = () => {
       setEvent(eventResponse.data);
       setGuests(guestsResponse.data);
       
+      // Fetch gallery photos
+      fetchGallery();
+      
       // Check if envelope animation should be shown
       // Only show if event.show_envelope_animation is true AND user is NOT logged in (guest view)
       const sessionKey = `envelope_shown_${eventId}`;
