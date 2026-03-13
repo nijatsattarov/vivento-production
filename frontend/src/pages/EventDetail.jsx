@@ -52,6 +52,8 @@ const EventDetail = () => {
   const [isAddingGuest, setIsAddingGuest] = useState(false);
   const [showEnvelope, setShowEnvelope] = useState(false);
   const [guestViewMode, setGuestViewMode] = useState('cards'); // 'cards' or 'list'
+  const [galleryPhotos, setGalleryPhotos] = useState([]);
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const [balance, setBalance] = useState({
     balance: 0,
     free_invitations_used: 0,
