@@ -398,6 +398,60 @@ const InvitationPage = () => {
             Bu dəvətnamə <span className="font-semibold text-purple-600">Vivento</span> ilə yaradılıb
           </p>
         </div>
+
+        {/* Gallery Section - Show only if photos exist */}
+        {galleryPhotos.length > 0 && (
+          <Card className="mt-8 bg-white/90 backdrop-blur-sm shadow-2xl border-0 overflow-hidden">
+            <CardHeader className="text-center bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+              <CardTitle className="flex items-center justify-center gap-2 text-2xl">
+                <Image className="h-6 w-6" />
+                Tədbir Qalereyası
+              </CardTitle>
+              <p className="text-purple-100 text-sm mt-1">
+                Xatirə fotoları
+              </p>
+            </CardHeader>
+            <CardContent className="p-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {galleryPhotos.map((photo) => (
+                  <div 
+                    key={photo.id}
+                    className="aspect-square rounded-lg overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-shadow"
+                    onClick={() => setSelectedPhoto(photo)}
+                  >
+                    <img
+                      src={photo.url}
+                      alt="Gallery photo"
+                      className="w-full h-full object-cover hover:scale-105 transition-transform"
+                    />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Photo Lightbox */}
+        {selectedPhoto && (
+          <div 
+            className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+            onClick={() => setSelectedPhoto(null)}
+          >
+            <div className="max-w-4xl max-h-[90vh] relative">
+              <img
+                src={selectedPhoto.url}
+                alt="Gallery photo"
+                className="max-w-full max-h-[90vh] object-contain rounded-lg"
+              />
+              <button
+                className="absolute top-4 right-4 text-white bg-black/50 rounded-full p-2 hover:bg-black/70"
+                onClick={() => setSelectedPhoto(null)}
+              >
+                <XCircle className="h-6 w-6" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
