@@ -10,7 +10,8 @@ import {
   CheckCircle, 
   XCircle, 
   Heart,
-  ExternalLink
+  ExternalLink,
+  Image
 } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
@@ -21,6 +22,8 @@ const InvitationPage = () => {
   const [invitation, setInvitation] = useState(null);
   const [responding, setResponding] = useState(false);
   const [hasResponded, setHasResponded] = useState(false);
+  const [galleryPhotos, setGalleryPhotos] = useState([]);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
 
   const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -35,11 +38,25 @@ const InvitationPage = () => {
       const response = await axios.get(`${API_BASE_URL}/api/invite/${token}`);
       setInvitation(response.data);
       setHasResponded(!!response.data.guest.rsvp_status);
+      
+      // Fetch gallery photos for this event
+      if (response.data.event?.id) {
+        fetchGallery(response.data.event.id);
+      }
     } catch (error) {
       console.error('Dəvətnamə alınarkən xəta:', error);
       toast.error('Dəvətnamə tapılmadı və ya etibarsızdır');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchGallery = async (eventId) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/events/${eventId}/gallery`);
+      setGalleryPhotos(response.data.photos || []);
+    } catch (error) {
+      console.error('Gallery fetch error:', error);
     }
   };
 
