@@ -251,12 +251,68 @@ const BlogManager = ({ token }) => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Şəkil URL</Label>
-                    <Input
-                      value={formData.thumbnail}
-                      onChange={(e) => setFormData({ ...formData, thumbnail: e.target.value })}
-                      placeholder="https://..."
-                    />
+                    <Label>Şəkil</Label>
+                    <div className="space-y-2">
+                      {/* Image Preview */}
+                      {formData.thumbnail && (
+                        <div className="relative w-full h-32 rounded-lg overflow-hidden border">
+                          <img 
+                            src={formData.thumbnail} 
+                            alt="Thumbnail preview" 
+                            className="w-full h-full object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setFormData({ ...formData, thumbnail: '' })}
+                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                        </div>
+                      )}
+                      
+                      {/* Upload Button */}
+                      <div className="flex gap-2">
+                        <label className="flex-1 cursor-pointer">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            className="hidden"
+                            disabled={isUploading}
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="w-full"
+                            disabled={isUploading}
+                            asChild
+                          >
+                            <span>
+                              {isUploading ? (
+                                <>
+                                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                  Yüklənir...
+                                </>
+                              ) : (
+                                <>
+                                  <Upload className="mr-2 h-4 w-4" />
+                                  Şəkil Yüklə
+                                </>
+                              )}
+                            </span>
+                          </Button>
+                        </label>
+                      </div>
+                      
+                      {/* Or URL Input */}
+                      <Input
+                        value={formData.thumbnail}
+                        onChange={(e) => setFormData({ ...formData, thumbnail: e.target.value })}
+                        placeholder="və ya URL daxil edin..."
+                        className="text-xs"
+                      />
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label>Kateqoriya</Label>
