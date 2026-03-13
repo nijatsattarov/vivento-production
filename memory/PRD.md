@@ -78,6 +78,24 @@ Vivento is an Azerbaijani digital wedding/event invitation platform that allows 
   - Added `touch-none` CSS to prevent default touch scrolling on elements
 - **Status**: IMPLEMENTED
 
+**EVENT GALLERY FEATURE**
+- **Description**: Users can upload photos to event gallery after the event
+- **Features**:
+  1. Gallery tab in EventDetail page with photo upload
+  2. Photos auto-expire and delete after 5 days (like WeTransfer)
+  3. Gallery section in InvitationPage for guests to view photos
+  4. Photo lightbox for full-screen viewing
+  5. Manual cleanup endpoint: `/api/cleanup/expired-gallery`
+- **Endpoints**:
+  - `GET /api/events/{event_id}/gallery` - Get gallery photos (public)
+  - `POST /api/events/{event_id}/gallery` - Upload photo (auth required)
+  - `DELETE /api/events/{event_id}/gallery/{photo_id}` - Delete photo (auth required)
+  - `POST /api/cleanup/expired-gallery` - Cleanup expired photos
+- **Technical**:
+  - Photos stored in Cloudinary with auto-delete tags
+  - GalleryPhoto model with expires_at field (5 days from creation)
+- **Status**: IMPLEMENTED
+
 ---
 
 ## Prioritized Backlog
