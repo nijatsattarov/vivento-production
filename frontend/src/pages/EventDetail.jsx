@@ -91,6 +91,73 @@ const EventDetail = () => {
     }
   };
 
+  const fetchGallery = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/events/${eventId}/gallery`);
+      setGalleryPhotos(response.data.photos || []);
+    } catch (error) {
+      console.error('Gallery fetch error:', error);
+    }
+  };
+
+  const handlePhotoUpload = async (e) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setIsUploadingPhoto(true);
+
+    for (const file of files) {
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        await axios.post(
+          `${API_BASE_URL}/api/events/${eventId}/gallery`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+        );
+
+        toast.success('Foto əlavə edildi!');
+      } catch (error) {
+        console.error('Photo upload error:', error);
+        toast.error(error.response?.data?.detail || 'Foto yüklənərkən xəta');
+      }
+    }
+
+    setIsUploadingPhoto(false);
+    fetchGallery();
+  };
+
+  const handleDeletePhoto = async (photoId) => {
+    try {
+      await axios.delete(
+        `${API_BASE_URL}/api/events/${eventId}/gallery/${photoId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success('Foto silindi');
+      fetchGallery();
+    } catch (error) {
+      console.error('Delete photo error:', error);
+      toast.error('Foto silinərkən xəta');
+    }
+  };
+
+  const formatExpiryDate = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = date - now;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays <= 0) return 'Müddəti bitib';
+    if (diffDays === 1) return '1 gün qaldı';
+    return `${diffDays} gün qaldı`;
+  };
+
   const fetchEventData = async () => {
     try {
       if (!token) {
