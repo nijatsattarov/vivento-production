@@ -3088,16 +3088,37 @@ async def get_event_gallery(event_id: str):
     try:
         now = datetime.now(timezone.utc)
         
-        # Find non-expired photos
+        # Find non-expired photos - handle both datetime and string formats
         photos = await db.gallery_photos.find({
-            "event_id": event_id,
-            "expires_at": {"$gt": now.isoformat()}
+            "event_id": event_id
         }, {"_id": 0}).sort("created_at", -1).to_list(100)
+        
+        # Filter non-expired photos
+        valid_photos = []
+        for photo in photos:
+            expires_at = photo.get("expires_at")
+            if expires_at:
+                # Handle both datetime and string formats
+                if isinstance(expires_at, str):
+                    try:
+                        expires_at = datetime.fromisoformat(expires_at.replace('Z', '+00:00'))
+                    except:
+                        expires_at = datetime.fromisoformat(expires_at)
+                
+                # Make sure we compare timezone-aware datetimes
+                if expires_at.tzinfo is None:
+                    expires_at = expires_at.replace(tzinfo=timezone.utc)
+                
+                if expires_at > now:
+                    # Convert datetime to ISO string for JSON response
+                    photo["expires_at"] = expires_at.isoformat()
+                    photo["created_at"] = photo.get("created_at").isoformat() if isinstance(photo.get("created_at"), datetime) else photo.get("created_at")
+                    valid_photos.append(photo)
         
         return {
             "event_id": event_id,
-            "photos": photos,
-            "count": len(photos)
+            "photos": valid_photos,
+            "count": len(valid_photos)
         }
         
     except Exception as e:
