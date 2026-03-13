@@ -6,7 +6,7 @@ import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 import { Badge } from '../ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
-import { Plus, Edit, Trash2, Eye, Calendar } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, Calendar, Upload, Image, Loader2 } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
 
@@ -15,6 +15,7 @@ const BlogManager = ({ token }) => {
   const [posts, setPosts] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingPost, setEditingPost] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
