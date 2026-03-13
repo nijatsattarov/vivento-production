@@ -733,6 +733,113 @@ const EventDetail = () => {
             )}
           </TabsContent>
 
+          {/* Gallery Tab */}
+          <TabsContent value="gallery" className="space-y-6">
+            <Card className="bg-white shadow-lg border-0">
+              <CardHeader>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <Image className="h-5 w-5 text-purple-600" />
+                      Tədbir Qalereyası
+                    </CardTitle>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Fotolar avtomatik 5 gün sonra silinəcək
+                    </p>
+                  </div>
+                  <label className="cursor-pointer">
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={handlePhotoUpload}
+                      className="hidden"
+                      disabled={isUploadingPhoto}
+                    />
+                    <Button
+                      asChild
+                      disabled={isUploadingPhoto}
+                      className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                    >
+                      <span>
+                        <Upload className="mr-2 h-4 w-4" />
+                        {isUploadingPhoto ? 'Yüklənir...' : 'Foto əlavə et'}
+                      </span>
+                    </Button>
+                  </label>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {galleryPhotos.length === 0 ? (
+                  <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
+                    <Image className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      Qalereya boşdur
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      Tədbirin xatirə fotolarını əlavə edin
+                    </p>
+                    <label className="cursor-pointer">
+                      <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={handlePhotoUpload}
+                        className="hidden"
+                      />
+                      <Button asChild variant="outline">
+                        <span>
+                          <Upload className="mr-2 h-4 w-4" />
+                          Foto seç
+                        </span>
+                      </Button>
+                    </label>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {galleryPhotos.map((photo) => (
+                      <div 
+                        key={photo.id} 
+                        className="relative group aspect-square rounded-lg overflow-hidden shadow-md"
+                      >
+                        <img
+                          src={photo.url}
+                          alt="Gallery photo"
+                          className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleDeletePhoto(photo.id)}
+                            className="bg-red-600 hover:bg-red-700"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
+                          <div className="flex items-center text-xs text-white">
+                            <Clock className="h-3 w-3 mr-1" />
+                            {formatExpiryDate(photo.expires_at)}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {galleryPhotos.length > 0 && (
+                  <div className="mt-4 p-3 bg-amber-50 rounded-lg border border-amber-200">
+                    <p className="text-sm text-amber-800">
+                      <Clock className="h-4 w-4 inline mr-1" />
+                      <strong>Qeyd:</strong> Fotolar WeTransfer kimi 5 gün ərzində aktiv qalacaq, sonra avtomatik silinəcək.
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           <TabsContent value="details" className="space-y-6">
             <Card className="bg-white shadow-lg border-0">
               <CardHeader>
